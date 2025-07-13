@@ -23,6 +23,11 @@ local color = {
 		red = 255,
 		green = 0,
 		blue = 0
+	},
+	BLUE = {
+		red = 0,
+		green = 0,
+		blue = 255
 	}
 }
 		
