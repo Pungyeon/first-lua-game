@@ -13,10 +13,14 @@ function Puck:new(x, y)
 end
 
 function Puck:update(dt)
-		if self.vx > 0 then 
-			self.vx 
-		end 
+		if self.vx not 0 then 
+			self.vx * (0.2 * dt)
+		end
 
+		if self.vy not 0 then
+			self.vy * (0.2 * dt)
+		end
+		
 		Node:update(self, dt)
 end
 
