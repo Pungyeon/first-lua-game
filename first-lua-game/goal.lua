@@ -27,6 +27,8 @@ function Goal:collision(puck)
 end
 
 function Goal:bounce_puck(puck)
+	
+
 	if puck.x < self.x then
 		puck.speed = puck.speed * 0.2
 		puck.vx = puck.vx * -1
