@@ -20,9 +20,13 @@ function Puck:update(dt)
 end
 
 function Puck:bounce(dt)
+	if self.vx < 0 or self.vx > screenWidth then
+		self.vx = self.vx * -1
+	end
 	
-	self.vx = self.vx * -1
-	self.vy = self.vy * -1
+	if self.vy < 0 or self.vy > screenHeight then
+		self.vy = self.vy * -1
+	end
 end
 
 return Puck
