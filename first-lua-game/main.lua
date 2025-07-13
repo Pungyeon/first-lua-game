@@ -29,6 +29,7 @@ function love.update(dt)
 
 		if checkCollision(player, puck) then
 			puck.color = color.GREEN
+			player.pickup(puck)
 		else 
 			puck.color = color.WHITE
 		end

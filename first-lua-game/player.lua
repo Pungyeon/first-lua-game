@@ -18,9 +18,13 @@ function Player:update(dt)
         self.inputComponent:update(self)
     end
 
-    Node.update(self, dt)
+		if self.carrying not nil then 
+			self.carrying.vx = self.vx
+			self.carrying.vy = self.vy
+			self.carrying.speed = self.speed
+		end
 
-		
+    Node.update(self, dt)
 end
 
 function Player:pickup(puck)
