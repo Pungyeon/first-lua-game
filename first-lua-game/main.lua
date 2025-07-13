@@ -17,6 +17,17 @@ function Puck:new(x, y)
 	return obj
 end
 
+function Puck:update(dt)
+    local mag = math.sqrt(self.vx^2 + self.vy^2)
+    if mag > 0 then
+        self.vx = self.vx / mag
+        self.vy = self.vy / mag
+    end
+
+    self.x = self.x + self.vx * self.speed * dt
+    self.y = self.y + self.vy * self.speed * dt
+end
+
 function Player:new(x, y)
     local obj = {
         x = x,
@@ -66,10 +77,12 @@ InputMap = {
 -- Love2D callbacks
 function love.load()
     player = Player:new(100, 100)
+		puck = Puck:new(200, 200)
 end
 
 function love.update(dt)
     player:update(dt)
+		puck:update(dt)
 end
 
 function love.draw()
