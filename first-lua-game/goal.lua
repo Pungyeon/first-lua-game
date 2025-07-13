@@ -34,19 +34,22 @@ function Goal:draw()
 	Node.draw(self.post_back)
 end
 
-function Goal:collision(puck) 
+function Goal:collision(dt, puck) 
 	if collision.Simple(self.post_top, puck) then
-		puck.vx = puck.vy * -1
+		puck.vy = puck.vy * -1
+		Node.update(puck, dt)
 		puck.speed = puck.speed * 0.2
 	end
 
 	if collision.Simple(self.post_bottom, puck) then
 		puck.vx = puck.vy * -1
+		Node.update(puck, dt)
 		puck.speed = puck.speed * 0.2
 	end
 
 	if collision.Simple(self.post_back, puck) then
 		puck.vx = puck.vx * -1
+		Node.update(puck, dt)
 		puck.speed = puck.speed * 0.2
 	end
 
