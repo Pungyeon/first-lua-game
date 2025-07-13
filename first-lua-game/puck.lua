@@ -1,4 +1,5 @@
 local screenWidth, screenHeight = love.window.getMode()
+local color = require("color")
 
 Puck = {}
 Puck.__index = Puck
@@ -13,18 +14,21 @@ function Puck:new(x, y)
 end
 
 function Puck:update(dt)
-		-- self.vx = self.vx * (0.2 * dt)
-		-- self.vy = self.vy * (0.2 * dt)
+		if self.speed > 0 then
+			
+		end
 		
 		Node.update(self, dt)
 end
 
-function Puck:bounce(dt)
-	if self.vx < 0 or self.vx > screenWidth then
+function Puck:bounce()
+	if self.x < 0 or self.x > screenWidth then
+		self.speed = self.speed * 0.8
 		self.vx = self.vx * -1
 	end
 	
-	if self.vy < 0 or self.vy > screenHeight then
+	if self.y < 0 or self.y > screenHeight then
+		self.speed = self.speed * 0.8
 		self.vy = self.vy * -1
 	end
 end
