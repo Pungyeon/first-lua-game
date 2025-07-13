@@ -1,34 +1,10 @@
+Node = {}
+Node.__index = Node
+
 Player = {}
 Player.__index = Player
 
-Puck = {}
-Puck.__index = Puck
-
-function Puck:new(x, y)
-	local obj = {
-		x = x,
-		y = y,
-		vx = 1,
-		vy = 1,
-		size = 20,
-		speed = 150
-	}
-	setmetatable(obj, self)
-	return obj
-end
-
-function Puck:update(dt)
-    local mag = math.sqrt(self.vx^2 + self.vy^2)
-    if mag > 0 then
-        self.vx = self.vx / mag
-        self.vy = self.vy / mag
-    end
-
-    self.x = self.x + self.vx * self.speed * dt
-    self.y = self.y + self.vy * self.speed * dt
-end
-
-function Player:new(x, y)
+function Node:new(x, y)
     local obj = {
         x = x,
         y = y,
@@ -41,7 +17,7 @@ function Player:new(x, y)
     return obj
 end
 
-function Player:update(dt)
+function Node:update(dt)
     self.vx, self.vy = 0, 0
 
     for key, action in pairs(InputMap) do
@@ -61,7 +37,7 @@ function Player:update(dt)
     self.y = self.y + self.vy * self.speed * dt
 end
 
-function Player:draw()
+function Node:draw()
 		love.graphics.setColor(180, 0, 0)
     love.graphics.rectangle("fill", self.x, self.y, self.size, self.size)
 end
@@ -76,8 +52,8 @@ InputMap = {
 
 -- Love2D callbacks
 function love.load()
-    player = Player:new(100, 100)
-		puck = Puck:new(200, 200)
+    player = Node:new(100, 100)
+		puck = Node:new(200, 200)
 end
 
 function love.update(dt)
@@ -87,4 +63,5 @@ end
 
 function love.draw()
     player:draw()
+		puck:draw()
 end
