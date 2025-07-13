@@ -112,7 +112,8 @@ function love.update(dt)
     puck:update(dt)
 
 		if checkCollision(player, puck) then
-			-- Do the thing here
+			-- TODO : @pungyeon - we should have the player push the puck somehow
+			-- 
 			puck.color = color.GREEN
 		else 
 			puck.color = color.WHITE
