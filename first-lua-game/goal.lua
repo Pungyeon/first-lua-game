@@ -1,5 +1,6 @@
 local Node = require('node')
 local color = require('color')
+local collision = require('collision')
 
 Goal = {}
 Goal.__index = Goal
@@ -13,7 +14,11 @@ function Goal:new(x, y, width, height)
 end
 
 function Goal:collision(puck) 
-	
+	if collision.Simple(self, puck) then
+		
+	end
+
+	return  
 end
 
 return Goal
