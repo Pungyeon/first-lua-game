@@ -44,6 +44,8 @@ end
 
 function Player:shoot()
 	if self.carrying ~= nil then
+		self.carrying.vx = self.vx
+		self.carrying.vy = self.vy
 		self.carrying.speed = 1000
 	end
 
