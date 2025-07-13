@@ -1,49 +1,79 @@
 Node = {}
 Node.__index = Node
 
-Player = {}
-Player.__index = Player
-
 function Node:new(x, y)
     local obj = {
         x = x,
         y = y,
         vx = 0,
         vy = 0,
-        size = 50,
-        speed = 200
+        speed = 200,
+        size = 50
     }
     setmetatable(obj, self)
     return obj
 end
 
 function Node:update(dt)
-    self.vx, self.vy = 0, 0
-
-    for key, action in pairs(InputMap) do
-        if love.keyboard.isDown(key) then
-            action(self)
-        end
-    end
-
-    -- Normalize diagonal movement
-    local mag = math.sqrt(self.vx^2 + self.vy^2)
-    if mag > 0 then
-        self.vx = self.vx / mag
-        self.vy = self.vy / mag
-    end
-
     self.x = self.x + self.vx * self.speed * dt
     self.y = self.y + self.vy * self.speed * dt
 end
 
 function Node:draw()
-		love.graphics.setColor(180, 0, 0)
     love.graphics.rectangle("fill", self.x, self.y, self.size, self.size)
 end
 
--- Input mapping
-InputMap = {
+-- InputComponent handles keyboard input
+InputComponent = {}
+InputComponent.__index = InputComponent
+
+function InputComponent:new(inputMap)
+    local obj = { map = inputMap }
+    setmetatable(obj, self)
+    return obj
+end
+
+function InputComponent:update(node)
+    node.vx, node.vy = 0, 0
+    for key, action in pairs(self.map) do
+        if love.keyboard.isDown(key) then
+            action(node)
+        end
+    end
+
+    -- Normalize diagonal movement
+    local mag = math.sqrt(node.vx^2 + node.vy^2)
+    if mag > 0 then
+        node.vx = node.vx / mag
+        node.vy = node.vy / mag
+    end
+end
+
+-- Player class inherits from Node and uses InputComponent
+Player = setmetatable({}, { __index = Node })
+
+function Player:new(x, y, inputComponent)
+    local obj = Node.new(self, x, y)
+    obj.inputComponent = inputComponent
+    return obj
+end
+
+function Player:update(dt)
+    if self.inputComponent then
+        self.inputComponent:update(self)
+    end
+    Node.update(self, dt)
+end
+
+-- Puck class inherits from Node but has no input
+Puck = setmetatable({}, { __index = Node })
+
+function Puck:new(x, y)
+    return Node.new(self, x, y)
+end
+
+-- Input map for player controls
+local inputMap = {
     w = function(p) p.vy = p.vy - 1 end,
     s = function(p) p.vy = p.vy + 1 end,
     a = function(p) p.vx = p.vx - 1 end,
@@ -52,16 +82,16 @@ InputMap = {
 
 -- Love2D callbacks
 function love.load()
-    player = Node:new(100, 100)
-		puck = Node:new(200, 200)
+    player = Player:new(100, 100, InputComponent:new(inputMap))
+    puck = Puck:new(300, 300)
 end
 
 function love.update(dt)
     player:update(dt)
-		puck:update(dt)
+    puck:update(dt)
 end
 
 function love.draw()
     player:draw()
-		puck:draw()
+    puck:draw()
 end
