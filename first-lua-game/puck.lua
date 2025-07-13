@@ -17,39 +17,36 @@ function Puck:update(dt)
 		if self.speed > 0 then
 			self.speed = self.speed * (1 - dt)
 		end
-
-		self:bounce()
 		
 		Node.update(self, dt)
 end
 
-function Puck:bounce()
-	if self.x < 0 or self.x > screenWidth then
+function Puck:bounce(min_x, min_y, max_x, max_y)
+	if self.x < min_x or self.x > max_x then
 		self.speed = self.speed * 0.8
 		self.vx = self.vx * -1
 	end
 
-	if self.x < 0 then
-		self.x = 0
+	if self.x < min_x then
+		self.x = min_x
 	end
 
-	if self.x > screenWidth then
-		self.x = screenWidth - self.width
+	if self.x > max_x then
+		self.x = max_x - self.width
 	end
 	
-	if self.y < 0 or self.y > screenHeight then
+	if self.y < min_y or self.y > max_y then
 		self.speed = self.speed * 0.8
 		self.vy = self.vy * -1
 	end
 	
-	if self.y < 0 then
-		self.y = 0
+	if self.y < min_y then
+		self.y = min_y
 	end
 
-	if self.y > screenHeight then
-		self.y = screenHeight - self.height
+	if self.y > max_y then
+		self.y = max_y - self.height
 	end
-
 end
 
 return Puck

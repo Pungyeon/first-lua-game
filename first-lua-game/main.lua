@@ -35,6 +35,7 @@ function love.update(dt)
 
     player:update(dt)
     puck:update(dt)
+		puck:bounce(0, 0, screenWidth, screenHeight)
 
 		if collision.Simple(player, puck) then 
 			player:pickup(puck)

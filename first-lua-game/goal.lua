@@ -18,7 +18,7 @@ function Goal:collision(puck)
 		
 	end
 
-	return  
+	return false
 end
 
 return Goal
