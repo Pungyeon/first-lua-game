@@ -29,12 +29,18 @@ end
 function Goal:bounce_puck(puck)
 	-- Puck touches bottom of goal from outside
 	if puck.y < self.y + self.height and puck.y + (puck.height/2) > self.y + self.height then
-		puck.vx = puck.vx * -1
+		puck.vy = puck.vy * -1
 		return false
 	end
 	
 	-- Puck touches back of goal from outside
-	if puck.x > self.x and puck.x + (puck.width / 2)
+	if puck.x > self.x and puck.x + (puck.width / 2) < self.x then 
+		puck.vx = puck.vx * -1
+		return false
+	end
+
+	-- Puck touch top of goal from outside
+	  if puck.
 
 
 	if puck.x < self.x then
