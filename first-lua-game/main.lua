@@ -47,9 +47,10 @@ function love.update(dt)
 end
 
 function love.draw()
+	goal:draw()
 	player:draw()
 	puck:draw()
-	goal:draw()
+
 
 	love.graphics.print("Score: " .. score, 10, screenHeight - 40)
 end

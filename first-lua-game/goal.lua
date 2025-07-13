@@ -35,7 +35,7 @@ function Goal:bounce_puck(puck)
 		puck.vy = puck.vy * -1
 	end
 
-	if puck.y > self.y + height then
+	if puck.y > self.y + self.height then
 		puck.vy = puck.vy * -1
 	end
 end
