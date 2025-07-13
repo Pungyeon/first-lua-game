@@ -51,11 +51,14 @@ function InputComponent:update(node)
 end
 
 -- Player class inherits from Node and uses InputComponent
-Player = setmetatable({}, { __index = Node })
+Player = {}
+Player.__index = Player
+Player = setmetatable(Player, { __index = Node })
 
 function Player:new(x, y, inputComponent)
     local obj = Node.new(self, x, y)
     obj.inputComponent = inputComponent
+		setmetatable(obj, self)
     return obj
 end
 
@@ -67,10 +70,14 @@ function Player:update(dt)
 end
 
 -- Puck class inherits from Node but has no input
-Puck = setmetatable({}, { __index = Node })
+Puck = {}
+Puck.__index = Puck
+Puck = setmetatable(Puck, { __index = Node })
 
 function Puck:new(x, y)
-    return Node.new(self, x, y)
+    local obj = Node.new(self, x, y)
+		setmetatable(obj, self)
+		return obj
 end
 
 -- Input map for player controls
