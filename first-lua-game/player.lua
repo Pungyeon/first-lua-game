@@ -17,7 +17,14 @@ function Player:update(dt)
     if self.inputComponent then
         self.inputComponent:update(self)
     end
+
     Node.update(self, dt)
+
+		
+end
+
+function Player:pickup(puck)
+	self.carrying = puck
 end
 
 return Player
