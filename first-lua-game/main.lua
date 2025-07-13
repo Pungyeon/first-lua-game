@@ -89,6 +89,13 @@ local inputMap = {
     d = function(p) p.vx = p.vx + 1 end
 }
 
+function checkCollision(a, b)
+    return a.x < b.x + b.width and
+           a.x + a.width > b.x and
+           a.y < b.y + b.height and
+           a.y + a.height > b.y
+end
+
 -- Love2D callbacks
 function love.load()
     player = Player:new(100, 100, InputComponent:new(inputMap))
@@ -98,6 +105,10 @@ end
 function love.update(dt)
     player:update(dt)
     puck:update(dt)
+
+		if checkCollision(player, puck) then
+			
+		end
 end
 
 function love.draw()
