@@ -53,5 +53,6 @@ function love.draw()
 
 
 	love.graphics.print("Score: " .. score, 10, screenHeight - 40)
+	love.graphics.print("vx: " .. player.vx .. ", vy: " .. player.vy, 10, screenHeight - 80)
 end
 
