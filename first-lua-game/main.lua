@@ -1,3 +1,4 @@
+local color = require('color')
 -- Node
 Node = {}
 Node.__index = Node
@@ -11,11 +12,7 @@ function Node:new(x, y, width, height)
         speed = 200,
 				width = width,
 				height = height,
-				color = {
-					red = 255,
-					green = 255,
-					blue = 255
-				}
+				color = color.WHITE
     }
     setmetatable(obj, self)
     return obj
