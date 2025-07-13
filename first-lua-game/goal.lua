@@ -29,19 +29,29 @@ function Goal:draw()
 end
 
 function Goal:collision(puck) 
-	if 
-	if collision.Simple(self, puck) then
-		if self:bounce_puck(puck) and self.can_score then
+	if collision.Simple(self.post_top, puck) then
+		puck.vx = puck.vy * -1
+		puck.speed = puck.speed * 0.2
+	end
+
+	if collision.Simple(self.post_bottom, puck) then
+		puck.vx = puck.vy * -1
+		puck.speed = puck.speed * 0.2
+	end
+
+	if collision.Simple(self.post_back, puck) then
+		puck.vx = puck.vx * -1
+		puck.speed = puck.speed * 0.2
+	end
+
+	if collision.isContained(self, puck) then
+		if self.can_score then
 			self.can_score = false
 			return true
 		end
 	end
 
 	return false
-end
-
-function Goal:bounce_puck(puck)
-	
 end
 
 return Goal
