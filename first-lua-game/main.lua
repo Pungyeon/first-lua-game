@@ -119,6 +119,17 @@ function love.update(dt)
 
 		if checkCollision(player, puck) then
 			-- Do the thing here
+			puck.color = {
+				red = 0,
+				green = 255,
+				blue = 0
+			}
+		else 
+			puck.color = {
+				red = 255,
+				green = 255,
+				blue = 255
+			}
 		end
 end
 
