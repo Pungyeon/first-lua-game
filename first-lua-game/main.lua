@@ -62,11 +62,7 @@ Player = setmetatable(Player, { __index = Node })
 function Player:new(x, y, inputComponent)
     local obj = Node.new(self, x, y, 50, 50)
     obj.inputComponent = inputComponent
-		obj.color = {
-			red = 255,
-			green = 0,
-			blue = 0
-		}
+		obj.color = color.RED
 		setmetatable(obj, self)
     return obj
 end
@@ -116,17 +112,9 @@ function love.update(dt)
 
 		if checkCollision(player, puck) then
 			-- Do the thing here
-			puck.color = {
-				red = 0,
-				green = 255,
-				blue = 0
-			}
+			puck.color = color.GREEN
 		else 
-			puck.color = {
-				red = 255,
-				green = 255,
-				blue = 255
-			}
+			puck.color = color.WHITE
 		end
 end
 
