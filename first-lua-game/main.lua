@@ -2,14 +2,15 @@
 Node = {}
 Node.__index = Node
 
-function Node:new(x, y)
+function Node:new(x, y, width, height)
     local obj = {
         x = x,
         y = y,
         vx = 0,
         vy = 0,
         speed = 200,
-        size = 50
+				width = width,
+				height = height
     }
     setmetatable(obj, self)
     return obj
@@ -21,7 +22,7 @@ function Node:update(dt)
 end
 
 function Node:draw()
-    love.graphics.rectangle("fill", self.x, self.y, self.size, self.size)
+    love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
 end
 
 -- InputComponent handles keyboard input
