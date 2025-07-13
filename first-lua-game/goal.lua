@@ -16,7 +16,7 @@ end
 
 function Goal:collision(puck) 
 	if collision.Simple(self, puck) then
-		puck:bounce(self.x, self.y, 10000, 10000)
+		self:bounce_puck(puck)
 		if self.can_score then
 			self.can_score = false
 			return true
@@ -24,6 +24,20 @@ function Goal:collision(puck)
 	end
 
 	return false
+end
+
+function Goal:bounce_puck(puck)
+	if puck.x < self.x then
+		puck.vx = puck.vx * -1
+	end
+	
+	if puck.y < self.y then
+		puck.vy = puck.vy * -1
+	end
+
+	if puck.y > self.y + height then
+		puck.vy = puck.vy * -1
+	end
 end
 
 return Goal
