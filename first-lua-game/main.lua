@@ -24,6 +24,10 @@ function love.load()
 end
 
 function love.update(dt)
+		if love.keyboard.isDown('r') then
+			love.load()
+		end
+
     player:update(dt)
     puck:update(dt)
 
