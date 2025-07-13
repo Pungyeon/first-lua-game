@@ -16,7 +16,7 @@ end
 
 function love.load()
 		local goal_height = 80
-		local goal_width = 20
+		local goal_width = 40
 
     player = Player:new(100, 100, InputComponent:new(globals.InputMap))
 		goal = Goal:new(
