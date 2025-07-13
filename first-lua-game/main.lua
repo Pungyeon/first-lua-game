@@ -1,33 +1,6 @@
 local color = require('color')
-
--- Node
-Node = {}
-Node.__index = Node
-
-function Node:new(x, y, width, height)
-    local obj = {
-        x = x,
-        y = y,
-        vx = 0,
-        vy = 0,
-        speed = 200,
-				width = width,
-				height = height,
-				color = color.WHITE
-    }
-    setmetatable(obj, self)
-    return obj
-end
-
-function Node:update(dt)
-    self.x = self.x + self.vx * self.speed * dt
-    self.y = self.y + self.vy * self.speed * dt
-end
-
-function Node:draw()
-		love.graphics.setColor(self.color.red, self.color.green, self.color.blue)
-    love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
-end
+local Node = require('node')
+local Player = require('player')
 
 -- InputComponent handles keyboard input
 InputComponent = {}
@@ -54,27 +27,6 @@ function InputComponent:update(node)
         node.vy = node.vy / mag
     end
 end
-
--- Player class inherits from Node and uses InputComponent
-Player = {}
-Player.__index = Player
-Player = setmetatable(Player, { __index = Node })
-
-function Player:new(x, y, inputComponent)
-    local obj = Node.new(self, x, y, 50, 50)
-    obj.inputComponent = inputComponent
-		obj.color = color.RED
-		setmetatable(obj, self)
-    return obj
-end
-
-function Player:update(dt)
-    if self.inputComponent then
-        self.inputComponent:update(self)
-    end
-    Node.update(self, dt)
-end
-
 -- Puck class inherits from Node but has no input
 Puck = {}
 Puck.__index = Puck
