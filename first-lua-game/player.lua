@@ -19,9 +19,11 @@ function Player:update(dt)
     end
 
 		if self.carrying ~= nil then 
-			self.carrying.vx = self.vx
-			self.carrying.vy = self.vy
-			self.carrying.speed = self.speed
+			self.carrying.speed = 0
+			if self.vx < 0 then 
+				
+			else 
+			end
 		end
 
     Node.update(self, dt)
