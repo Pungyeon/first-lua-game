@@ -20,10 +20,10 @@ function Player:update(dt)
     Node.update(self, dt)
 
 		if self.carrying ~= nil then 
-			if self.vx < 0 then 
+			if self.direction == -1 then 
 				self.carrying.x = self.x - (self.carrying.width)
 			end
-			if self.vx > 0 then
+			if self.vx == 1 then
 				self.carrying.x = self.x + (self.width)
 			end
 			
@@ -43,6 +43,7 @@ end
 
 function Player:shoot()
 	if self.carrying ~= nil then
+		self.carrying.x = self.carrying.x + self.vx
 		self.carrying.vx = self.vx
 		self.carrying.vy = self.vy
 		self.carrying.speed = 1000
