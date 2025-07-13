@@ -7,6 +7,7 @@ local InputComponent = require('input_component')
 local globals = require('globals')
 
 local screenWidth, screenHeight = love.window.getMode()
+local score = 0
 
 function checkCollision(a, b)
     return a.x < b.x + b.width and
@@ -44,11 +45,17 @@ function love.update(dt)
 		if checkCollision(player, puck) then
 			player:pickup(puck)
 		end
+
+		if checkCollision(puck, goal) then 
+			score += 1
+		end
 end
 
 function love.draw()
 	player:draw()
 	puck:draw()
 	goal:draw()
+
+	
 end
 
