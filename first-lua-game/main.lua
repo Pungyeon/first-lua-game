@@ -2,6 +2,7 @@ local color = require('color')
 local Node = require('node')
 local Player = require('player')
 local InputComponent = require('input_component')
+local globals = require('globals')
 
 
 -- Puck class inherits from Node but has no input
@@ -25,7 +26,7 @@ end
 
 -- Love2D callbacks
 function love.load()
-    player = Player:new(100, 100, InputComponent:new(inputMap))
+    player = Player:new(100, 100, InputComponent:new(globals.InputMap))
     puck = Puck:new(300, 300)
 end
 
@@ -47,3 +48,4 @@ function love.draw()
     player:draw()
     puck:draw()
 end
+
