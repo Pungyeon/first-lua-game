@@ -18,7 +18,7 @@ function Puck:update(dt)
 			self.speed = self.speed * (1 - dt)
 		end
 
-		self.bounce()
+		self:bounce()
 		
 		Node.update(self, dt)
 end
