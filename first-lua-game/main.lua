@@ -1,14 +1,30 @@
 Player = {}
 Player.__index = Player
 
+Puck = {}
+Puck.__index = Puck
+
+function Puck:new(x, y)
+	local obj = {
+		x = x,
+		y = y,
+		vx = 1,
+		vy = 1,
+		size = 20,
+		speed = 150
+	}
+	setmetatable(obj, self)
+	return obj
+end
+
 function Player:new(x, y)
     local obj = {
         x = x,
         y = y,
-        speed = 200,
         vx = 0,
         vy = 0,
-        size = 50
+        size = 50,
+        speed = 200
     }
     setmetatable(obj, self)
     return obj
@@ -35,7 +51,7 @@ function Player:update(dt)
 end
 
 function Player:draw()
-		love.graphics.setColor("red")
+		love.graphics.setColor(180, 0, 0)
     love.graphics.rectangle("fill", self.x, self.y, self.size, self.size)
 end
 
