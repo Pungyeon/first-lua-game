@@ -10,7 +10,12 @@ function Node:new(x, y, width, height)
         vy = 0,
         speed = 200,
 				width = width,
-				height = height
+				height = height,
+				color = {
+					red = 255,
+					green = 255,
+					blue = 255
+				}
     }
     setmetatable(obj, self)
     return obj
@@ -22,6 +27,7 @@ function Node:update(dt)
 end
 
 function Node:draw()
+		love.graphics.setColor(self.color.red, self.color.green, self.color.blue)
     love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
 end
 
@@ -59,6 +65,11 @@ Player = setmetatable(Player, { __index = Node })
 function Player:new(x, y, inputComponent)
     local obj = Node.new(self, x, y, 50, 50)
     obj.inputComponent = inputComponent
+		obj.color = {
+			red = 255,
+			green = 0,
+			blue = 0
+		}
 		setmetatable(obj, self)
     return obj
 end
@@ -107,7 +118,7 @@ function love.update(dt)
     puck:update(dt)
 
 		if checkCollision(player, puck) then
-			
+			-- Do the thing here
 		end
 end
 
