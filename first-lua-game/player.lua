@@ -37,7 +37,12 @@ function Player:pickup(puck)
 end
 
 function Player:shoot()
-	
+	if self.carrying ~= nil then
+		self.carrying.speed = 1000
+	end
+
+
+	self.carrying = nil 
 end
 
 return Player
