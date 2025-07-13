@@ -1,4 +1,5 @@
 local color = require('color')
+
 -- Node
 Node = {}
 Node.__index = Node
