@@ -20,7 +20,6 @@ function Player:update(dt)
     Node.update(self, dt)
 
 		if self.carrying ~= nil then 
-			self.carrying.speed = 0
 			if self.vx < 0 then 
 				self.carrying.x = self.x - (self.carrying.width)
 			end
@@ -39,6 +38,7 @@ function Player:pickup(puck)
 		blue = 0
 	}
 	self.carrying = puck
+	self.carrying.speed = 0 
 end
 
 function Player:shoot()
