@@ -11,10 +11,15 @@ function Puck:new(x, y)
 end
 
 function Puck:update(dt)
-		self.vx = self.vx * (0.2 * dt)
-		self.vy = self.vy * (0.2 * dt)
+		-- self.vx = self.vx * (0.2 * dt)
+		-- self.vy = self.vy * (0.2 * dt)
 		
-		Node:update(self, dt)
+		Node.update(self, dt)
+end
+
+function Puck:bounce(dt)
+	self.vx = self.vx * -1
+	self.vy = self.vy * -1
 end
 
 return Puck

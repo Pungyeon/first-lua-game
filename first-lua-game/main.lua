@@ -12,6 +12,10 @@ function checkCollision(a, b)
            a.y + a.height > b.y
 end
 
+function checkWallCollision(a)
+	
+end
+
 function love.load()
     player = Player:new(100, 100, InputComponent:new(globals.InputMap))
     puck = Puck:new(300, 300)
@@ -25,6 +29,10 @@ function love.update(dt)
 			puck.color = color.GREEN
 		else 
 			puck.color = color.WHITE
+		end
+
+		if checkWallCollision(puck) then
+			
 		end
 end
 
