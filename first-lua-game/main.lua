@@ -20,8 +20,16 @@ function checkWallCollision(a)
 end
 
 function love.load()
+		local goal_height = 80
+		local goal_width = 20
+
     player = Player:new(100, 100, InputComponent:new(globals.InputMap))
-		goal = Goal:new(screenHeight / 2 - )
+		goal = Goal:new(
+			150,
+			(screenHeight / 2) - (goal_height/2),
+			goal_width,
+			goal_height
+		)
     puck = Puck:new(300, 300)
 end
 
@@ -39,7 +47,8 @@ function love.update(dt)
 end
 
 function love.draw()
-    player:draw()
-    puck:draw()
+	player:draw()
+	puck:draw()
+	goal:draw()
 end
 

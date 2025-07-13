@@ -1,6 +1,8 @@
 local Node = require('node')
+local color = require('color')
 
 Goal = {}
+Goal.__index = Goal
 Goal = setmetatable(Goal, { __index = Node })
 
 function Goal:new(x, y, width, height)

@@ -1,6 +1,7 @@
 local color = require('color')
 
 Player = {}
+Player.__index = Player
 Player = setmetatable(Player, { __index = Node })
 
 function Player:new(x, y, inputComponent)
