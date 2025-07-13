@@ -32,11 +32,6 @@ function love.update(dt)
 		else 
 			puck.color = color.WHITE
 		end
-
-		if checkWallCollision(puck) then
-			puck:bounce()
-		end
-
 end
 
 function love.draw()
