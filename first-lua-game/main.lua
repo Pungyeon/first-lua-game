@@ -35,6 +35,7 @@ function Player:update(dt)
 end
 
 function Player:draw()
+		love.graphics.setColor("red")
     love.graphics.rectangle("fill", self.x, self.y, self.size, self.size)
 end
 
