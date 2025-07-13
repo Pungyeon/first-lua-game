@@ -5,6 +5,8 @@ local Puck = require('puck')
 local InputComponent = require('input_component')
 local globals = require('globals')
 
+local screenWidth, screenHeight = love.window.getMode()
+
 function checkCollision(a, b)
     return a.x < b.x + b.width and
            a.x + a.width > b.x and
@@ -13,7 +15,7 @@ function checkCollision(a, b)
 end
 
 function checkWallCollision(a)
-	
+	return a.x < 0 or a.y < 0 or a.x > screenWidth or a.y > screenHeight
 end
 
 function love.load()
@@ -32,8 +34,9 @@ function love.update(dt)
 		end
 
 		if checkWallCollision(puck) then
-			
+			puck:bounce()
 		end
+
 end
 
 function love.draw()

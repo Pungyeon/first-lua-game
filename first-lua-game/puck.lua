@@ -1,3 +1,5 @@
+local screenWidth, screenHeight = love.window.getMode()
+
 Puck = {}
 Puck.__index = Puck
 Puck = setmetatable(Puck, { __index = Node })
@@ -18,6 +20,7 @@ function Puck:update(dt)
 end
 
 function Puck:bounce(dt)
+	
 	self.vx = self.vx * -1
 	self.vy = self.vy * -1
 end
