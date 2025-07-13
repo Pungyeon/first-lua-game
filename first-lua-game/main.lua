@@ -1,6 +1,7 @@
 local color = require('color')
 local Node = require('node')
 local Player = require('player')
+local Goal = require('goal')
 local Puck = require('puck')
 local InputComponent = require('input_component')
 local globals = require('globals')
@@ -20,6 +21,7 @@ end
 
 function love.load()
     player = Player:new(100, 100, InputComponent:new(globals.InputMap))
+		goal = Goal:new(screenHeight / 2 - )
     puck = Puck:new(300, 300)
 end
 
