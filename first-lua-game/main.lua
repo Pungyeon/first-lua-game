@@ -57,7 +57,7 @@ Player.__index = Player
 Player = setmetatable(Player, { __index = Node })
 
 function Player:new(x, y, inputComponent)
-    local obj = Node.new(self, x, y)
+    local obj = Node.new(self, x, y, 50, 50)
     obj.inputComponent = inputComponent
 		setmetatable(obj, self)
     return obj
@@ -76,7 +76,7 @@ Puck.__index = Puck
 Puck = setmetatable(Puck, { __index = Node })
 
 function Puck:new(x, y)
-    local obj = Node.new(self, x, y)
+    local obj = Node.new(self, x, y, 20, 20)
 		setmetatable(obj, self)
 		return obj
 end
