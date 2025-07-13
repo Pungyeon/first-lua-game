@@ -30,12 +30,26 @@ function Puck:bounce()
 	end
 
 	if self.x < 0 then
+		self.x = 0
+	end
+
+	if self.x > screenWidth then
+		self.x = screenWidth - self.width
 	end
 	
 	if self.y < 0 or self.y > screenHeight then
 		self.speed = self.speed * 0.8
 		self.vy = self.vy * -1
 	end
+	
+	if self.y < 0 then
+		self.y = 0
+	end
+
+	if self.y > screenHeight then
+		self.y = screenHeight - self.height
+	end
+
 end
 
 return Puck
