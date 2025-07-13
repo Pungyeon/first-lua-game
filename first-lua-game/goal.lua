@@ -42,7 +42,7 @@ function Goal:collision(dt, puck)
 	end
 
 	if collision.Simple(self.post_bottom, puck) then
-		puck.vx = puck.vy * -1
+		puck.vy = puck.vy * -1
 		Node.update(puck, dt)
 		puck.speed = puck.speed * 0.2
 	end
