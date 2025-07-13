@@ -28,10 +28,7 @@ function love.update(dt)
     puck:update(dt)
 
 		if checkCollision(player, puck) then
-			puck.color = color.GREEN
-			player.pickup(puck)
-		else 
-			puck.color = color.WHITE
+			player:pickup(puck)
 		end
 end
 

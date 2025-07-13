@@ -18,7 +18,7 @@ function Player:update(dt)
         self.inputComponent:update(self)
     end
 
-		if self.carrying not nil then 
+		if self.carrying ~= nil then 
 			self.carrying.vx = self.vx
 			self.carrying.vy = self.vy
 			self.carrying.speed = self.speed
@@ -28,7 +28,16 @@ function Player:update(dt)
 end
 
 function Player:pickup(puck)
+	self.color = {
+		red = 200,
+		green = 0,
+		blue = 0
+	}
 	self.carrying = puck
+end
+
+function Player:shoot()
+	
 end
 
 return Player
