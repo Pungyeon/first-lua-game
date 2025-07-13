@@ -1,32 +1,9 @@
 local color = require('color')
 local Node = require('node')
 local Player = require('player')
+local InputComponent = require('input_component')
 
--- InputComponent handles keyboard input
-InputComponent = {}
-InputComponent.__index = InputComponent
 
-function InputComponent:new(inputMap)
-    local obj = { map = inputMap }
-    setmetatable(obj, self)
-    return obj
-end
-
-function InputComponent:update(node)
-    node.vx, node.vy = 0, 0
-    for key, action in pairs(self.map) do
-        if love.keyboard.isDown(key) then
-            action(node)
-        end
-    end
-
-    -- Normalize diagonal movement
-    local mag = math.sqrt(node.vx^2 + node.vy^2)
-    if mag > 0 then
-        node.vx = node.vx / mag
-        node.vy = node.vy / mag
-    end
-end
 -- Puck class inherits from Node but has no input
 Puck = {}
 Puck.__index = Puck
@@ -38,13 +15,6 @@ function Puck:new(x, y)
 		return obj
 end
 
--- Input map for player controls
-local inputMap = {
-    w = function(p) p.vy = p.vy - 1 end,
-    s = function(p) p.vy = p.vy + 1 end,
-    a = function(p) p.vx = p.vx - 1 end,
-    d = function(p) p.vx = p.vx + 1 end
-}
 
 function checkCollision(a, b)
     return a.x < b.x + b.width and
