@@ -12,4 +12,8 @@ function Goal:new(x, y, width, height)
     return obj
 end
 
+function Goal:collision(puck) 
+	
+end
+
 return Goal

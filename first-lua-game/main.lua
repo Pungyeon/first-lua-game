@@ -42,11 +42,7 @@ function love.update(dt)
     player:update(dt)
     puck:update(dt)
 
-		if checkCollision(player, puck) then
-			player:pickup(puck)
-		end
-
-		if checkCollision(puck, goal) then 
+		if goal.collision(puck) then
 			score = score + 1
 		end
 end

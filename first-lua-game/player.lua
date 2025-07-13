@@ -48,7 +48,6 @@ function Player:shoot()
 		self.carrying.speed = 1000
 	end
 
-
 	self.carrying = nil 
 end
 
