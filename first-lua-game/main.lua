@@ -47,7 +47,7 @@ function love.update(dt)
 		end
 
 		if checkCollision(puck, goal) then 
-			score += 1
+			score = score + 1
 		end
 end
 
@@ -56,6 +56,6 @@ function love.draw()
 	puck:draw()
 	goal:draw()
 
-	
+	love.graphics.print("Score: " .. score, 10, screenHeight - 40)
 end
 
