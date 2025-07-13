@@ -20,6 +20,7 @@ function love.load()
 
     player = Player:new(100, 100, InputComponent:new(globals.InputMap))
 		goal = Goal:new(
+			-1,
 			150,
 			(screenHeight / 2) - (goal_height/2),
 			goal_width,
