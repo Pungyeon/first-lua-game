@@ -28,6 +28,8 @@ function Player:update(dt)
 			end
 			
 			self.carrying.y = self.y + (self.height-self.carrying.height)
+			self.carrying.vx = self.vx
+			self.carrying.vy = self.vy
 		end
 end
 
@@ -43,8 +45,6 @@ end
 
 function Player:shoot()
 	if self.carrying ~= nil then
-		self.carrying.vx = self.vx
-		self.carrying.vy = self.vy
 		self.carrying.speed = 1000
 	end
 
