@@ -1,5 +1,3 @@
-
--- Puck class inherits from Node but has no input
 Puck = {}
 Puck.__index = Puck
 Puck = setmetatable(Puck, { __index = Node })
@@ -13,13 +11,8 @@ function Puck:new(x, y)
 end
 
 function Puck:update(dt)
-		if self.vx not 0 then 
-			self.vx * (0.2 * dt)
-		end
-
-		if self.vy not 0 then
-			self.vy * (0.2 * dt)
-		end
+		self.vx = self.vx * (0.2 * dt)
+		self.vy = self.vy * (0.2 * dt)
 		
 		Node:update(self, dt)
 end
