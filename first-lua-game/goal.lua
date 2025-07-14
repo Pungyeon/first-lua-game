@@ -53,8 +53,9 @@ function Goal:collision(dt, puck)
 		puck.speed = puck.speed * 0.2
 	end
 
-	if collision.Full(self, puck) then
+	if collision.Full(puck, self) then
 		if self.can_score then
+			puck.speed = puck.speed * 0.1
 			self.can_score = false
 			return true
 		end
