@@ -18,7 +18,9 @@ function love.load()
 		local goal_height = 80
 		local goal_width = 40
 
-    player = Player:new(100, 100, InputComponent:new(globals.InputMap))
+		players = {
+			Player:new(100, 100, InputComponent:new(globals.InputMap))
+		}
 		goal = Goal:new(
 			-1,
 			150,
@@ -31,16 +33,21 @@ end
 
 function love.update(dt)
 		if love.keyboard.isDown('r') then
+			score = 0 
 			love.load()
 		end
 
-    player:update(dt)
+		for i = 1, #players do
+			players[i]:update(dt)
+		end
+
     puck:update(dt)
 		puck:bounce(0, 0, screenWidth, screenHeight)
 
-		if area.Collision(player, puck) then 
-			player:pickup(puck)
+		for i = 1, #players do
+			players[i]:update(dt)
 		end
+		
 
 		if goal:collision(dt, puck) then
 			score = score + 1
@@ -48,7 +55,6 @@ function love.update(dt)
 end
 
 function love.draw()
-	score = 0
 	goal:draw()
 	player:draw()
 	puck:draw()
