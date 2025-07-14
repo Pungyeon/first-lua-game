@@ -36,18 +36,20 @@ function love.load()
     puck = Puck:new(300, 300)
 end
 
-function love.update(dt)
-		if love.keyboard.isDown('r') then
-			score = 0 
-			love.load()
-		end
-
-		if love.keypressed('k') then
+function love.keypressed(key)
+		if key == 'k' then
 			players[selected]:deselect()
 			selected = selected + 1
 			if selected > #players then 
 				selected = 1
 			end
+		end
+end
+
+function love.update(dt)
+		if love.keyboard.isDown('r') then
+			score = 0 
+			love.load()
 		end
 
 		players[selected]:select()
