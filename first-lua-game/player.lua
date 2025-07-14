@@ -8,12 +8,21 @@ function Player:new(x, y, inputComponent)
     local obj = Node.new(self, x, y, 50, 50)
     obj.inputComponent = inputComponent
 		obj.color = color.RED
+		obj.selected = false
 		setmetatable(obj, self)
     return obj
 end
 
+function Player:draw()
+	Node.draw(self)
+
+	if self.selected then
+		
+	end
+end
+
 function Player:update(dt)
-    if self.inputComponent then
+    if self.inputComponent and self.selected then
         self.inputComponent:update(self)
     end
 
@@ -49,6 +58,14 @@ function Player:shoot()
 	end
 
 	self.carrying = nil 
+end
+
+function Player:select()
+	self.selected = true
+end
+
+function Player:deselect()
+	self.selected = false
 end
 
 return Player

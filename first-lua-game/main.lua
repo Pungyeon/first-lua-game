@@ -19,8 +19,12 @@ function love.load()
 		local goal_width = 40
 
 		players = {
-			Player:new(100, 100, InputComponent:new(globals.InputMap))
+			Player:new(100, 100, InputComponent:new(globals.InputMap)),
+			Player:new(400, 100, InputComponent:new(globals.InputMap))
 		}
+		players[1].select()
+		
+
 		goal = Goal:new(
 			-1,
 			150,
@@ -45,9 +49,11 @@ function love.update(dt)
 		puck:bounce(0, 0, screenWidth, screenHeight)
 
 		for i = 1, #players do
-			players[i]:update(dt)
+			local player = players[i]
+			if area.Collision(player, puck) then 
+				player:pickup(puck)
+			end
 		end
-		
 
 		if goal:collision(dt, puck) then
 			score = score + 1
@@ -56,12 +62,14 @@ end
 
 function love.draw()
 	goal:draw()
-	player:draw()
+	
+	for i = 1, #players do
+			players[i]:draw()
+	end 
+
 	puck:draw()
 
-
 	love.graphics.print("Score: " .. score, 10, screenHeight - 40)
-	love.graphics.print("vx: " .. player.vx .. ", vy: " .. player.vy .. ", speed: " .. player.speed, 10, screenHeight - 80)
 	love.graphics.print("vx: " .. puck.vx .. ", vy: " .. puck.vy .. ", speed: " .. puck.speed, 10, screenHeight - 120)
 end
 
