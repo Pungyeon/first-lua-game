@@ -48,6 +48,7 @@ function love.update(dt)
 end
 
 function love.draw()
+	score = 0
 	goal:draw()
 	player:draw()
 	puck:draw()
