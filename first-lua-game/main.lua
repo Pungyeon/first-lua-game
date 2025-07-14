@@ -9,6 +9,7 @@ local area = require('area')
 
 local screenWidth, screenHeight = love.window.getMode()
 local score = 0
+local selected = 1
 
 function checkWallCollision(a)
 	return a.x < 0 or a.y < 0 or a.x > screenWidth or a.y > screenHeight
@@ -22,7 +23,7 @@ function love.load()
 			Player:new(100, 100, InputComponent:new(globals.InputMap)),
 			Player:new(400, 100, InputComponent:new(globals.InputMap))
 		}
-		players[1]:select()
+
 		
 
 		goal = Goal:new(
@@ -41,9 +42,15 @@ function love.update(dt)
 			love.load()
 		end
 
-		if love.keyboard.isDown('k') then
-			
+		if love.keypressed('k') then
+			players[selected]:deselect()
+			selected = selected + 1
+			if selected > #players then 
+				selected = 1
+			end
 		end
+
+		players[selected]:select()
 
 		for i = 1, #players do
 			players[i]:update(dt)
