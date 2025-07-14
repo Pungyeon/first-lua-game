@@ -1,6 +1,6 @@
 local Node = require('node')
 local color = require('color')
-local collision = require('collision')
+local area = require('area')
 
 Goal = {}
 Goal.__index = Goal
@@ -35,25 +35,25 @@ function Goal:draw()
 end
 
 function Goal:collision(dt, puck) 
-	if collision.Simple(self.post_top, puck) then
+	if area.Collision(self.post_top, puck) then
 		puck.vy = puck.vy * -1
 		Node.update(puck, dt)
 		puck.speed = puck.speed * 0.2
 	end
 
-	if collision.Simple(self.post_bottom, puck) then
+	if area.Collision(self.post_bottom, puck) then
 		puck.vy = puck.vy * -1
 		Node.update(puck, dt)
 		puck.speed = puck.speed * 0.2
 	end
 
-	if collision.Simple(self.post_back, puck) then
+	if area.Collision(self.post_back, puck) then
 		puck.vx = puck.vx * -1
 		Node.update(puck, dt)
 		puck.speed = puck.speed * 0.2
 	end
 
-	if collision.Full(puck, self) then
+	if area.Contains(self, puck) then
 		if self.can_score then
 			puck.speed = puck.speed * 0.1
 			self.can_score = false

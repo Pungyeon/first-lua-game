@@ -5,7 +5,7 @@ local Goal = require('goal')
 local Puck = require('puck')
 local InputComponent = require('input_component')
 local globals = require('globals')
-local collision = require('collision')
+local area = require('area')
 
 local screenWidth, screenHeight = love.window.getMode()
 local score = 0
@@ -38,7 +38,7 @@ function love.update(dt)
     puck:update(dt)
 		puck:bounce(0, 0, screenWidth, screenHeight)
 
-		if collision.Simple(player, puck) then 
+		if area.Collision(player, puck) then 
 			player:pickup(puck)
 		end
 
