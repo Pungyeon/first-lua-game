@@ -22,7 +22,7 @@ function love.load()
 			Player:new(100, 100, InputComponent:new(globals.InputMap)),
 			Player:new(400, 100, InputComponent:new(globals.InputMap))
 		}
-		players[1].select()
+		players[1]:select()
 		
 
 		goal = Goal:new(
@@ -39,6 +39,10 @@ function love.update(dt)
 		if love.keyboard.isDown('r') then
 			score = 0 
 			love.load()
+		end
+
+		if love.keyboard.isDown('k') then
+			
 		end
 
 		for i = 1, #players do

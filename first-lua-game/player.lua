@@ -14,11 +14,18 @@ function Player:new(x, y, inputComponent)
 end
 
 function Player:draw()
-	Node.draw(self)
-
 	if self.selected then
-		
+		local border = 5
+		local selected = Node:new(
+			self.x-border,
+			self.y-border,
+			self.width+(border*2),
+			self.height+(border*2)
+		)
+		selected.color = color.BLUE
+		Node.draw(selected)
 	end
+	Node.draw(self)
 end
 
 function Player:update(dt)
