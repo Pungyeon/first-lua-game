@@ -72,6 +72,8 @@ function Player:select()
 end
 
 function Player:deselect()
+	self.vx = 0
+	self.vy = 0
 	self.selected = false
 end
 
