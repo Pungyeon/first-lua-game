@@ -36,13 +36,17 @@ function love.load()
     puck = Puck:new(300, 300)
 end
 
+function switch_player(to)
+	players[selected]:deselect()
+	selected = to
+	if selected > #players then
+		selected = 1
+	end
+end
+
 function love.keypressed(key)
 		if key == 'k' then
-			players[selected]:deselect()
-			selected = selected + 1
-			if selected > #players then 
-				selected = 1
-			end
+			switch_player(selected + 1)
 		end
 end
 
@@ -65,6 +69,7 @@ function love.update(dt)
 			local player = players[i]
 			if area.Collision(player, puck) then 
 				player:pickup(puck)
+				switch_player(i)
 			end
 		end
 
