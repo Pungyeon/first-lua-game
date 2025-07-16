@@ -23,7 +23,6 @@ function love.load()
 			Player:new(100, 100, InputComponent:new(globals.InputMap)),
 			Player:new(400, 100, InputComponent:new(globals.InputMap))
 		}
-
 		
 
 		goal = Goal:new(
