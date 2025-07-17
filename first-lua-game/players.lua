@@ -12,18 +12,20 @@ function Players:new(players)
 	return obj
 end
 
+function Players:switch_next()
+	self:switch_to(self.selected + 1)
+end
+
 function Players:switch_to(to)
-	self.players[selected]:deselect()
+	self.players[self.selected]:deselect()
 	self.selected = to
-	if self.selected > #players then
+	if self.selected > #self.players then
 		self.selected = 1
 	end
 end
 
 function Players:update(dt)	
-		if #self.players > 0 then
-			self.players[self.selected]:select()
-		end
+		self.players[self.selected]:select()
 
 		for i = 1, #self.players do
 			self.players[i]:update(dt)
@@ -41,8 +43,8 @@ function Players:collision(puck)
 end
 
 function Players:draw()
-	for i = 1, #players do
-			players[i]:draw()
+	for i = 1, #self.players do
+			self.players[i]:draw()
 	end 
 end
 

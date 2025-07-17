@@ -37,7 +37,7 @@ end
 
 function love.keypressed(key)
 		if key == 'k' then
-			switch_player(selected + 1)
+			players:switch_next()
 		end
 end
 
