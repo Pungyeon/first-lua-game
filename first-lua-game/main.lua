@@ -48,7 +48,6 @@ function love.update(dt)
 		end
 
 		players:update(dt)
-
     puck:update(dt)
 		puck:bounce(0, 0, screenWidth, screenHeight)
 
