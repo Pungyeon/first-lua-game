@@ -5,16 +5,16 @@ Goalie.__index = Player
 Goalie = setmetatable(Goalie, { __index = Player })
 
 function Goalie:new(x, y, teamColor, inputComponent)
-    local obj = Player:new(x, y, teamColor, inputComponent)
+    local obj = Player.new(self, x, y, teamColor, inputComponent)
 
 		obj.max_y = y+obj.height + 40
 		obj.min_y = y - 40
 
 		setmetatable(obj, self)
     return obj
-end	
+end
 
-function Goalie:move(puck) 
+function Goalie:ding(puck) 
 	self.y = 0
 end
 
