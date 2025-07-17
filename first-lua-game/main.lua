@@ -1,6 +1,7 @@
 local color = require('color')
 local Node = require('node')
 local Player = require('player')
+local Players = require('players')
 local Goal = require('goal')
 local Puck = require('puck')
 local InputComponent = require('input_component')
@@ -19,12 +20,11 @@ function love.load()
 		local goal_height = 80
 		local goal_width = 40
 
-		players = {
+		players = Players:new({
 			Player:new(100, 100, InputComponent:new(globals.InputMap)),
 			Player:new(400, 100, InputComponent:new(globals.InputMap))
-		}
+		})
 		
-
 		goal = Goal:new(
 			-1,
 			150,
@@ -55,22 +55,12 @@ function love.update(dt)
 			love.load()
 		end
 
-		players[selected]:select()
-
-		for i = 1, #players do
-			players[i]:update(dt)
-		end
+		players:update(dt)
 
     puck:update(dt)
 		puck:bounce(0, 0, screenWidth, screenHeight)
 
-		for i = 1, #players do
-			local player = players[i]
-			if area.Collision(player, puck) then 
-				player:pickup(puck)
-				switch_player(i)
-			end
-		end
+
 
 		if goal:collision(dt, puck) then
 			score = score + 1
