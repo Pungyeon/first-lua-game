@@ -4,10 +4,10 @@ Player = {}
 Player.__index = Player
 Player = setmetatable(Player, { __index = Node })
 
-function Player:new(x, y, inputComponent)
+function Player:new(x, y, teamColor, inputComponent)
     local obj = Node.new(self, x, y, 50, 50)
     obj.inputComponent = inputComponent
-		obj.color = color.RED
+		obj.color = teamColor
 		obj.selected = false
 		setmetatable(obj, self)
     return obj

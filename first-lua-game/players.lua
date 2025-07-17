@@ -37,7 +37,7 @@ function Players:collision(puck)
 		local player = self.players[i]
 		if area.Collision(player, puck) then 
 			player:pickup(puck)
-			self.switch_to(i)
+			self:switch_to(i)
 		end
 	end
 end

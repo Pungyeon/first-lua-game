@@ -1,6 +1,7 @@
 local color = require('color')
 local Node = require('node')
 local Player = require('player')
+local Goalie = require('goalie')
 local Players = require('players')
 local Goal = require('goal')
 local Puck = require('puck')
@@ -21,9 +22,11 @@ function love.load()
 		local goal_width = 40
 
 		players = Players:new({
-			Player:new(100, 100, InputComponent:new(globals.InputMap)),
-			Player:new(400, 100, InputComponent:new(globals.InputMap))
+			Player:new(100, 100, color.RED, InputComponent:new(globals.InputMap)),
+			Player:new(400, 100, color.RED, InputComponent:new(globals.InputMap))
 		})
+
+		goalie = Goalie:new(150, 300, color.GREEN, {})
 		
 		goal = Goal:new(
 			-1,
@@ -38,15 +41,13 @@ end
 function love.keypressed(key)
 		if key == 'k' then
 			players:switch_next()
+		elseif key == 'r' then
+			score = 0
+			love.load()
 		end
 end
 
 function love.update(dt)
-		if love.keyboard.isDown('r') then
-			score = 0 
-			love.load()
-		end
-
 		players:update(dt)
     puck:update(dt)
 		puck:bounce(0, 0, screenWidth, screenHeight)
