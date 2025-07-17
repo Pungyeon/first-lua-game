@@ -14,4 +14,16 @@ function Goalie:new(x, y, teamColor, inputComponent)
     return obj
 end	
 
+function Goalie:update(dt, puck) 
+	if self.y < puck.y then
+		self.y = self.y - (dt * self.speed / 2)
+	end
+
+	if self.y > puck.y then 
+		self.y = self.y + (dt * self.speed / 2)
+	end
+
+	Player.update(self, dt)
+end
+
 return Goalie

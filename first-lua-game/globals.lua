@@ -9,7 +9,7 @@ local globals = {
 		d = function(p)
 			p.vx = p.vx + 1
 			p.direction = 1
-		end
+		end,
 		space = function(p) p:shoot() end
 	}
 }
