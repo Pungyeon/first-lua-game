@@ -20,6 +20,7 @@ end
 function love.load()
 		local goal_height = 140
 		local goal_width = 40
+		local goal_center = (screenHeight / 2) - (goal_height/2)
 
 		players = Players:new({
 			Player:new(100, 100, color.RED, InputComponent:new(globals.InputMap)),
@@ -28,13 +29,7 @@ function love.load()
 
 		goalie = Goalie:new(210, 380, color.GREEN, {})
 		
-		goal = Goal:new(
-			-1,
-			150,
-			(screenHeight / 2) - (goal_height/2),
-			goal_width,
-			goal_height
-		)
+		goal = Goal:new(-1, 150, goal_center, goal_width, goal_height)
     puck = Puck:new(300, 300)
 end
 
@@ -54,6 +49,7 @@ function love.update(dt)
 
 		players:collision(puck)
 
+		goalie:move()
 		goalie:update(dt, puck)
 
 		if goal:collision(dt, puck) then
@@ -68,6 +64,6 @@ function love.draw()
 	goalie:draw()
 
 	love.graphics.print("Score: " .. score, 10, screenHeight - 40)
-	love.graphics.print("vx: " .. puck.vx .. ", vy: " .. puck.vy .. ", speed: " .. puck.speed, 10, screenHeight - 120)
+	love.graphics.print("Goalie: " .. goalie.x .. "," .. goalie.y, 10, screenHeight - 80)
 end
 
