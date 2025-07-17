@@ -6,7 +6,7 @@ Players.__index = Players
 function Players:new(players)
 	local obj = {
 		players = players,
-		select = 1
+		selected = 1
 	}
 	setmetatable(obj, self)
 	return obj
@@ -20,8 +20,10 @@ function Players:switch_to(to)
 	end
 end
 
-function Players:update(dt)
-		self.players[self.selected]:select()
+function Players:update(dt)	
+		if #self.players > 0 then
+			self.players[self.selected]:select()
+		end
 
 		for i = 1, #self.players do
 			self.players[i]:update(dt)
@@ -29,7 +31,7 @@ function Players:update(dt)
 end
 
 function Players:collision(puck)
-	for i = 1, #selfplayers do
+	for i = 1, #self.players do
 		local player = self.players[i]
 		if area.Collision(player, puck) then 
 			player:pickup(puck)
