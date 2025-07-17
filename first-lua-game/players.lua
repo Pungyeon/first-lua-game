@@ -1,9 +1,15 @@
+local area = require('area')
+
 Players = {}
 Players.__index = Players
 
 function Players:new(players)
-	self.players = players
-	self.select = 1
+	local obj = {
+		players = players,
+		select = 1
+	}
+	setmetatable(obj, self)
+	return obj
 end
 
 function Players:switch_to(to)
@@ -23,11 +29,19 @@ function Players:update(dt)
 end
 
 function Players:collision(puck)
-	for i = 1, #players do
-	local player = players[i]
-			if area.Collision(player, puck) then 
-				player:pickup(puck)
-				switch_player(i)
-			end
+	for i = 1, #selfplayers do
+		local player = self.players[i]
+		if area.Collision(player, puck) then 
+			player:pickup(puck)
+			self.switch_to(i)
 		end
+	end
 end
+
+function Players:draw()
+	for i = 1, #players do
+			players[i]:draw()
+	end 
+end
+
+return Players

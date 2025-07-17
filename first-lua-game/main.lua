@@ -35,14 +35,6 @@ function love.load()
     puck = Puck:new(300, 300)
 end
 
-function switch_player(to)
-	players[selected]:deselect()
-	selected = to
-	if selected > #players then
-		selected = 1
-	end
-end
-
 function love.keypressed(key)
 		if key == 'k' then
 			switch_player(selected + 1)
@@ -60,7 +52,7 @@ function love.update(dt)
     puck:update(dt)
 		puck:bounce(0, 0, screenWidth, screenHeight)
 
-
+		players:collision(puck)
 
 		if goal:collision(dt, puck) then
 			score = score + 1
@@ -69,11 +61,7 @@ end
 
 function love.draw()
 	goal:draw()
-	
-	for i = 1, #players do
-			players[i]:draw()
-	end 
-
+	players:draw()
 	puck:draw()
 
 	love.graphics.print("Score: " .. score, 10, screenHeight - 40)
