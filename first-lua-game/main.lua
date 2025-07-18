@@ -49,7 +49,7 @@ function love.update(dt)
 
 		players:collision(puck)
 
-		-- goalie:ding()
+		goalie:ding()
 		goalie:update(dt, puck)
 
 		if goal:collision(dt, puck) then
