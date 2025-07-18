@@ -5,10 +5,7 @@ Goalie.__index = Player
 Goalie = setmetatable(Goalie, { __index = Player })
 
 function Goalie:new(x, y, teamColor, inputComponent)
-    local obj = Node.new(self, x, y, 50, 50)
-    obj.inputComponent = inputComponent
-		obj.color = teamColor
-		obj.selected = false
+    local obj = Player.new(self, x, y, teamColor, inputComponent)
 		setmetatable(obj, self)
     return obj
 end
