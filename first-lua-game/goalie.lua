@@ -17,13 +17,22 @@ function Goalie:new(x, y, teamColor, inputComponent)
 end
 
 function Goalie:pickup(puck)
-	self.color = color.BLUE
+	self.has_puck = true
+	self.puck_time = 200
+	self.vy = 0
 
 	Player.pickup(self, puck)
 end
 
 function Goalie:move_towards(puck)
-	if self.carrying ~= nil then 
+	if self.has_puck then 
+		self.puck_time = self.puck_time - 1
+		if self.puck_time < 0 then
+			self._has_puck = false
+			self.carrying.vx = 1
+			self.carrying.vy = -1
+			self.carrying = nil
+		end
 		return
 	end
 
