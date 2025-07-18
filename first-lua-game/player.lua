@@ -50,8 +50,11 @@ function Player:update(dt)
 end
 
 function Player:pickup(puck)
-	self.carrying = puck
-	self.carrying.speed = 0 
+	if puck:can_pickup() then
+		self.carrying = puck
+		self.carrying.speed = 0
+		puck:set_owner(self)
+	end
 end
 
 function Player:shoot()
