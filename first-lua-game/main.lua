@@ -18,16 +18,6 @@ local goal_width = 40
 local goal_center = (screenHeight / 2) - (goal_height/2)
 
 
-local players = Players:new({
-	Player:new(100, 100, color.RED, InputComponent:new(globals.InputMap)),
-	Player:new(400, 100, color.RED, InputComponent:new(globals.InputMap))
-})
-
-local goalie = Goalie:new(210, 380, color.GREEN, {})
-local goal = Goal:new(-1, 150, goal_center, goal_width, goal_height)
-local puck = Puck:new(300, 300)
-
-
 function checkWallCollision(a)
 	return a.x < 0 or a.y < 0 or a.x > screenWidth or a.y > screenHeight
 end
@@ -61,8 +51,8 @@ function love.update(dt)
 
 		players:collision(puck)
 
-		goalie:ding()
 		goalie:update(dt, puck)
+		goalie:ding()
 
 		if goal:collision(dt, puck) then
 			score = score + 1
