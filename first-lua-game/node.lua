@@ -19,6 +19,12 @@ function Node:new(x, y, width, height)
     return obj
 end
 
+function Node:center() 
+	return {
+		x = self.y + self.height/2,
+		y = 
+end
+
 function Node:update(dt)
     self.x = self.x + self.vx * self.speed * dt
     self.y = self.y + self.vy * self.speed * dt
