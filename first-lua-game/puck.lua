@@ -21,6 +21,10 @@ function Puck:update(dt)
 		Node.update(self, dt)
 end
 
+function Puck:pickup(owner)
+	self.owner = owner
+end
+
 function Puck:bounce(min_x, min_y, max_x, max_y)
 	if self.x < min_x or self.x > max_x then
 		self.speed = self.speed * 0.8
