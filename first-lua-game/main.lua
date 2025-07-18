@@ -50,9 +50,6 @@ function love.update(dt)
 		puck:bounce(0, 0, screenWidth, screenHeight)
 
 		-- TODO : need to have players collide with one another
-		-- TODO : need to make sure that contested collisions can happen
-		--				i.e if the goalie/player has the puck and collides with 
-		-- 				another player, this won't start a contest.
 		players:collision(puck)
 
 		if area.Collision(goalie, puck) then

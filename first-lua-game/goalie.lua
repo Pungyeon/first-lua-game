@@ -33,6 +33,7 @@ function Goalie:move_towards(puck)
 			self.carrying.vx = 1
 			self.carrying.vy = -1
 			self.carrying.speed = 1000
+			self.carrying:release()
 			self.carrying = nil
 		end
 		return
