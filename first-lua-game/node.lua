@@ -21,8 +21,9 @@ end
 
 function Node:center() 
 	return {
-		x = self.y + self.height/2,
-		y = 
+		y = self.y + self.height/2,
+		x = self.x + self.width/2
+  } 
 end
 
 function Node:update(dt)
