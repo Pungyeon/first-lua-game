@@ -9,13 +9,13 @@ function Goalie:new(x, y, teamColor, inputComponent)
 
 		obj.top = obj.y - 40
 		obj.bottom = obj.y + 40
+		obj.speed = 100
 
 		setmetatable(obj, self)
     return obj
 end
 
 function Goalie:move_towards(puck)
-	
 
 	if self:center().y < puck:center().y then
 		self.vy = 1
