@@ -7,14 +7,16 @@ Goalie = setmetatable(Goalie, { __index = Player })
 function Goalie:new(x, y, teamColor, inputComponent)
     local obj = Player.new(self, x, y, teamColor, inputComponent)
 
-		local obj.top = obj.y - 40
-		local obj.bottom = obj.y + obj.height + 40
+		obj.top = obj.y - 40
+		obj.bottom = obj.y + 40
 
 		setmetatable(obj, self)
     return obj
 end
 
-function Goalie:move_towards_puck(puck)
+function Goalie:move_towards(puck)
+	
+
 	if self:center().y < puck:center().y then
 		self.vy = 1
 	end 
@@ -29,8 +31,12 @@ function Goalie:update(dt)
 		self.vy = 0
 	end
 
-	if self.y + self.height > self.bottom then
-	if 
+	if self.y > self.bottom then
+		self.y = self.bottom
+		self.vy = 0
+	end
+	
+	Player.update(self, dt)
 end
 
 return Goalie

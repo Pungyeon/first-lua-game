@@ -51,8 +51,9 @@ function love.update(dt)
 
 		players:collision(puck)
 
-		goalie:update(dt, puck)
-		goalie:ding()
+		goalie:move_towards(puck)
+		goalie:update(dt)
+
 
 		if goal:collision(dt, puck) then
 			score = score + 1
