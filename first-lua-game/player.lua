@@ -50,11 +50,12 @@ function Player:update(dt)
 end
 
 function Player:pickup(puck)
-	if puck:can_pickup() then
+	local was_picked_up = puck:pickup(self)
+	if was_picked_up then
 		self.carrying = puck
 		self.carrying.speed = 0
-		puck:set_owner(self)
 	end
+	return was_picked_up
 end
 
 function Player:shoot()

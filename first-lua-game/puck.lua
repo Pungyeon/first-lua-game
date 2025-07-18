@@ -33,12 +33,12 @@ function Puck:string()
 	return "PICKED_UP"
 end
 
-function Puck:can_pickup()
-	return self.owner == nil
-end
-
 function Puck:pickup(owner)
+	if self.owner ~= nil then
+		return false
+	end
 	self.owner = owner
+	return true
 end
 
 function Puck:bounce(min_x, min_y, max_x, max_y)
