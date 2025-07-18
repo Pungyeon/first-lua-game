@@ -1,4 +1,5 @@
 local Player = require('player')
+local color = require('color')
 
 Goalie = {}
 Goalie.__index = Goalie
@@ -13,6 +14,12 @@ function Goalie:new(x, y, teamColor, inputComponent)
 
 		setmetatable(obj, self)
     return obj
+end
+
+function Goalie:pickup(puck)
+	self.color = color.BLUE
+
+	Player.pickup(self, puck)
 end
 
 function Goalie:move_towards(puck)
