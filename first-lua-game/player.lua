@@ -57,6 +57,7 @@ end
 function Player:shoot()
 	if self.carrying ~= nil then
 		self.carrying.speed = 1000
+		self.carrying:release()
 	end
 
 	self.carrying = nil 

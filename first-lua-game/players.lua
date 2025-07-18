@@ -35,9 +35,12 @@ end
 function Players:collision(puck)
 	for i = 1, #self.players do
 		local player = self.players[i]
-		if area.Collision(player, puck) then 
-			player:pickup(puck)
-			self:switch_to(i)
+		if area.Collision(player, puck) then
+			if puck:can_pickup() then
+				puck:pickup(player)
+				player:pickup(puck)
+				self:switch_to(i)
+			end
 		end
 	end
 end
