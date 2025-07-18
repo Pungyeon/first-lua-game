@@ -16,7 +16,6 @@ function Goalie:new(x, y, teamColor, inputComponent)
 end
 
 function Goalie:move_towards(puck)
-
 	if self:center().y < puck:center().y then
 		self.vy = 1
 	end 
