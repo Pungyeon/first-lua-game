@@ -11,13 +11,13 @@ function Goalie:new(x, y, teamColor, inputComponent)
 		obj.top = obj.y - 40
 		obj.bottom = obj.y + 40
 		obj.speed = 100
+		obj.puck_time = 0
 
 		setmetatable(obj, self)
     return obj
 end
 
 function Goalie:pickup(puck)
-	self.has_puck = true
 	self.puck_time = 200
 	self.vy = 0
 
@@ -25,14 +25,8 @@ function Goalie:pickup(puck)
 end
 
 function Goalie:move_towards(puck)
-	if self.has_puck then 
+	if self.carrying ~= nil then 
 		self.puck_time = self.puck_time - 1
-		if self.puck_time < 0 then
-			self._has_puck = false
-			self.carrying.vx = 1
-			self.carrying.vy = -1
-			self.carrying = nil
-		end
 		return
 	end
 

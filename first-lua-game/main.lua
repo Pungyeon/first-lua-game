@@ -71,6 +71,6 @@ function love.draw()
 	goalie:draw()
 
 	love.graphics.print("Score: " .. score, 10, screenHeight - 40)
-	love.graphics.print("Goalie: " .. goalie.x .. "," .. goalie.y, 10, screenHeight - 80)
+	love.graphics.print("puck_time: " .. goalie.puck_time, 10, screenHeight - 80)
 end
 
