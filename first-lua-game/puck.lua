@@ -21,8 +21,16 @@ function Puck:update(dt)
 		Node.update(self, dt)
 end
 
+function Puck:release()
+	self.owner = nil
+end
+
 function Puck:pickup(owner)
+	if self.owner ~= nil then
+		return false
+	end
 	self.owner = owner
+	return true
 end
 
 function Puck:bounce(min_x, min_y, max_x, max_y)
