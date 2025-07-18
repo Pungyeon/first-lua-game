@@ -16,10 +16,14 @@ function Goalie:new(x, y, teamColor, inputComponent)
 end
 
 function Goalie:move_towards(puck)
-	if self:center().y < puck:center().y then
+	if self.carrying ~= nil then 
+		return
+	end
+
+	if self:center().y < puck:center().y and self.y < self.bottom then
 		self.vy = 1
 	end 
-	if self:center().y > puck:center().y then 
+	if self:center().y > puck:center().y and self.y > self.top then 
 		self.vy = -1
 	end
 end

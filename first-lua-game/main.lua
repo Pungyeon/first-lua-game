@@ -51,6 +51,10 @@ function love.update(dt)
 
 		players:collision(puck)
 
+		if area.Collision(goalie, puck) then
+			goalie:pickup(puck)
+		end
+
 		goalie:move_towards(puck)
 		goalie:update(dt)
 

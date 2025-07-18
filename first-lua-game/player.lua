@@ -50,11 +50,6 @@ function Player:update(dt)
 end
 
 function Player:pickup(puck)
-	self.color = {
-		red = 200,
-		green = 0,
-		blue = 0
-	}
 	self.carrying = puck
 	self.carrying.speed = 0 
 end
