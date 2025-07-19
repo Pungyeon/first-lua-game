@@ -24,13 +24,16 @@ function Players:switch_to(to)
 	end
 end
 
-
-
-function Players:update(dt)	
+function Players:handle_input()
 		self.players[self.selected]:select()
 
 		for i = 1, #self.players do
 			self.players[i]:handle_input()
+		end
+end
+
+function Players:update(dt)	
+		for i = 1, #self.players do
 			self.players[i]:update(dt)
 		end
 end

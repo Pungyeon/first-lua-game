@@ -45,10 +45,16 @@ function love.keypressed(key)
 end
 
 function love.update(dt)
-		players:update(dt)
-    puck:update(dt)
-		puck:bounce(0, 0, screenWidth, screenHeight)
+		-- Handle Input here to ensure that inputs are handled before updating
+ 		-- this makes handling collisions and movement cancellation much easier
+		players:handle_input()
+		
+		-- TODO : maybe change this method name to handle_input ? 
+		goalie:move_towards(puck)
 
+		-- Handle collisions. Here, we want to calculate if any collisions occured
+		--  as a result of the handling of input. If so, we should cancel the input
+		--  and/or the movement.
 		-- TODO : need to have players collide with one another
 		players:collision(puck)
 
@@ -56,7 +62,13 @@ function love.update(dt)
 			goalie:pickup(puck)
 		end
 
-		goalie:move_towards(puck)
+		players:update(dt)
+    puck:update(dt)
+		puck:bounce(0, 0, screenWidth, screenHeight)
+
+
+
+
 		goalie:update(dt)
 
 
