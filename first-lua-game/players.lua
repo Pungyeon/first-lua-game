@@ -28,6 +28,8 @@ function Players:update(dt)
 		self.players[self.selected]:select()
 
 		for i = 1, #self.players do
+			self.players[i]:handle_input()
+			if self.
 			self.players[i]:update(dt)
 		end
 end

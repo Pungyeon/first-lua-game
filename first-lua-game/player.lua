@@ -28,11 +28,13 @@ function Player:draw()
 	Node.draw(self)
 end
 
-function Player:update(dt)
+function Player:handle_input()
     if self.inputComponent and self.selected then
         self.inputComponent:update(self)
     end
+end
 
+function Player:update(dt)
     Node.update(self, dt)
 
 		if self.carrying ~= nil then 
