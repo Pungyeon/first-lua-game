@@ -29,10 +29,11 @@ function Players:update(dt)
 
 		for i = 1, #self.players do
 			self.players[i]:handle_input()
-			if self.
 			self.players[i]:update(dt)
 		end
 end
+
+function Players:collides_with(exclude, )
 
 function Players:collision(puck)
 	for i = 1, #self.players do
