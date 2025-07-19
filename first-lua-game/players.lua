@@ -24,6 +24,8 @@ function Players:switch_to(to)
 	end
 end
 
+
+
 function Players:update(dt)	
 		self.players[self.selected]:select()
 
@@ -33,7 +35,16 @@ function Players:update(dt)
 		end
 end
 
-function Players:collides_with(exclude, )
+function Players:internal_collision(i) 
+	for j = 1, #self.players do 
+		if i ~= j then
+			if area.Collision(self.players[i], self.players[j]) then
+				return true
+			end
+		end
+	end
+	return false
+end
 
 function Players:collision(puck)
 	for i = 1, #self.players do
