@@ -34,6 +34,23 @@ function Player:handle_input()
     end
 end
 
+function Player:rollback(dt)
+    Node.rollback(self, dt)
+
+		if self.carrying ~= nil then 
+			if self.vx < 0 then 
+				self.carrying.x = self.x + (self.carrying.width)
+			end
+			if self.vx > 0 then
+				self.carrying.x = self.x + (self.width)
+			end
+			
+			self.carrying.y = self.y + (self.height-self.carrying.height)
+			self.carrying.vx = self.vx
+			self.carrying.vy = self.vy
+		end
+end
+
 function Player:update(dt)
     Node.update(self, dt)
 

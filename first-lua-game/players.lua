@@ -34,9 +34,10 @@ end
 
 function Players:update(dt)	
 		for i = 1, #self.players do
-			if self:internal_collision(i) == false then
-				self.players[i]:update(dt)
-			end
+			self.players[i]:update(dt)
+			if self:internal_collision(i) == true then
+
+			else
 		end
 end
 

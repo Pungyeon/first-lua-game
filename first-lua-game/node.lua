@@ -26,6 +26,11 @@ function Node:center()
   } 
 end
 
+function Node:rollback(dt)
+    self.x = self.x - (self.vx * self.speed * dt)
+    self.y = self.y - (self.vy * self.speed * dt)
+end
+
 function Node:update(dt)
     self.x = self.x + self.vx * self.speed * dt
     self.y = self.y + self.vy * self.speed * dt
