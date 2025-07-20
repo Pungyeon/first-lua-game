@@ -35,7 +35,7 @@ end
 function Players:update(dt)	
 		for i = 1, #self.players do
 			self.players[i]:update(dt)
-			if self:internal_collision(i) == true then
+			if self:internal_collision(i) then
 				self.players[i]:rollback(dt)
 			end
 		end
@@ -47,6 +47,15 @@ function Players:internal_collision(i)
 			if area.Collision(self.players[i], self.players[j]) then
 				return true
 			end
+		end
+	end
+	return false
+end
+
+function Players:external_collision(i, objects)
+	for j = 1, #objects do
+		if area.Collision(player, objects[j]) then
+			return true
 		end
 	end
 	return false
