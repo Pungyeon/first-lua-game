@@ -36,8 +36,8 @@ function Players:update(dt)
 		for i = 1, #self.players do
 			self.players[i]:update(dt)
 			if self:internal_collision(i) == true then
-
-			else
+				self.players[i]:rollback(dt)
+			end
 		end
 end
 

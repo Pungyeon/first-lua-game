@@ -37,15 +37,17 @@ end
 function Player:rollback(dt)
     Node.rollback(self, dt)
 
+		-- TODO : we can simplify this a lot by putting this logic on the puck
+		-- 	instead of having it here in the player (where it really doesn't belong)
 		if self.carrying ~= nil then 
 			if self.vx < 0 then 
 				self.carrying.x = self.x + (self.carrying.width)
 			end
 			if self.vx > 0 then
-				self.carrying.x = self.x + (self.width)
+				self.carrying.x = self.x - (self.width)
 			end
 			
-			self.carrying.y = self.y + (self.height-self.carrying.height)
+			self.carrying.y = self.y - (self.height-self.carrying.height)
 			self.carrying.vx = self.vx
 			self.carrying.vy = self.vy
 		end
