@@ -26,7 +26,7 @@ function Goalie:pickup(puck)
 	Player.pickup(self, puck)
 end
 
-function Goalie:move_towards(puck)
+function Goalie:move_towards(dt, puck)
 	if self.carrying ~= nil then 
 		self.puck_time = self.puck_time - 1
 		if self.puck_time < 0 then
@@ -34,6 +34,7 @@ function Goalie:move_towards(puck)
 			self.carrying.vy = -1
 			self.carrying.speed = 1000
 			self.carrying:release()
+			self.carrying:update(dt)
 			self.carrying = nil
 		end
 		return

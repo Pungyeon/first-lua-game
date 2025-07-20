@@ -50,7 +50,7 @@ function love.update(dt)
 		players:handle_input()
 		
 		-- TODO : maybe change this method name to handle_input ? 
-		goalie:move_towards(puck)
+		goalie:move_towards(dt, puck)
 
 		players:collision(puck)
 
@@ -88,6 +88,7 @@ function love.draw()
 	goalie:draw()
 
 	love.graphics.print("Score: " .. score, 10, screenHeight - 40)
+	love.graphics.print("Goalie" .. goalie.puck_time, 10, screenHeight - 60)
 	love.graphics.print("puck_owner: " .. puck:string(), 10, screenHeight - 80)
 end
 
