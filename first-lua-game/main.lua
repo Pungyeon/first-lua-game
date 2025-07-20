@@ -52,10 +52,6 @@ function love.update(dt)
 		-- TODO : maybe change this method name to handle_input ? 
 		goalie:move_towards(puck)
 
-		-- Handle collisions. Here, we want to calculate if any collisions occured
-		--  as a result of the handling of input. If so, we should cancel the input
-		--  and/or the movement.
-		-- TODO : need to have players collide with one another
 		players:collision(puck)
 
 		if area.Collision(goalie, puck) then
@@ -64,7 +60,9 @@ function love.update(dt)
 
 		players:foreach(function(i, player)
 			player:update(dt)
-			if area.Collision(player, goalie)
+			if area.Collision(player, goalie) then
+				player:rollback(dt)
+			end
 			if players:internal_collision(i) then
 				player:rollback(dt)
 			end

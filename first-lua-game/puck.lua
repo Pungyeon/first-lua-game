@@ -30,7 +30,7 @@ function Puck:string()
 	if self.owner == nil then
 		return "EMPTY"
 	end
-	return "PICKED_UP"
+	return "PICKED_UP: " .. self.puck_time
 end
 
 function Puck:pickup(owner)
