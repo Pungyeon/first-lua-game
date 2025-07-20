@@ -60,6 +60,9 @@ function love.update(dt)
 
 		players:foreach(function(i, player)
 			player:update(dt)
+			if area.Collision(player, goal) then
+				player:rollback(dt)
+			end
 			if area.Collision(player, goalie) then
 				player:rollback(dt)
 			end
