@@ -62,7 +62,13 @@ function love.update(dt)
 			goalie:pickup(puck)
 		end
 
-		players:update(dt)
+		players:foreach(function(i, player)
+			player:update(dt)
+			if area.Collision(player, goalie)
+			if players:internal_collision(i) then
+				player:rollback(dt)
+			end
+		end)
     puck:update(dt)
 		puck:bounce(0, 0, screenWidth, screenHeight)
 

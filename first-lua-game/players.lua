@@ -32,7 +32,13 @@ function Players:handle_input()
 		end
 end
 
-function Players:update(dt)	
+function Players:foreach(fn)
+	for i = 1, #self.players do 
+		fn(i, self.players[i])
+	end
+end
+
+function Players:update(dt)
 		for i = 1, #self.players do
 			self.players[i]:update(dt)
 			if self:internal_collision(i) then
