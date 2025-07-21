@@ -57,6 +57,10 @@ function love.update(dt)
 		if area.Collision(goalie, puck) then
 			goalie:pickup(puck)
 		end
+		
+		-- TODO : Add enemy players
+		-- TODO : Add AI movement for team mates
+
 
 		players:foreach(function(i, player)
 			player:update(dt)
