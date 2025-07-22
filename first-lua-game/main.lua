@@ -58,8 +58,17 @@ function love.update(dt)
 			goalie:pickup(puck)
 		end
 		
+		-- BACKEND TODO
 		-- TODO : Add enemy players
-		-- TODO : Add AI movement for team mates
+		-- TODO : Add AI movement for team mates and enemy players
+		-- TODO : Add goal for player team
+		-- TODO : Improve goalie AI 
+		-- TODO : Implement scoring system + reset.
+		-- TODO : Implement tackling (enemy) players
+		-- 
+
+		-- FRONTEND TODO
+		-- TODO : Create some graphics !
 
 
 		players:foreach(function(i, player)
