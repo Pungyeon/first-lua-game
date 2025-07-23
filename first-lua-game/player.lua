@@ -38,12 +38,27 @@ function Player:handle_input(puck)
 				x = puck.x - self.x,
 				y = puck.y - self.y
 			}
+			-- Do we need to do an aboslute on this ?
 			if diff.x > diff.y then
-				self.
+				self.vx = 1
+				self.vy = diff.y / diff.x
 			else 
+				self.vx = diff.x / diff.y
+				self.vy = 1
 			end
     end
 end
+
+-- TODO : move this into a library
+function abs(n)
+	if n < 0 then
+		return n * -1
+	end
+	return n
+end
+
+-- TODO : move this into a library
+function sign_of(n) 
 
 function Player:rollback(dt)
     Node.rollback(self, dt)
