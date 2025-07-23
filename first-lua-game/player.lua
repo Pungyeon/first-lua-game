@@ -32,19 +32,21 @@ function Player:handle_input(puck)
     if self.inputComponent and self.selected then
         self.inputComponent:update(self)
 		else
+			if puck.
 			-- chase after puck
+			-- TODO: We need to ensure that we aren't chasing down our own players
 			-- TODO: We might have to check if distance to x is less than 1
 			local diff = {
 				x = puck.x - self.x,
 				y = puck.y - self.y
 			}
-			-- Do we need to do an aboslute on this ?
-			if diff.x > diff.y then
-				self.vx = 1
-				self.vy = diff.y / diff.x
+
+			if abs(diff.x) > abs(diff.y) then
+				self.vx = sign(diff.x)
+				self.vy = diff.y / abs(diff.x)
 			else 
-				self.vx = diff.x / diff.y
-				self.vy = 1
+				self.vx = diff.x / abs(diff.y)
+				self.vy = sign(diff.y)
 			end
     end
 end
@@ -58,7 +60,12 @@ function abs(n)
 end
 
 -- TODO : move this into a library
-function sign_of(n) 
+function sign(n) 
+	if n < 0 then
+		return -1
+	end
+	return 1
+end
 
 function Player:rollback(dt)
     Node.rollback(self, dt)
