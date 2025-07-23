@@ -23,16 +23,16 @@ function checkWallCollision(a)
 end
 
 function love.load()
+    puck = Puck:new(300, 300)
 
 		players = Players:new({
 			Player:new(100, 100, color.RED, InputComponent:new(globals.InputMap)),
 			Player:new(400, 100, color.RED, InputComponent:new(globals.InputMap))
-		})
+		}, puck)
 
 		goalie = Goalie:new(210, 380, color.GREEN, {})
 		
 		goal = Goal:new(-1, 150, goal_center, goal_width, goal_height)
-    puck = Puck:new(300, 300)
 end
 
 function love.keypressed(key)
@@ -52,7 +52,7 @@ function love.update(dt)
 		-- TODO : maybe change this method name to handle_input ? 
 		goalie:move_towards(dt, puck)
 
-		players:collision(puck)
+		players:puck_collision()
 
 		if area.Collision(goalie, puck) then
 			goalie:pickup(puck)

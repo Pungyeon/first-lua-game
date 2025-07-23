@@ -3,10 +3,11 @@ local area = require('area')
 Players = {}
 Players.__index = Players
 
-function Players:new(players)
+function Players:new(players, puck)
 	local obj = {
 		players = players,
-		selected = 1
+		selected = 1,
+		puck = puck
 	}
 	setmetatable(obj, self)
 	return obj
@@ -49,11 +50,11 @@ function Players:internal_collision(i)
 	return false
 end
 
-function Players:collision(puck)
+function Players:puck_collision()
 	for i = 1, #self.players do
 		local player = self.players[i]
-		if area.Collision(player, puck) then
-			if player:pickup(puck) then
+		if area.Collision(player, self.puck) then
+			if player:pickup(self.puck) then
 				self:switch_to(i)
 			end
 		end
