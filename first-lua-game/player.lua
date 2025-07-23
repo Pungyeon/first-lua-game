@@ -32,7 +32,16 @@ function Player:handle_input(puck)
     if self.inputComponent and self.selected then
         self.inputComponent:update(self)
 		else
-			 
+			-- chase after puck
+			-- TODO: We might have to check if distance to x is less than 1
+			local diff = {
+				x = puck.x - self.x,
+				y = puck.y - self.y
+			}
+			if diff.x > diff.y then
+				self.
+			else 
+			end
     end
 end
 
