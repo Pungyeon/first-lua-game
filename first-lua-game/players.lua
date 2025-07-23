@@ -29,7 +29,7 @@ function Players:handle_input()
 		self.players[self.selected]:select()
 
 		for i = 1, #self.players do
-			self.players[i]:handle_input()
+			self.players[i]:handle_input(self.puck)
 		end
 end
 
