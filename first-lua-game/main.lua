@@ -25,7 +25,7 @@ end
 function love.load()
     puck = Puck:new(300, 300)
 
-		players = Players:new({
+		home_team = Players:new({
 			Player:new(100, 100, color.RED, InputComponent:new(globals.InputMap)),
 			Player:new(400, 100, color.RED, InputComponent:new(globals.InputMap))
 		}, puck)
@@ -47,12 +47,12 @@ end
 function love.update(dt)
 		-- Handle Input here to ensure that inputs are handled before updating
  		-- this makes handling collisions and movement cancellation much easier
-		players:handle_input()
+		home_team:handle_input()
 		
 		-- TODO : maybe change this method name to handle_input ? 
 		goalie:move_towards(dt, puck)
 
-		players:puck_collision()
+		home_team:puck_collision()
 
 		if area.Collision(goalie, puck) then
 			goalie:pickup(puck)
@@ -71,7 +71,7 @@ function love.update(dt)
 		-- TODO : Create some graphics !
 
 
-		players:foreach(function(i, player)
+		home_team:foreach(function(i, player)
 			player:update(dt)
 			if area.Collision(player, goal) then
 				player:rollback(dt)
@@ -79,11 +79,13 @@ function love.update(dt)
 			if area.Collision(player, goalie) then
 				player:rollback(dt)
 			end
-			if players:internal_collision(i) then
+			if home_team:internal_collision(i) then
 				player:rollback(dt)
 			end
 		end)
+
     puck:update(dt)
+
 		puck:bounce(0, 0, screenWidth, screenHeight)
 
 		goalie:update(dt)
@@ -96,7 +98,7 @@ end
 
 function love.draw()
 	goal:draw()
-	players:draw()
+	home_team:draw()
 	puck:draw()
 	goalie:draw()
 

@@ -37,10 +37,17 @@ function Player:handle_input(puck)
 			if puck.owner ~= nil and puck.owner.teamColor == self.teamColor then 
 			-- TODO : Do something more intelligent here.
 			--  for example, we could assign 'positions' to each player
+			-- 	this is another instance of wanting / needing to know the positions
+			-- 	of all players in the game. 
+				self.vx = 0
+				self.vy = 0
 				return
 			end
-			-- chase after puck
+		self:move_towards(puck)
+end
 
+function Player:move_towards(puck)
+			-- chase after puck
 			-- TODO: We might have to check if distance to x is less than 1
 			local diff = {
 				x = puck.x - self.x,
