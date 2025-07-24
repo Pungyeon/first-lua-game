@@ -35,6 +35,9 @@ function Player:handle_input(puck, goal)
 			-- TODO: Make sure that player doesn't get stuck in net / similar.
 			-- TODO: We need to ensure that we aren't chasing down our own players
 			if puck.owner ~= nil and puck.owner.teamColor == self.teamColor then 
+				local obj = {
+					
+				}
 			-- TODO : Do something more intelligent here.
 			--  for example, we could assign 'positions' to each player
 			-- 	this is another instance of wanting / needing to know the positions
