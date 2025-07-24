@@ -32,9 +32,14 @@ function Player:handle_input(puck)
     if self.inputComponent and self.selected then
         self.inputComponent:update(self)
 		else
-			if puck.
-			-- chase after puck
+			-- TODO: Make sure that player doesn't get stuck in net / similar.
 			-- TODO: We need to ensure that we aren't chasing down our own players
+			if puck.owner ~= nil and puck.owner.teamColor == self.teamColor then 
+			-- TODO : Do something more intelligent here.
+				return
+			end
+			-- chase after puck
+
 			-- TODO: We might have to check if distance to x is less than 1
 			local diff = {
 				x = puck.x - self.x,
