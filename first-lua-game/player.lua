@@ -9,6 +9,8 @@ function Player:new(x, y, teamColor, inputComponent)
     obj.inputComponent = inputComponent
     obj.color = teamColor
     obj.selected = false
+    obj.bounce_time = 0
+    obj.debug_msg = ""
     setmetatable(obj, self)
     return obj
 end
@@ -29,8 +31,16 @@ function Player:draw()
 end
 
 function Player:handle_input(puck, goal)
+    -- If a player is being bounced, then input does not matter.
+    -- Essentially, you cannot do anything about a bounce
+    if self.bounce_time > 0 then
+        self.bounce_time = self.bounce_time - 1
+        return
+    end
+
     if self.inputComponent and self.selected then
         self.inputComponent:update(self)
+        return
     else
         -- TODO: Make sure that player doesn't get stuck in net / similar.
         -- TODO: We need to ensure that we aren't chasing down our own players
@@ -78,6 +88,24 @@ function sign(n)
         return -1
     end
     return 1
+end
+
+function Player:on_collision(result)
+    self.bounce_time = 10
+    if result.top then
+        self.debug_msg = "top bounce"
+        self.vy = 1
+    end
+    if result.bottom then
+        self.debug_msg = "bottom bounce"
+        self.vy = -1
+    end
+    if result.right then
+        self.vx = -1
+    end
+    if result.left then
+        self.vx = 1
+    end
 end
 
 function Player:rollback(dt)

@@ -42,17 +42,16 @@ function Players:internal_collision(i)
     for j = 1, #self.players do
         if i ~= j then
             if area.Collision(self.players[i], self.players[j]) then
-                return true
+                self.players[i]:on_collision(area.CollisionResult(self.players[i], self.players[j]))
             end
         end
     end
-    return false
 end
 
 function Players:external_collision(player, players)
     for j = 1, #players do
         if area.Collision(player, players[j]) then
-            return true
+            player:on_collision(area.CollisionResult(player, self.players[j]))
         end
     end
     return false

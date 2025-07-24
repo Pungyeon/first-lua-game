@@ -94,32 +94,29 @@ function love.update(dt)
     away_team:foreach(function(i, player)
         player:update(dt)
         if area.Collision(player, goal) then
-            player:rollback(dt)
+            player:on_collision(area.CollisionResult(player, goal))
         end
         if area.Collision(player, goalie) then
-            player:rollback(dt)
+            player:on_collision(area.CollisionResult(player, goalie))
         end
-        if away_team:internal_collision(i) then
-            player:rollback(dt)
-        end
-        if away_team:external_collision(player, home_team.players) then
-            player:rollback(dt)
-        end
+        away_team:internal_collision(i)
+        away_team:external_collision(player, home_team.players)
     end)
 
     home_team:foreach(function(i, player)
         player:update(dt)
         if area.Collision(player, goal) then
-            player:rollback(dt)
+            player:on_collision(area.CollisionResult(player, goal))
         end
         if area.Collision(player, goalie) then
-            player:rollback(dt)
+            player:on_collision(area.CollisionResult(player, goalie))
         end
-        if home_team:internal_collision(i) then
-            player:rollback(dt)
-        end
-        if home_team:external_collision(player, away_team.players) then
-            player:rollback(dt)
+        home_team:internal_collision(i)
+        home_team:external_collision(player, away_team.players)
+
+        local node = Node:new(0, screenHeight - 10, screenWidth, 10)
+        if area.Collision(player, node) then
+            player:on_collision(player, area.CollisionResult(player, node))
         end
     end)
 
@@ -143,6 +140,6 @@ function love.draw()
     goalie:draw()
 
     love.graphics.print("Score: " .. score, 10, screenHeight - 40)
-    love.graphics.print("Goalie" .. goalie.puck_time, 10, screenHeight - 60)
+    love.graphics.print("Bounce" .. home_team.players[1].debug_msg, 10, screenHeight - 60)
     love.graphics.print("puck_owner: " .. puck:string(), 10, screenHeight - 80)
 end
