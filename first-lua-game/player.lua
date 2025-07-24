@@ -36,6 +36,7 @@ function Player:handle_input(puck)
 			-- TODO: We need to ensure that we aren't chasing down our own players
 			if puck.owner ~= nil and puck.owner.teamColor == self.teamColor then 
 			-- TODO : Do something more intelligent here.
+			--  for example, we could assign 'positions' to each player
 				return
 			end
 			-- chase after puck
