@@ -28,7 +28,7 @@ function Player:draw()
 	Node.draw(self)
 end
 
-function Player:handle_input(puck)
+function Player:handle_input(puck, goal)
     if self.inputComponent and self.selected then
         self.inputComponent:update(self)
 		else

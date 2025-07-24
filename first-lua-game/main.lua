@@ -47,7 +47,7 @@ end
 function love.update(dt)
 		-- Handle Input here to ensure that inputs are handled before updating
  		-- this makes handling collisions and movement cancellation much easier
-		home_team:handle_input()
+		home_team:handle_input(puck, goal)
 		
 		-- TODO : maybe change this method name to handle_input ? 
 		goalie:move_towards(dt, puck)

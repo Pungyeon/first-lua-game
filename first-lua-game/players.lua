@@ -3,11 +3,10 @@ local area = require('area')
 Players = {}
 Players.__index = Players
 
-function Players:new(players, puck)
+function Players:new(players)
 	local obj = {
 		players = players,
-		selected = 1,
-		puck = puck
+		selected = 1
 	}
 	setmetatable(obj, self)
 	return obj
@@ -25,11 +24,11 @@ function Players:switch_to(to)
 	end
 end
 
-function Players:handle_input()
+function Players:handle_input(puck, goal)
 		self.players[self.selected]:select()
 
 		for i = 1, #self.players do
-			self.players[i]:handle_input(self.puck)
+			self.players[i]:handle_input(puck, goal)
 		end
 end
 
