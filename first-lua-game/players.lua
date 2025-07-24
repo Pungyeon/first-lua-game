@@ -52,7 +52,7 @@ end
 function Players:pickup_collision(puck)
 	for i = 1, #self.players do
 		local player = self.players[i]
-		if area.Collision(player, self.puck) then
+		if area.Collision(player, puck) then
 			if player:pickup(puck) then
 				self:switch_to(i)
 			end

@@ -38,7 +38,7 @@ function Player:handle_input(puck, goal)
 				-- TODO : We still need to do something more intelligent
 				-- here at some time, though, that is not now.
 				self:move_towards({
-					x = goal:center().x + math.random(20),
+					x = goal:center().x + 100 + math.random(20),
 					y = goal:center().y
 				})
 				return

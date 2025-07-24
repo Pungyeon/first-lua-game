@@ -7,8 +7,6 @@ Puck = setmetatable(Puck, { __index = Node })
 
 function Puck:new(x, y)
     local obj = Node.new(self, x, y, 20, 20)
-		obj.vx = 0.1
-		obj.vy = 0.3
 		obj.owner = nil
 		setmetatable(obj, self)
 		return obj
