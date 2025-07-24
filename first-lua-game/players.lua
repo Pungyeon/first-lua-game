@@ -49,6 +49,15 @@ function Players:internal_collision(i)
 	return false
 end
 
+function Players:external_collision(player, players) 
+	for j = 1, #players do 
+		if area.Collision(player, players[j]) then
+			return true
+		end
+	end
+	return false
+end
+
 function Players:pickup_collision(puck)
 	for i = 1, #self.players do
 		local player = self.players[i]

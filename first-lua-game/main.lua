@@ -73,6 +73,7 @@ function love.update(dt)
 		-- Handle Input here to ensure that inputs are handled before updating
  		-- this makes handling collisions and movement cancellation much easier
 		home_team:handle_input(puck, goal)
+		home_team:handle_input(puck, goal)
 		
 		-- TODO : maybe change this method name to handle_input ? 
 		goalie:move_towards(dt, puck)
@@ -106,6 +107,9 @@ function love.update(dt)
 			if away_team:internal_collision(i) then
 				player:rollback(dt)
 			end
+			if away_team:external_collision(player, home_team) then
+				player:rollback(dt)
+			end
 		end)
 
 		home_team:foreach(function(i, player)
@@ -117,6 +121,9 @@ function love.update(dt)
 				player:rollback(dt)
 			end
 			if home_team:internal_collision(i) then
+				player:rollback(dt)
+			end
+			if home_team:external_collision(player, away_team) then
 				player:rollback(dt)
 			end
 		end)
