@@ -11,19 +11,19 @@ function Node:new(x, y, width, height)
         vx = 0,
         vy = 0,
         speed = 200,
-				width = width,
-				height = height,
-				color = color.WHITE
+        width = width,
+        height = height,
+        color = color.WHITE
     }
     setmetatable(obj, self)
     return obj
 end
 
-function Node:center() 
-	return {
-		y = self.y + self.height/2,
-		x = self.x + self.width/2
-  } 
+function Node:center()
+    return {
+        y = self.y + self.height / 2,
+        x = self.x + self.width / 2
+    }
 end
 
 function Node:rollback(dt)
@@ -37,7 +37,7 @@ function Node:update(dt)
 end
 
 function Node:draw()
-		love.graphics.setColor(self.color.red, self.color.green, self.color.blue)
+    love.graphics.setColor(self.color.red, self.color.green, self.color.blue)
     love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
 end
 

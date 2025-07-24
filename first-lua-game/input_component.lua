@@ -15,13 +15,11 @@ function InputComponent:update(node)
         end
     end
 
-    local mag = math.sqrt(node.vx^2 + node.vy^2)
+    local mag = math.sqrt(node.vx ^ 2 + node.vy ^ 2)
     if mag > 0 then
         node.vx = node.vx / mag
         node.vy = node.vy / mag
     end
 end
-
-
 
 return InputComponent

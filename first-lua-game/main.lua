@@ -17,11 +17,6 @@ local goal_height = 140
 local goal_width = 40
 local goal_center = (screenHeight / 2) - (goal_height / 2)
 
-
-function checkWallCollision(a)
-    return a.x < 0 or a.y < 0 or a.x > screenWidth or a.y > screenHeight
-end
-
 function love.load()
     puck = Puck:new(screenWidth / 2, screenHeight / 2)
 
@@ -72,7 +67,7 @@ end
 function love.update(dt)
     -- Handle Input here to ensure that inputs are handled before updating
     -- this makes handling collisions and movement cancellation much easier
-    -- away_team:handle_input(puck, goal)
+    away_team:handle_input(puck, goal)
     home_team:handle_input(puck, goal)
 
     -- TODO : maybe change this method name to handle_input ?
