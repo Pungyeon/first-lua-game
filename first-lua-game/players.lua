@@ -49,11 +49,11 @@ function Players:internal_collision(i)
 	return false
 end
 
-function Players:puck_collision()
+function Players:pickup_collision(puck)
 	for i = 1, #self.players do
 		local player = self.players[i]
 		if area.Collision(player, self.puck) then
-			if player:pickup(self.puck) then
+			if player:pickup(puck) then
 				self:switch_to(i)
 			end
 		end
