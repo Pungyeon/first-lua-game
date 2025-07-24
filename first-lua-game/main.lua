@@ -26,9 +26,34 @@ function love.load()
     puck = Puck:new(screenWidth/2, screenHeight/2)
 
 		home_team = Players:new({
-			Player:new(100, 100, color.RED, InputComponent:new(globals.InputMap)),
-			Player:new(400, 100, color.RED, InputComponent:new(globals.InputMap))
-		}, puck)
+			Player:new(
+				screenWidth/2 + 100,
+				screenHeight/2 + 100,
+				color.RED,
+				InputComponent:new(globals.InputMap)
+			),
+			Player:new(
+				screenWidth/2 + 100,
+				screenHeight/2 - 100,
+				color.RED,
+				InputComponent:new(globals.InputMap)
+			)
+		})
+
+		away_team = Players:new({
+			Player:new(
+				screenWidth/2 - 100,
+				screenHeight/2 + 100,
+				color.GREEN,
+				nil
+			),
+			Player:new(
+				screenWidth/2 - 100,
+				screenHeight/2 - 100,
+				color.GREEN,
+				nil
+			)
+		})
 
 		goalie = Goalie:new(210, 380, color.GREEN, {})
 		
@@ -53,6 +78,7 @@ function love.update(dt)
 		goalie:move_towards(dt, puck)
 
 		home_team:pickup_collision(puck)
+		away_team:pickup_collision(puck)
 
 		if area.Collision(goalie, puck) then
 			goalie:pickup(puck)
@@ -69,7 +95,18 @@ function love.update(dt)
 
 		-- FRONTEND TODO
 		-- TODO : Create some graphics !
-
+		away_team:foreach(function(i, player)
+			player:update(dt)
+			if area.Collision(player, goal) then
+				player:rollback(dt)
+			end
+			if area.Collision(player, goalie) then
+				player:rollback(dt)
+			end
+			if away_team:internal_collision(i) then
+				player:rollback(dt)
+			end
+		end)
 
 		home_team:foreach(function(i, player)
 			player:update(dt)
@@ -98,6 +135,7 @@ end
 
 function love.draw()
 	goal:draw()
+	away_team:draw()
 	home_team:draw()
 	puck:draw()
 	goalie:draw()
