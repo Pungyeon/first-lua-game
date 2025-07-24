@@ -43,7 +43,6 @@ function Player:handle_input(puck, goal)
         return
     else
         -- TODO: Make sure that player doesn't get stuck in net / similar.
-        -- TODO: We need to ensure that we aren't chasing down our own players
         if puck.owner ~= nil and puck.owner.teamColor == self.teamColor then
             -- TODO : We still need to do something more intelligent
             -- here at some time, though, that is not now.
