@@ -52,7 +52,8 @@ function love.load()
 
     goalie = Goalie:new(210, 380, color.GREEN, {})
 
-    goal = Goal:new(-1, 150, goal_center, goal_width, goal_height)
+    goal = Goal:new(-1, 150 - goal_width, goal_center, goal_width, goal_height)
+    home_goal = Goal:new(1, screenWidth - 150, goal_center, goal_width, goal_height)
 end
 
 function love.keypressed(key)
@@ -67,7 +68,7 @@ end
 function love.update(dt)
     -- Handle Input here to ensure that inputs are handled before updating
     -- this makes handling collisions and movement cancellation much easier
-    away_team:handle_input(puck, goal)
+    away_team:handle_input(puck, home_goal)
     home_team:handle_input(puck, goal)
 
     -- TODO : maybe change this method name to handle_input ?
@@ -81,7 +82,6 @@ function love.update(dt)
     end
 
     -- BACKEND TODO
-    -- TODO : Add enemy players
     -- TODO : Add AI movement for team mates and enemy players
     -- TODO : Add goal for player team
     -- TODO : Improve goalie AI
@@ -134,6 +134,7 @@ end
 
 function love.draw()
     goal:draw()
+    home_goal:draw()
     away_team:draw()
     home_team:draw()
     puck:draw()
