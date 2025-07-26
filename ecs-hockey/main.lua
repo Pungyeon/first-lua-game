@@ -24,12 +24,15 @@ function love.load()
     }
 end
 
+function love.conf(t)
+    t.console = true
+end
+
 function love.keypressed(key)
-    -- TODO : note - this isn't actually taking key into account
-    InputSystem:handle(key, entities)
 end
 
 function love.update(dt)
+    InputSystem:handle("UNUSED", entities)
     PhysicsSystem:handle(dt, entities)
     CollisionSystem:handle(entities)
 end

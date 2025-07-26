@@ -2,25 +2,29 @@ local CollisionSystem = {}
 local function is_top_collision(a, b)
     return a.velocity.y < 0
         and a.position.y < (b.position.y + b.collision.height)
-        and ((a.position.x < b.position.x + b.collision.width) or (a.position.x + a.collision.width > b.position.x))
+        and (a.position.x < b.position.x + b.collision.width)
+        and (a.position.x + a.collision.width > b.position.x)
 end
 
 local function is_bottom_collision(a, b)
     return a.velocity.y > 0
         and a.position.y + a.collision.height > b.position.y
-        and ((a.position.x < b.position.x + b.collision.width) or (a.position.x + a.collision.width > b.position.x))
+        and (a.position.x < b.position.x + b.collision.width)
+        and (a.position.x + a.collision.width > b.position.x)
 end
 
 local function is_right_collision(a, b)
     return a.velocity.x > 0
         and a.position.x + a.collision.width > b.position.x
-        and ((a.position.y < b.position.y + b.collision.height) or (a.position.y + a.collision.height > b.position.y))
+        and (a.position.y < b.position.y + b.collision.height)
+        and (a.position.y + a.collision.height > b.position.y)
 end
 
 local function is_left_collision(a, b)
     return a.velocity.x < 0
         and a.position.x < b.position.x + b.collision.width
-        and ((a.position.y < b.position.y + b.collision.height) or (a.position.y + a.collision.height > b.position.y))
+        and (a.position.y < b.position.y + b.collision.height)
+        and (a.position.y + a.collision.height > b.position.y)
 end
 
 local function collision_result(a, b)
@@ -45,20 +49,31 @@ function CollisionSystem:handle(entities)
     end
 
     for _, player in ipairs(players) do
-        for _, wall in ipairs(walls) do
-            if aabb(player, wall) then
-                local result = collision_result(player, wall)
-                if result.top then
-                    player.position.y = wall.position.y + wall.collision.height
+        if player.velocity.x ~= 0 then
+            for _, wall in ipairs(walls) do
+                if aabb(player, wall) then
+                    print("x collision: " .. player.velocity.x .. ", y vel: " .. player.velocity.y)
+                    if player.velocity.x > 0 then
+                        player.position.x = wall.position.x - player.collision.width
+                    else
+                        player.position.x = wall.position.x + wall.collision.width
+                    end
+                    player.velocity.x = 0
                 end
-                if result.bottom then
-                    player.position.y = wall.position.y - player.collision.height
-                end
-                if result.right then
-                    player.position.x = wall.position.x - player.collision.width
-                end
-                if result.left then
-                    player.position.x = wall.position.x + wall.collision.width
+            end
+        end
+
+        if player.velocity.y ~= 0 then
+            for _, wall in ipairs(walls) do
+                if aabb(player, wall) then
+                    print("y collision: " .. player.velocity.y .. ", x vel: " .. player.velocity.x)
+                    if player.velocity.y > 0 then
+                        -- player.position.y = wall.position.y - player.collision.height
+                    else
+                        player.position.y = wall.position.y + wall.collision.height
+                        -- player.position.y = wall.position.y + wall.collision.height
+                    end
+                    player.velocity.y = 0
                 end
             end
         end
