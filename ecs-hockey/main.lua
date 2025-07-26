@@ -33,8 +33,8 @@ end
 
 function love.update(dt)
     InputSystem:handle("UNUSED", entities)
+    CollisionSystem:handle(dt, entities)
     PhysicsSystem:handle(dt, entities)
-    CollisionSystem:handle(entities)
 end
 
 function love.draw()
