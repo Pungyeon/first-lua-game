@@ -1,8 +1,9 @@
 local Player = require("scripts/entities/player")
-local Input = require("scripts/components/input")
+local Wall = require("scripts/entities/wall")
 local RenderSystem = require("scripts/systems/render")
 local InputSystem = require("scripts/systems/input")
 local PhysicsSystem = require("scripts/systems/physics")
+local CollisionSystem = require("scripts/systems/collision")
 
 local screen_width, screen_height = love.window.getMode()
 
@@ -11,23 +12,28 @@ local render_system = nil
 local input_system = nil
 local physics_system = nil
 
+local wall_thickness = 10
+
 function love.load()
     entities = {
-        Player:new(100, 100, Input:new())
+        Player:new(100, 100),
+        Wall:new(0, 0, screen_width, wall_thickness),
+        Wall:new(0, 0, wall_thickness, screen_height),
+        Wall:new(screen_width - wall_thickness, 0, wall_thickness, screen_height),
+        Wall:new(0, screen_height - wall_thickness, screen_width, screen_height),
     }
-    render_system = RenderSystem:new()
-    input_system = InputSystem:new()
-    physics_system = Physics:new()
 end
 
 function love.keypressed(key)
+    -- TODO : note - this isn't actually taking key into account
+    InputSystem:handle(key, entities)
 end
 
 function love.update(dt)
-    input_system:handle(entities)
-    physics_system:handle(dt, entities)
+    PhysicsSystem:handle(dt, entities)
+    CollisionSystem:handle(entities)
 end
 
 function love.draw()
-    render_system:handle(entities)
+    RenderSystem:handle(entities)
 end
