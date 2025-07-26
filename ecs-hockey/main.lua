@@ -6,8 +6,10 @@ local InputSystem = require("scripts/systems/input")
 local PhysicsSystem = require("scripts/systems/physics")
 local CollisionSystem = require("scripts/systems/collision")
 local EventBus = require("scripts/types/event_bus")
+local Color = require("scripts/types/color")
 local InteractiveSystem = require("scripts/systems/interactive")
 local SelectSystem = require("scripts/systems/select")
+local AISystem = require("scripts/systems/ai")
 
 local screen_width, screen_height = love.window.getMode()
 local wall_thickness = 10
@@ -16,10 +18,13 @@ local interactive_system = nil
 local select_system = nil
 
 function love.load()
+    red_team = { id = 1, color = Color.RED }
+    blue_team = { id = 2, color = Color.BLUE }
     entities = {
         Puck:new(250, 250),
-        Player:new(screen_width * 0.1, 100),
-        Player:new(screen_width * 0.8, 100),
+        Player:new(screen_width * 0.1, 100, red_team),
+        Player:new(screen_width * 0.8, 100, red_team),
+        Player:new(screen_width * 0.1, 400, blue_team),
         Wall:new(0, 0, screen_width, wall_thickness),
         Wall:new(0, 0, wall_thickness, screen_height),
         Wall:new(screen_width - wall_thickness, 0, wall_thickness, screen_height),
@@ -29,7 +34,8 @@ function love.load()
         entities[i].id = i
     end
     interactive_system = InteractiveSystem:new(entities)
-    select_system = SelectSystem:new(entities)
+    select_system = SelectSystem:new(red_team, entities)
+    AISystem:initialise(entities)
 end
 
 function love.conf(t)
@@ -41,6 +47,7 @@ end
 
 function love.update(dt)
     InputSystem:handle("UNUSED", entities)
+    -- AISystem:handle(dt)
     CollisionSystem:handle(dt, entities)
     PhysicsSystem:handle(dt, entities)
 end

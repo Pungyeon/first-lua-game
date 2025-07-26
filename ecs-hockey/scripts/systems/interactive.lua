@@ -39,6 +39,15 @@ function InteractiveSystem:new(entities)
     return self
 end
 
+local function release(root, velocity, speed)
+    local puck = root.attached
+    puck.velocity = velocity
+    puck.speed = speed
+    root.attached = nil
+    puck.attached = nil
+    EventBus:emit("possession", nil)
+end
+
 function InteractiveSystem:handle_pass(root)
     if root.attached == nil then
         return
@@ -48,7 +57,7 @@ function InteractiveSystem:handle_pass(root)
     -- of the player. i.e if the player is moving down, we should filter out players who are above
     local teammates = {}
     for _, entity in ipairs(self.entities) do
-        if entity.tag == "player" and entity.color == root.color then
+        if entity.tag == "player" and entity.team.id == root.team.id then
             table.insert(teammates, entity)
         end
     end
@@ -57,14 +66,15 @@ function InteractiveSystem:handle_pass(root)
     if nearest == nil then
         return
     end
-    local puck = root.attached
-    puck.velocity = Vector:new(
-        nearest.distance.x / nearest.distance.direct,
-        nearest.distance.y / nearest.distance.direct
+
+    release(
+        root,
+        Vector:new(
+            nearest.distance.x / nearest.distance.direct,
+            nearest.distance.y / nearest.distance.direct
+        ),
+        500
     )
-    puck.speed = 500
-    root.attached = nil
-    puck.attached = nil
 end
 
 function InteractiveSystem:handle_shoot(entity)
@@ -72,11 +82,7 @@ function InteractiveSystem:handle_shoot(entity)
         return
     end
 
-    local puck = entity.attached
-    puck.velocity = Vector:new(entity.velocity.x, entity.velocity.y)
-    puck.speed = 1000
-    puck.attached = nil
-    entity.attached = nil
+    release(entity, Vector:new(entity.velocity.x, entity.velocity.y), 1000)
 end
 
 return InteractiveSystem

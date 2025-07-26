@@ -8,6 +8,34 @@ local function aabb(a, b)
         a.position.y + a.collision.height > b.position.y
 end
 
+local function handle_rigid_collision(dt, entity, static)
+    local predict = {
+        position = Vector:new(
+            entity.position.x + (entity.velocity.x * entity.speed * dt),
+            entity.position.y
+        ),
+        collision = entity.collision,
+    }
+
+    if aabb(predict, static) then
+        if entity.collision.type == "rigid" then
+            entity.velocity.x = 0
+        else
+            error("unsupported collision type: " .. entity.collision.type)
+        end
+        predict.position.x = entity.position.x
+    end
+
+    predict.position.y = entity.position.y + (entity.velocity.y * entity.speed * dt)
+    if aabb(predict, static) then
+        if entity.collision.type == "rigid" then
+            entity.velocity.y = 0
+        else
+            error("unsupported collision type: " .. entity.collision.type)
+        end
+    end
+end
+
 -- TODO : perhaps this needs a renaming as well ? handle static collision?
 local function handle_static_collision(dt, entity, static)
     local predict = {
@@ -62,9 +90,14 @@ function CollisionSystem:handle(dt, entities)
     end
 
     for _, particle in ipairs(particles) do
+        if particle.attached then
+            goto continue
+        end
+
         for _, wall in ipairs(walls) do
             handle_static_collision(dt, particle, wall)
         end
+        ::continue::
     end
 
     for _, player in ipairs(players) do
@@ -76,12 +109,27 @@ function CollisionSystem:handle(dt, entities)
     -- TODO : handle collision between puck and player
     for _, player in ipairs(players) do
         for _, particle in ipairs(particles) do
+            if particle.attached then
+                goto continue
+            end
             if aabb(player, particle) then
                 if player.attached == nil then
                     player.attached = particle
                     particle.attached = player
                     EventBus:emit("switch", player)
+                    EventBus:emit("possession", player)
                 end
+            end
+            ::continue::
+        end
+    end
+
+    for i = 1, #players do
+        local a = players[i]
+        for j = 1, #players do
+            local b = players[j]
+            if a.id ~= b.id then
+                handle_rigid_collision(dt, a, b)
             end
         end
     end

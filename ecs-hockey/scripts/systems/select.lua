@@ -3,10 +3,10 @@ local Vector = require("scripts/types/vector")
 
 SelectSystem = {} -- TODO : this name sucks
 
-function SelectSystem:new(entities)
+function SelectSystem:new(team, entities)
     local players = {}
     for _, entity in ipairs(entities) do
-        if entity.tag == "player" then
+        if entity.tag == "player" and entity.team.id == team.id then
             table.insert(players, entity)
         end
     end
@@ -28,13 +28,14 @@ function SelectSystem:new(entities)
 end
 
 function SelectSystem:switch_to(i)
-    if self.selected > #self.players then
-        self.selected = 1
-    end
     self.players[self.selected].selected = nil
     self.players[self.selected].velocity = Vector:new(0, 0)
 
     self.selected = i
+    if self.selected > #self.players then
+        self.selected = 1
+    end
+
     self.players[self.selected].selected = {}
 end
 

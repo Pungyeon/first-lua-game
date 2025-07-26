@@ -19,12 +19,11 @@ function PhysicsSystem:handle(dt, entities)
             if entity.attached then
                 if entity.velocity.x > 0 then
                     entity.attached.position.x = entity.position.x + entity.dimensions.width
-                    entity.attached.position.y = entity.position.y + entity.dimensions.height / 2
                 end
                 if entity.velocity.x < 0 then
                     entity.attached.position.x = entity.position.x - entity.attached.dimensions.width
-                    entity.attached.position.y = entity.position.y + entity.dimensions.height / 2
                 end
+                entity.attached.position.y = entity.position.y + entity.dimensions.height / 2
             end
         end
         if entity.physics and entity.physics.type == "particle" and entity.attached == nil then

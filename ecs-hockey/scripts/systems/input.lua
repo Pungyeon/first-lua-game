@@ -6,6 +6,10 @@ InputSystem = {
 }
 
 local function handle_entity(key, entity)
+    if entity.collision.bounce > 0 then
+        entity.collision.bounce = entity.collision.bounce - 1
+        return
+    end
     entity.velocity = Vector:new(0, 0)
     if love.keyboard.isDown("w") then
         entity.velocity.y = -1
