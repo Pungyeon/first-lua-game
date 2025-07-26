@@ -8,11 +8,10 @@ function Player:new(x, y)
         speed      = 200,
         position   = Vector:new(x, y),
         velocity   = Vector:new(0, 0),
-        selected   = {}, -- TODO : Make this nil by default
         render     = { type = "rectangle" },
-        physics    = { "simple" },
+        physics    = { type = "simple" },
         dimensions = { width = 30, height = 30 },
-        collision  = { width = 30, height = 30 },
+        collision  = { type = "rigid", width = 30, height = 30 },
         color      = Color.RED,
         tag        = "player"
     }

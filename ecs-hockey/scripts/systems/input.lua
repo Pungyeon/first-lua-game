@@ -1,4 +1,9 @@
-InputSystem = {}
+local EventBus = require("scripts/types/event_bus")
+
+InputSystem = {
+    l_down = false,
+    k_down = false
+}
 
 local function handle_entity(key, entity)
     entity.velocity = Vector:new(0, 0)
@@ -13,6 +18,23 @@ local function handle_entity(key, entity)
     end
     if love.keyboard.isDown("d") then
         entity.velocity.x = 1
+    end
+    if love.keyboard.isDown("j") then
+        EventBus:emit("pass", entity)
+    end
+
+    if love.keyboard.isDown("k") and InputSystem.k_down == false then
+        InputSystem.k_down = true
+        EventBus:emit("shoot", entity)
+    elseif love.keyboard.isDown("k") == false and InputSystem.k_down then
+        InputSystem.k_down = false
+    end
+
+    if love.keyboard.isDown("l") and InputSystem.l_down == false then
+        InputSystem.l_down = true
+        EventBus:emit("switch", nil)
+    elseif love.keyboard.isDown("l") == false and InputSystem.l_down then
+        InputSystem.l_down = false
     end
 end
 

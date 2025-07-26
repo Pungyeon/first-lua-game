@@ -6,7 +6,7 @@ local Wall = {}
 function Wall:new(x, y, width, height)
     return {
         position   = Vector:new(x, y),
-        collision  = { width = width, height = height },
+        collision  = { type = "static", width = width, height = height },
         dimensions = { width = width, height = height },
         color      = Color.WHITE,
         render     = { type = "rectangle" },

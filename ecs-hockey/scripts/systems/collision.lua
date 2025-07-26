@@ -1,41 +1,87 @@
+local EventBus = require("scripts/types/event_bus")
 local CollisionSystem = {}
 
-function aabb(a, b)
+local function aabb(a, b)
     return a.position.x < b.position.x + b.collision.width and
         a.position.x + a.collision.width > b.position.x and
         a.position.y < b.position.y + b.collision.height and
         a.position.y + a.collision.height > b.position.y
 end
 
-function CollisionSystem:handle(dt, entities)
-    local walls = {}
-    local players = {}
-    for _, entity in ipairs(entities) do
-        if entity.tag == "wall" then
-            table.insert(walls, entity)
+-- TODO : perhaps this needs a renaming as well ? handle static collision?
+local function handle_static_collision(dt, entity, static)
+    local predict = {
+        position = Vector:new(
+            entity.position.x + (entity.velocity.x * entity.speed * dt),
+            entity.position.y
+        ),
+        collision = entity.collision,
+    }
+    if aabb(predict, static) then
+        if entity.collision.type == "rigid" then
+            entity.velocity.x = 0
+        elseif entity.collision.type == "particle" then
+            entity.velocity.x = entity.velocity.x * -1
+            entity.speed = entity.speed * 0.75
+        else
+            error("unsupported collision type: " .. entity.collision.type)
         end
-        if entity.tag == "player" then
-            table.insert(players, entity)
+        predict.position.x = entity.position.x
+    end
+
+    predict.position.y = entity.position.y + (entity.velocity.y * entity.speed * dt)
+    if aabb(predict, static) then
+        if entity.collision.type == "rigid" then
+            entity.velocity.y = 0
+        elseif entity.collision.type == "particle" then
+            entity.velocity.y = entity.velocity.y * -1
+            entity.speed = entity.speed * 0.75
+            -- TODO : should we also decrease speed ?
+        else
+            error("unsupported collision type: " .. entity.collision.type)
+        end
+    end
+end
+
+function CollisionSystem:handle(dt, entities)
+    local walls = {}   -- TODO : rename this to static
+    local players = {} -- TODO : rename this to rigid
+    local particles = {}
+    for _, entity in ipairs(entities) do
+        if entity.collision then
+            if entity.collision.type == "static" then
+                table.insert(walls, entity)
+            end
+            if entity.collision.type == "rigid" then
+                table.insert(players, entity)
+            end
+            if entity.collision.type == "particle" then
+                table.insert(particles, entity)
+            end
+        end
+    end
+
+    for _, particle in ipairs(particles) do
+        for _, wall in ipairs(walls) do
+            handle_static_collision(dt, particle, wall)
         end
     end
 
     for _, player in ipairs(players) do
         for _, wall in ipairs(walls) do
-            local predict = {
-                position = Vector:new(
-									player.position.x + (player.velocity.x * player.speed * dt),
-									player.position.y
-								),
-                collision = player.collision,
-            }
-            if aabb(predict, wall) then
-                player.velocity.x = 0
-                predict.position.x = player.position.x
-            end
+            handle_static_collision(dt, player, wall)
+        end
+    end
 
-            predict.position.y = player.position.y + (player.velocity.y * player.speed * dt)
-            if aabb(predict, wall) then
-                player.velocity.y = 0
+    -- TODO : handle collision between puck and player
+    for _, player in ipairs(players) do
+        for _, particle in ipairs(particles) do
+            if aabb(player, particle) then
+                if player.attached == nil then
+                    player.attached = particle
+                    particle.attached = player
+                    EventBus:emit("switch", player)
+                end
             end
         end
     end
