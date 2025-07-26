@@ -47,11 +47,12 @@ end
 
 function love.update(dt)
     InputSystem:handle("UNUSED", entities)
-    -- AISystem:handle(dt)
+    AISystem:handle(dt)
     CollisionSystem:handle(dt, entities)
     PhysicsSystem:handle(dt, entities)
 end
 
 function love.draw()
     RenderSystem:handle(entities)
+    AISystem:debug()
 end
