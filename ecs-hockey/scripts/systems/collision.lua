@@ -22,7 +22,10 @@ function CollisionSystem:handle(dt, entities)
     for _, player in ipairs(players) do
         for _, wall in ipairs(walls) do
             local predict = {
-                position = Vector:new(player.position.x, player.position.x + (player.velocity.y * player.speed * dt)),
+                position = Vector:new(
+									player.position.x + (player.velocity.x * player.speed * dt),
+									player.position.y
+								),
                 collision = player.collision,
             }
             if aabb(predict, wall) then
