@@ -74,7 +74,21 @@ function is_within_square(pos, square)
 end
 
 function get_best_square(pos, squares)
-    -- TODO : implement me
+    local best = nil
+    for _, square in ipairs(squares) do
+        if not best then
+            best = square
+        end
+        -- TODO :
+        -- * maybe we can make the position a little relative?
+        -- * we should also look at square neighbours, to consider where the action isrunning
+        -- * we should also consider whether the player is attacking or defending, but
+        --    I actually think that we can just assume that they are attacking if we are looking at this?
+        if square.contains < best.contains then
+            best = square
+        end
+    end
+    return best
 end
 
 function AISystem:handle(dt)
@@ -83,11 +97,38 @@ function AISystem:handle(dt)
     for team, players in ipairs(self.team_to_players) do
         for _, player in ipairs(players) do
             -- TODO : skip if the player is traveling (or within distance of travel goal)
+            if player.travelling_to then
+                local distance = player.position:distance_to(player.travelling_to)
+                if distance.direct > 50 then
+                    goto continue
+                end
+                player.travelling_to = nil
+                player.velocity = Vector:new(0, 0)
+            end
             if player.selected == nil then
                 if self.possession and self.possession.team.id == team then
                     -- TODO : try to find space.
                     -- get the best square
                     -- set player.travelling = { x, y }
+                    --
+                    local s = get_best_square(player, self.squares)
+                    local travel_to = Vector:new(
+                        love.math.random(s.x, s.x + s.width),
+                        love.math.random(s.y, s.y + s.height)
+                    )
+                    print(string.format("best square: %s", Vector:new(s.x, s.y):string()))
+                    local distance = travel_to:distance_to(player.position)
+                    player.travelling_to = travel_to
+                    player.velocity = Vector:new(
+                        distance.x / distance.direct,
+                        distance.y / distance.direct
+                    )
+                    print(string.format("player: %s - travel: %s - velocity: %s - distance(%d): %d, %d",
+                        player.position:string(),
+                        player.travelling_to:string(),
+                        player.velocity:string(),
+                        distance.direct, distance.x, distance.y
+                    ))
                 else
                     local distance = self.puck.position:distance_to(player.position)
                     -- local distance = player.position:distance_to(self.puck.position)
@@ -97,6 +138,7 @@ function AISystem:handle(dt)
                     )
                 end
             end
+            ::continue::
         end
     end
 end
@@ -112,6 +154,14 @@ function AISystem:debug()
             square.x + square.width, square.y + square.height
         )
         love.graphics.print(square.contains, square.x + square.width / 2, square.y + square.height / 2)
+    end
+
+    for team, players in ipairs(self.team_to_players) do
+        for _, player in ipairs(players) do
+            if player.travelling_to then
+                love.graphics.rectangle("fill", player.travelling_to.x, player.travelling_to.y, 20, 20)
+            end
+        end
     end
 end
 

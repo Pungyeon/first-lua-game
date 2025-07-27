@@ -11,6 +11,10 @@ function Vector:new(x, y)
     return obj
 end
 
+function Vector:string()
+    return string.format("{ x: %f, y: %f }", self.x, self.y)
+end
+
 function Vector:distance_to(vector)
     local x = self.x - vector.x
     local y = self.y - vector.y
