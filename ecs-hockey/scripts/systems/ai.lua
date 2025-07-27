@@ -110,7 +110,7 @@ function AISystem:is_travelling(player)
     if player.travelling_to then
         local distance = player.position:distance_to(player.travelling_to)
         if distance.direct > 50 then
-            if player.attached then
+            if player.attached and not player.selected then
                 local should_shoot = love.math.random(1, 100) == 1
                 if should_shoot then
                     EventBus:emit("shoot", player)
