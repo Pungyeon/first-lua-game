@@ -145,25 +145,29 @@ function AISystem:handle_team(dt, team, opponents, team_id)
                 Vector:new(distance.x, distance.y):string()
             ))
         end
-				::continue::
+        ::continue::
     end
 
-		if not self.possession or self.possession.team.id != team_id then
-    local j = 1
-    for i = 1, #team do
-        local player = team[i]
-        local distance = self.puck.position:distance_to(player.position)
-        if distance.direct < 200 or j > #opponents then -- TODO : Fix this hacky bullshit
-        else
-            local opponent = opponents[j]
-            distance = opponent.position:distance_to(player.position)
+    if not self.possession or self.possession.team.id ~= team_id then
+        local j = 1
+        for i = 1, #team do
+            local player = team[i]
+            if player.selected then
+                goto continue
+            end
+            local distance = self.puck.position:distance_to(player.position)
+            if distance.direct < 200 or j > #opponents then -- TODO : Fix this hacky bullshit
+            else
+                local opponent = opponents[j]
+                distance = opponent.position:distance_to(player.position)
+            end
+            player.velocity = Vector:new(
+                distance.x / distance.direct,
+                distance.y / distance.direct
+            )
+            ::continue::
         end
-        player.velocity = Vector:new(
-            distance.x / distance.direct,
-            distance.y / distance.direct
-        )
     end
-		end 
 end
 
 function AISystem:handle(dt)
