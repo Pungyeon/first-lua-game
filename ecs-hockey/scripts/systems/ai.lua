@@ -74,7 +74,7 @@ function AISystem:calculate_spatial_map()
         end
     end
 
-    for _, player in ipairs(self.home_team) do
+    for _, player in ipairs(self.away_team) do
         for i = 1, #squares do
             if is_within_square(player.position, squares[i]) then
                 squares[i].contains = squares[i].contains + 1
@@ -124,7 +124,7 @@ function AISystem:is_travelling(player)
     return false
 end
 
-function AISystem:handle_team(dt, team, team_id)
+function AISystem:handle_team(dt, team, opponents, team_id)
     for _, player in ipairs(team) do
         if self:is_travelling(player) or player.selected then
             goto continue
@@ -144,24 +144,32 @@ function AISystem:handle_team(dt, team, team_id)
             )
             goto continue
         end
+    end
 
-
+    local j = 1
+    for i = 1, #team do
+        local player = team[i]
         local distance = self.puck.position:distance_to(player.position)
-        -- if distance.direct < 200 then
+        if distance.direct < 200 or j > #opponents then -- TODO : Fix this hacky bullshit
+        else
+            local opponent = opponents[j]
+            print(string.format("opp: %s", opponent.position:string()))
+            distance = opponent.position:distance_to(player.position)
+        end
         player.velocity = Vector:new(
             distance.x / distance.direct,
             distance.y / distance.direct
         )
-        -- end
-        ::continue::
     end
+
+    ::continue::
 end
 
 function AISystem:handle(dt)
     self:calculate_spatial_map()
 
-    self:handle_team(dt, self.home_team, Teams.HOME)
-    self:handle_team(dt, self.away_team, Teams.AWAY)
+    self:handle_team(dt, self.home_team, self.away_team, Teams.HOME)
+    self:handle_team(dt, self.away_team, self.home_team, Teams.AWAY)
 end
 
 function AISystem:debug()
@@ -175,7 +183,7 @@ function AISystem:debug()
             square.x + square.width, square.y + square.height
         )
         love.graphics.print(
-            square.contains,
+            string.format("%d (%d, %d)", square.contains, square.home, square.away),
             square.x + square.width / 2, square.y + square.height / 2)
     end
 
