@@ -1,9 +1,11 @@
 local EventBus = require("scripts/types/event_bus")
 local Color = require("scripts/types/color")
+local Teams = require("scripts/types/teams")
+local Vector = require("scripts/types/vector")
 local Assert = require("scripts/assert/assert")
 
 
-AISystem = {
+local AISystem = {
     possession = nil,
     puck = nil,
     squares = {},
@@ -32,14 +34,6 @@ function AISystem:initialise(entities)
     EventBus:on("possession", function(entity)
         self.possession = entity
     end)
-end
-
-function AISystem:teams(any)
-    local result = {}
-    for key, _ in ipairs(any) do
-        table[key] = 0
-    end
-    return result
 end
 
 function AISystem:calculate_spatial_map()
