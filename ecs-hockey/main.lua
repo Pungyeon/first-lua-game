@@ -7,6 +7,7 @@ local PhysicsSystem = require("scripts/systems/physics")
 local CollisionSystem = require("scripts/systems/collision")
 local EventBus = require("scripts/types/event_bus")
 local Color = require("scripts/types/color")
+local Teams = require("scripts/types/teams")
 local InteractiveSystem = require("scripts/systems/interactive")
 local SelectSystem = require("scripts/systems/select")
 local AISystem = require("scripts/systems/ai")
@@ -18,8 +19,8 @@ local interactive_system = nil
 local select_system = nil
 
 function love.load()
-    red_team = { id = 1, color = Color.RED }
-    blue_team = { id = 2, color = Color.BLUE }
+    red_team = { id = Teams.HOME, color = Color.RED }
+    blue_team = { id = Teams.AWAY, color = Color.BLUE }
     entities = {
         Puck:new(250, 250),
         Player:new(screen_width * 0.1, 100, red_team),

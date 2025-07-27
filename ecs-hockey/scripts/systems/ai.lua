@@ -2,24 +2,28 @@ local EventBus = require("scripts/types/event_bus")
 local Color = require("scripts/types/color")
 local Assert = require("scripts/assert/assert")
 
+
 AISystem = {
     possession = nil,
     puck = nil,
-    squares = {}
+    squares = {},
+    home_team = {},
+    away_team = {}
 }
 
 function AISystem:initialise(entities)
-    self.team_to_players = {}
     for _, entity in ipairs(entities) do
         if entity.tag == "puck" then
             self.puck = entity
         end
         if entity.tag == "player" then
-            local key = entity.team.id
-            if self.team_to_players[key] == nil then
-                self.team_to_players[key] = {}
+            if entity.team.id == Teams.HOME then
+                table.insert(self.home_team, entity)
+            elseif entity.team.id == Teams.AWAY then
+                table.insert(self.away_team, entity)
+            else
+                error(string.format("illegal team id value: %d", entity.team.id))
             end
-            table.insert(self.team_to_players[key], entity)
         end
     end
 
@@ -28,6 +32,14 @@ function AISystem:initialise(entities)
     EventBus:on("possession", function(entity)
         self.possession = entity
     end)
+end
+
+function AISystem:teams(any)
+    local result = {}
+    for key, _ in ipairs(any) do
+        table[key] = 0
+    end
+    return result
 end
 
 function AISystem:calculate_spatial_map()
@@ -39,8 +51,6 @@ function AISystem:calculate_spatial_map()
     local square_height = screen_height / rows
 
     local squares = {}
-    local current_x = 0
-    local current_y = 0
     for i = 1, columns do
         for j = 1, rows do
             table.insert(squares, {
@@ -48,20 +58,31 @@ function AISystem:calculate_spatial_map()
                 y = (j - 1) * square_height,
                 width = square_width,
                 height = square_height,
-                contains = 0
+                contains = 0,
+                home = 0,
+                away = 0,
             })
         end
     end
 
-    for team, players in ipairs(self.team_to_players) do
-        for _, player in ipairs(players) do
-            for i = 1, #squares do
-                if is_within_square(player.position, squares[i]) then
-                    squares[i].contains = squares[i].contains + 1
-                end
+    for _, player in ipairs(self.home_team) do
+        for i = 1, #squares do
+            if is_within_square(player.position, squares[i]) then
+                squares[i].contains = squares[i].contains + 1
+                squares[i].home = squares[i].home + 1
             end
         end
     end
+
+    for _, player in ipairs(self.home_team) do
+        for i = 1, #squares do
+            if is_within_square(player.position, squares[i]) then
+                squares[i].contains = squares[i].contains + 1
+                squares[i].away = squares[i].away + 1
+            end
+        end
+    end
+
 
     self.squares = squares
 end
@@ -91,49 +112,56 @@ function get_best_square(pos, squares)
     return best
 end
 
+function AISystem:is_travelling(player)
+    if player.travelling_to then
+        local distance = player.position:distance_to(player.travelling_to)
+        if distance.direct > 50 then
+            return true
+        end
+        player.travelling_to = nil
+        player.velocity = Vector:new(0, 0)
+    end
+    return false
+end
+
+function AISystem:handle_team(dt, team, team_id)
+    for _, player in ipairs(team) do
+        if self:is_travelling(player) or player.selected then
+            goto continue
+        end
+
+        if self.possession and self.possession.team.id == team_id then
+            local s = get_best_square(player, self.squares)
+            local travel_to = Vector:new(
+                love.math.random(s.x, s.x + s.width),
+                love.math.random(s.y, s.y + s.height)
+            )
+            local distance = travel_to:distance_to(player.position)
+            player.travelling_to = travel_to
+            player.velocity = Vector:new(
+                distance.x / distance.direct,
+                distance.y / distance.direct
+            )
+            goto continue
+        end
+
+
+        local distance = self.puck.position:distance_to(player.position)
+        -- if distance.direct < 200 then
+        player.velocity = Vector:new(
+            distance.x / distance.direct,
+            distance.y / distance.direct
+        )
+        -- end
+        ::continue::
+    end
+end
+
 function AISystem:handle(dt)
     self:calculate_spatial_map()
 
-    for team, players in ipairs(self.team_to_players) do
-        for _, player in ipairs(players) do
-            -- TODO : skip if the player is traveling (or within distance of travel goal)
-            if player.travelling_to then
-                local distance = player.position:distance_to(player.travelling_to)
-                if distance.direct > 50 then
-                    goto continue
-                end
-                player.travelling_to = nil
-                player.velocity = Vector:new(0, 0)
-            end
-            if player.selected == nil then
-                if self.possession and self.possession.team.id == team then
-                    local s = get_best_square(player, self.squares)
-                    local travel_to = Vector:new(
-                        love.math.random(s.x, s.x + s.width),
-                        love.math.random(s.y, s.y + s.height)
-                    )
-                    local distance = travel_to:distance_to(player.position)
-                    player.travelling_to = travel_to
-                    player.velocity = Vector:new(
-                        distance.x / distance.direct,
-                        distance.y / distance.direct
-                    )
-                else
-                    -- TODO : choose to either chase a player or a puck :shrug:?
-                    local distance = self.puck.position:distance_to(player.position)
-                    if distance.direct < 200 then
-                        player.velocity = Vector:new(
-                            distance.x / distance.direct,
-                            distance.y / distance.direct
-                        )
-                    else
-                        -- TODO : mark a player ??
-                    end
-                end
-            end
-            ::continue::
-        end
-    end
+    self:handle_team(dt, self.home_team, Teams.HOME)
+    self:handle_team(dt, self.away_team, Teams.AWAY)
 end
 
 function AISystem:debug()
@@ -146,14 +174,19 @@ function AISystem:debug()
             square.x + square.width, square.y,
             square.x + square.width, square.y + square.height
         )
-        love.graphics.print(square.contains, square.x + square.width / 2, square.y + square.height / 2)
+        love.graphics.print(
+            square.contains,
+            square.x + square.width / 2, square.y + square.height / 2)
     end
 
-    for team, players in ipairs(self.team_to_players) do
-        for _, player in ipairs(players) do
-            if player.travelling_to then
-                love.graphics.rectangle("fill", player.travelling_to.x, player.travelling_to.y, 20, 20)
-            end
+    for _, player in ipairs(self.home_team) do
+        if player.travelling_to then
+            love.graphics.rectangle("fill", player.travelling_to.x, player.travelling_to.y, 20, 20)
+        end
+    end
+    for _, player in ipairs(self.away_team) do
+        if player.travelling_to then
+            love.graphics.rectangle("fill", player.travelling_to.x, player.travelling_to.y, 20, 20)
         end
     end
 end
