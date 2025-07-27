@@ -107,35 +107,28 @@ function AISystem:handle(dt)
             end
             if player.selected == nil then
                 if self.possession and self.possession.team.id == team then
-                    -- TODO : try to find space.
-                    -- get the best square
-                    -- set player.travelling = { x, y }
-                    --
                     local s = get_best_square(player, self.squares)
                     local travel_to = Vector:new(
                         love.math.random(s.x, s.x + s.width),
                         love.math.random(s.y, s.y + s.height)
                     )
-                    print(string.format("best square: %s", Vector:new(s.x, s.y):string()))
                     local distance = travel_to:distance_to(player.position)
                     player.travelling_to = travel_to
                     player.velocity = Vector:new(
                         distance.x / distance.direct,
                         distance.y / distance.direct
                     )
-                    print(string.format("player: %s - travel: %s - velocity: %s - distance(%d): %d, %d",
-                        player.position:string(),
-                        player.travelling_to:string(),
-                        player.velocity:string(),
-                        distance.direct, distance.x, distance.y
-                    ))
                 else
+                    -- TODO : choose to either chase a player or a puck :shrug:?
                     local distance = self.puck.position:distance_to(player.position)
-                    -- local distance = player.position:distance_to(self.puck.position)
-                    player.velocity = Vector:new(
-                        distance.x / distance.direct,
-                        distance.y / distance.direct
-                    )
+                    if distance.direct < 200 then
+                        player.velocity = Vector:new(
+                            distance.x / distance.direct,
+                            distance.y / distance.direct
+                        )
+                    else
+                        -- TODO : mark a player ??
+                    end
                 end
             end
             ::continue::

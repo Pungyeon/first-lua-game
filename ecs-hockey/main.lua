@@ -24,7 +24,7 @@ function love.load()
         Puck:new(250, 250),
         Player:new(screen_width * 0.1, 100, red_team),
         Player:new(screen_width * 0.8, 100, red_team),
-        -- Player:new(screen_width * 0.1, 400, blue_team),
+        Player:new(screen_width * 0.1, 400, blue_team),
         Wall:new(0, 0, screen_width, wall_thickness),
         Wall:new(0, 0, wall_thickness, screen_height),
         Wall:new(screen_width - wall_thickness, 0, wall_thickness, screen_height),
