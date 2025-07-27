@@ -144,11 +144,11 @@ function AISystem:handle_team(dt, team, opponents, team_id)
                 distance.direct,
                 Vector:new(distance.x, distance.y):string()
             ))
-            goto continue
         end
 				::continue::
     end
 
+		if not self.possession or self.possession.team.id != team_id then
     local j = 1
     for i = 1, #team do
         local player = team[i]
@@ -163,8 +163,7 @@ function AISystem:handle_team(dt, team, opponents, team_id)
             distance.y / distance.direct
         )
     end
-
-
+		end 
 end
 
 function AISystem:handle(dt)
