@@ -142,6 +142,14 @@ function AISystem:handle_team(dt, team, opponents, team_id)
                 distance.x / distance.direct,
                 distance.y / distance.direct
             )
+            print(string.format("player: (id:%d, pos: %s, vel: %s), travel: %s, distance(%d): %s",
+                player.id,
+                player.position:string(),
+                player.velocity:string(),
+                travel_to:string(),
+                distance.direct,
+                Vector:new(distance.x, distance.y):string()
+            ))
             goto continue
         end
     end
@@ -153,7 +161,6 @@ function AISystem:handle_team(dt, team, opponents, team_id)
         if distance.direct < 200 or j > #opponents then -- TODO : Fix this hacky bullshit
         else
             local opponent = opponents[j]
-            print(string.format("opp: %s", opponent.position:string()))
             distance = opponent.position:distance_to(player.position)
         end
         player.velocity = Vector:new(
