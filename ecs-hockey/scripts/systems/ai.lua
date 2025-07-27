@@ -146,6 +146,7 @@ function AISystem:handle_team(dt, team, opponents, team_id)
             ))
             goto continue
         end
+				::continue::
     end
 
     local j = 1
@@ -163,7 +164,7 @@ function AISystem:handle_team(dt, team, opponents, team_id)
         )
     end
 
-    ::continue::
+
 end
 
 function AISystem:handle(dt)
