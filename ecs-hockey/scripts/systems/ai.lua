@@ -36,6 +36,13 @@ function AISystem:initialise(entities)
     end)
 end
 
+function is_within_square(pos, square)
+    return pos.x > square.x
+        and pos.x < square.x + square.width
+        and pos.y > square.y
+        and pos.y < square.y + square.height
+end
+
 function AISystem:calculate_spatial_map()
     -- TODO : initialise this in initialise instead.
     local columns = 3
@@ -81,14 +88,7 @@ function AISystem:calculate_spatial_map()
     self.squares = squares
 end
 
-function is_within_square(pos, square)
-    return pos.x > square.x
-        and pos.x < square.x + square.width
-        and pos.y > square.y
-        and pos.y < square.y + square.height
-end
-
-function get_best_square(pos, squares)
+local function get_best_square(pos, squares)
     local best = nil
     for _, square in ipairs(squares) do
         if not best then
@@ -110,6 +110,16 @@ function AISystem:is_travelling(player)
     if player.travelling_to then
         local distance = player.position:distance_to(player.travelling_to)
         if distance.direct > 50 then
+            if player.attached then
+                local should_shoot = love.math.random(1, 100) == 1
+                if should_shoot then
+                    EventBus:emit("shoot", player)
+                end
+                -- local should_pass = love.math.random(1, 100) == 1
+                -- if should_pass then
+                --     EventBus:emit("pass", player)
+                -- end
+            end
             return true
         end
         player.travelling_to = nil
@@ -136,19 +146,36 @@ function AISystem:handle_team(dt, team, opponents, team_id)
                 distance.x / distance.direct,
                 distance.y / distance.direct
             )
-            print(string.format("player: (id:%d, pos: %s, vel: %s), travel: %s, distance(%d): %s",
-                player.id,
-                player.position:string(),
-                player.velocity:string(),
-                travel_to:string(),
-                distance.direct,
-                Vector:new(distance.x, distance.y):string()
-            ))
+            -- print(string.format("player: (id:%d, pos: %s, vel: %s), travel: %s, distance(%d): %s",
+            --     player.id,
+            --     player.position:string(),
+            --     player.velocity:string(),
+            --     travel_to:string(),
+            --     distance.direct,
+            --     Vector:new(distance.x, distance.y):string()
+            -- ))
         end
         ::continue::
     end
 
-    if not self.possession or self.possession.team.id ~= team_id then
+    if not self.possession then
+        for i = 1, #team do
+            local player = team[i]
+            if player.selected then
+                goto continue
+            end
+
+            local distance = self.puck.position:distance_to(player.position)
+            player.velocity = Vector:new(
+                distance.x / distance.direct,
+                distance.y / distance.direct
+            )
+            ::continue::
+        end
+        return
+    end
+
+    if self.possession.team.id ~= team_id then
         local j = 1
         for i = 1, #team do
             local player = team[i]
@@ -160,6 +187,7 @@ function AISystem:handle_team(dt, team, opponents, team_id)
             else
                 local opponent = opponents[j]
                 distance = opponent.position:distance_to(player.position)
+                j = j + 1
             end
             player.velocity = Vector:new(
                 distance.x / distance.direct,
