@@ -4,6 +4,30 @@ local Teams = require("scripts/types/teams")
 local Vector = require("scripts/types/vector")
 local Assert = require("scripts/assert/assert")
 
+local function get_best_square(pos, squares)
+    local best = nil
+    for _, square in ipairs(squares) do
+        if not best then
+            best = square
+        end
+        -- TODO :
+        -- * maybe we can make the position a little relative?
+        -- * we should also look at square neighbours, to consider where the action isrunning
+        -- * we should also consider whether the player is attacking or defending, but
+        --    I actually think that we can just assume that they are attacking if we are looking at this?
+        if square.contains < best.contains then
+            best = square
+        end
+    end
+    return best
+end
+
+function is_within_square(pos, square)
+    return pos.x > square.x
+        and pos.x < square.x + square.width
+        and pos.y > square.y
+        and pos.y < square.y + square.height
+end
 
 local AISystem = {
     possession = nil,
@@ -31,16 +55,32 @@ function AISystem:initialise(entities)
 
     Assert.NotNil(self.puck, "no puck found for AISystem")
 
+    EventBus:on("collision", function(collision_data)
+        Assert.NotNil(collision_data)
+        Assert.NotNil(collision_data.entity)
+        Assert.NotNil(collision_data.velocity)
+        Assert.NotNil(collision_data.static)
+
+        local player = collision_data.entity
+        if player.selected then
+            return -- We don't want to do anything to our selected player
+        end
+
+        local static = collision_data.static
+        if static.team and static.team.id ~= player.team.id then
+            -- Tackle opponent ?
+        end
+
+        self:travel_to(
+            player,
+            player.position:add(collision_data.velocity:multiply(100))
+        )
+        -- self:reroute(player)
+    end)
+
     EventBus:on("possession", function(entity)
         self.possession = entity
     end)
-end
-
-function is_within_square(pos, square)
-    return pos.x > square.x
-        and pos.x < square.x + square.width
-        and pos.y > square.y
-        and pos.y < square.y + square.height
 end
 
 function AISystem:calculate_spatial_map()
@@ -88,24 +128,6 @@ function AISystem:calculate_spatial_map()
     self.squares = squares
 end
 
-local function get_best_square(pos, squares)
-    local best = nil
-    for _, square in ipairs(squares) do
-        if not best then
-            best = square
-        end
-        -- TODO :
-        -- * maybe we can make the position a little relative?
-        -- * we should also look at square neighbours, to consider where the action isrunning
-        -- * we should also consider whether the player is attacking or defending, but
-        --    I actually think that we can just assume that they are attacking if we are looking at this?
-        if square.contains < best.contains then
-            best = square
-        end
-    end
-    return best
-end
-
 function AISystem:is_travelling(player)
     if player.travelling_to then
         local distance = player.position:distance_to(player.travelling_to)
@@ -128,11 +150,37 @@ function AISystem:is_travelling(player)
     return false
 end
 
+function AISystem:reroute(player)
+    local s = get_best_square(player, self.squares)
+    local travel_to = Vector:new(
+        love.math.random(s.x, s.x + s.width),
+        love.math.random(s.y, s.y + s.height)
+    )
+    self:travel_to(player, travel_to)
+end
+
+function AISystem:travel_to(player, travel_to)
+    local distance = travel_to:distance_to(player.position)
+    player.travelling_to = travel_to
+    player.velocity = Vector:new(
+        distance.x / distance.direct,
+        distance.y / distance.direct
+    )
+    print(string.format("player: (id:%d, pos: %s, vel: %s), travel: %s, distance(%d): %s",
+        player.id,
+        player.position:string(),
+        player.velocity:string(),
+        travel_to:string(),
+        distance.direct,
+        Vector:new(distance.x, distance.y):string()
+    ))
+end
+
 function AISystem:handle_team(dt, team, opponents, team_id)
     if not self.possession then
         for i = 1, #team do
             local player = team[i]
-            if player.selected then
+            if player.selected or player.travelling_to then
                 goto continue
             end
 
@@ -152,27 +200,10 @@ function AISystem:handle_team(dt, team, opponents, team_id)
                 goto continue
             end
 
-            local s = get_best_square(player, self.squares)
-            local travel_to = Vector:new(
-                love.math.random(s.x, s.x + s.width),
-                love.math.random(s.y, s.y + s.height)
-            )
-            local distance = travel_to:distance_to(player.position)
-            player.travelling_to = travel_to
-            player.velocity = Vector:new(
-                distance.x / distance.direct,
-                distance.y / distance.direct
-            )
-            -- print(string.format("player: (id:%d, pos: %s, vel: %s), travel: %s, distance(%d): %s",
-            --     player.id,
-            --     player.position:string(),
-            --     player.velocity:string(),
-            --     travel_to:string(),
-            --     distance.direct,
-            --     Vector:new(distance.x, distance.y):string()
-            -- ))
+            self:reroute(player)
+            ::continue::
         end
-        ::continue::
+        return
     end
 
     if self.possession.team.id ~= team_id then

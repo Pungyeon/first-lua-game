@@ -16,9 +16,12 @@ local function handle_rigid_collision(dt, entity, static)
         ),
         collision = entity.collision,
     }
+    local result = { x = false, y = false, entity = entity, static = static, velocity = entity.velocity:copy() }
 
     if aabb(predict, static) then
         if entity.collision.type == "rigid" then
+            result.x = true
+            result.velocity.x = result.velocity.x * -1
             entity.velocity.x = 0
         else
             error("unsupported collision type: " .. entity.collision.type)
@@ -29,10 +32,15 @@ local function handle_rigid_collision(dt, entity, static)
     predict.position.y = entity.position.y + (entity.velocity.y * entity.speed * dt)
     if aabb(predict, static) then
         if entity.collision.type == "rigid" then
+            result.y = true
+            result.velocity.y = result.velocity.y * -1
             entity.velocity.y = 0
         else
             error("unsupported collision type: " .. entity.collision.type)
         end
+    end
+    if result.x or result.y then
+        EventBus:emit("collision", result)
     end
 end
 
