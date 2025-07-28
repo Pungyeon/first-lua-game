@@ -129,12 +129,29 @@ function AISystem:is_travelling(player)
 end
 
 function AISystem:handle_team(dt, team, opponents, team_id)
-    for _, player in ipairs(team) do
-        if self:is_travelling(player) or player.selected then
-            goto continue
-        end
+    if not self.possession then
+        for i = 1, #team do
+            local player = team[i]
+            if player.selected then
+                goto continue
+            end
 
-        if self.possession and self.possession.team.id == team_id then
+            local distance = self.puck.position:distance_to(player.position)
+            player.velocity = Vector:new(
+                distance.x / distance.direct,
+                distance.y / distance.direct
+            )
+            ::continue::
+        end
+        return
+    end
+
+    if self.possession.team.id == team_id then
+        for _, player in ipairs(team) do
+            if self:is_travelling(player) or player.selected then
+                goto continue
+            end
+
             local s = get_best_square(player, self.squares)
             local travel_to = Vector:new(
                 love.math.random(s.x, s.x + s.width),
@@ -158,30 +175,14 @@ function AISystem:handle_team(dt, team, opponents, team_id)
         ::continue::
     end
 
-    if not self.possession then
-        for i = 1, #team do
-            local player = team[i]
-            if player.selected then
-                goto continue
-            end
-
-            local distance = self.puck.position:distance_to(player.position)
-            player.velocity = Vector:new(
-                distance.x / distance.direct,
-                distance.y / distance.direct
-            )
-            ::continue::
-        end
-        return
-    end
-
     if self.possession.team.id ~= team_id then
         local j = 1
         for i = 1, #team do
             local player = team[i]
-            if player.selected then
+            if self:is_travelling(player) or player.selected then
                 goto continue
             end
+
             local distance = self.puck.position:distance_to(player.position)
             if distance.direct < 200 or j > #opponents then -- TODO : Fix this hacky bullshit
             else

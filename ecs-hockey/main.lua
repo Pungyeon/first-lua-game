@@ -30,8 +30,8 @@ function love.load()
     entities = {
         Puck:new(250, 250),
         Player:new(screen_width * 0.8, 100, red_team),
-        Player:new(screen_width * 0.8, 300, red_team),
-        Player:new(screen_width * 0.8, 500, red_team),
+        -- Player:new(screen_width * 0.8, 300, red_team),
+        -- Player:new(screen_width * 0.8, 500, red_team),
         Player:new(screen_width * 0.1, 400, blue_team),
         Player:new(screen_width * 0.1, 200, blue_team),
         Player:new(screen_width * 0.1, 100, blue_team),
