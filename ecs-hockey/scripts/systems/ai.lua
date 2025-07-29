@@ -79,6 +79,12 @@ function AISystem:initialise(entities)
     end)
 
     EventBus:on("possession", function(entity)
+        for _, player in ipairs(self.home_team) do
+            player.travelling_to = nil
+        end
+        for _, player in ipairs(self.away_team) do
+            player.travelling_to = nil
+        end
         self.possession = entity
     end)
 end
