@@ -4,6 +4,20 @@ local Teams = require("scripts/types/teams")
 local Vector = require("scripts/types/vector")
 local Assert = require("scripts/assert/assert")
 
+local Square = {}
+
+function Square:new(i, j, square_width, square_height)
+  return {
+    x = (i - 1) * square_width,
+    y = (j - 1) * square_height,
+    width = square_width,
+    height = square_height,
+    contains = 0,
+    home = 0,
+    away = 0,
+  }
+end
+
 local function get_best_square(pos, squares)
     local best = nil
     for _, square in ipairs(squares) do
@@ -100,15 +114,7 @@ function AISystem:calculate_spatial_map()
     local squares = {}
     for i = 1, columns do
         for j = 1, rows do
-            table.insert(squares, {
-                x = (i - 1) * square_width,
-                y = (j - 1) * square_height,
-                width = square_width,
-                height = square_height,
-                contains = 0,
-                home = 0,
-                away = 0,
-            })
+            table.insert(squares, Square:new(i, j, square_width, square_height))
         end
     end
 

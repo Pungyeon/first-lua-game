@@ -1,6 +1,7 @@
 local Player = require("scripts/entities/player")
 local Puck = require("scripts/entities/puck")
 local Wall = require("scripts/entities/wall")
+local Goal = require("scripts/entities/goal")
 local RenderSystem = require("scripts/systems/render")
 local InputSystem = require("scripts/systems/input")
 local PhysicsSystem = require("scripts/systems/physics")
@@ -17,6 +18,8 @@ local wall_thickness = 10
 local entities = nil
 local interactive_system = nil
 local select_system = nil
+
+local goal_height = 150
 
 -- Tasks:
 -- - [ ] Enable checking / tackling other players
@@ -39,6 +42,7 @@ function love.load()
         Wall:new(0, 0, wall_thickness, screen_height),
         Wall:new(screen_width - wall_thickness, 0, wall_thickness, screen_height),
         Wall:new(0, screen_height - wall_thickness, screen_width, screen_height),
+        Goal:new(50, screen_height/2 + goal_height/2, goal_height, goal_width, red_team)
     }
     for i = 1, #entities do
         entities[i].id = i
