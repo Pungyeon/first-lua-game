@@ -50,6 +50,10 @@ function InteractiveSystem:new(entities)
         obj:handle_pass(data)
     end)
 
+    EventBus:on("tackle", function(entity)
+        obj:handle_tackle(entity)
+    end)
+
     return self
 end
 
@@ -62,6 +66,22 @@ local function release(root, velocity, speed)
     EventBus:emit("possession", nil)
 
     root.release_stun = 50 -- this makes sure that the player cannot collide with the puck after release
+end
+
+function InteractiveSystem:handle_tackle(entity)
+  -- check if tackle is possible
+  -- push back other bloke
+  for _, player in ipairs(self.players) do
+    if player.id == entity.id then 
+      goto continue
+    end
+    local distance = player.position:distance_to(entity.position)
+    if math.abs(distance.direct) < 50 then -- This seems ok ? 
+      -- TODO : push the guy and implement a bounce timer, i guess ? 
+      print(string.format("BAM! %d (%d, %d)", distance.direct, player.id, entity.id))
+    end
+    ::continue::
+  end 
 end
 
 function InteractiveSystem:handle_pass(root)

@@ -2,7 +2,8 @@ local EventBus = require("scripts/types/event_bus")
 
 InputSystem = {
     l_down = false,
-    k_down = false
+    k_down = false,
+    n_down = false
 }
 
 local function handle_entity(key, entity)
@@ -39,6 +40,13 @@ local function handle_entity(key, entity)
         EventBus:emit("switch", nil)
     elseif love.keyboard.isDown("l") == false and InputSystem.l_down then
         InputSystem.l_down = false
+    end
+
+    if love.keyboard.isDown("n") and InputSystem.n_down == false then
+        InputSystem.n_down = true
+        EventBus:emit("tackle", entity)
+    elseif love.keyboard.isDown("n") == false and InputSystem.n_down then
+        InputSystem.n_down = false
     end
 end
 
