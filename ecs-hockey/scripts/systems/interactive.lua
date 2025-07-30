@@ -22,7 +22,9 @@ local function find_nearest(root, nodes)
 end
 
 function InteractiveSystem:new(entities)
-    local obj = {}
+    local obj = {
+      players = {}
+    }
     for _, entity in ipairs(entities) do
       if entity.tag == "goal" then    
         if entity.team.id == Teams.AWAY then
@@ -33,7 +35,7 @@ function InteractiveSystem:new(entities)
         end
       end
       if entity.tag == "player" then
-        obj.players = players
+        table.insert(obj.players, entity)
       end
     end 
 
