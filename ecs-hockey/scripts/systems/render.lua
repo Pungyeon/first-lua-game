@@ -1,6 +1,8 @@
 local Color = require("scripts/types/color")
 RenderSystem = {}
 
+local screen_width, screen_height = love.window.getMode()
+
 function RenderSystem:handle(entities)
     for i = 1, #entities do
         local entity = entities[i]
@@ -12,6 +14,12 @@ function RenderSystem:handle(entities)
 
             if entity.color ~= nil then
               color = entity.color
+            end 
+
+            if entity.render.type == "score_board" then 
+              love.graphics.print(string.format("%d - %d", entity.home_team, entity.away_team),
+                screen_width/2, screen_height*0.8
+              )
             end 
             
             if entity.render.type == "rectangle" then
