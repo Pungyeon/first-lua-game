@@ -155,6 +155,13 @@ function CollisionSystem:handle(dt, entities)
             if particle.attached then
                 goto continue
             end
+            if player.release_stun then 
+              player.release_stun = player.release_stun - 1
+              if player.release_stun == 0 then
+                player.release_stun = nil
+              end
+              goto continue
+            end 
             if aabb(player, particle) then
                 if player.attached == nil then
                     player.attached = particle

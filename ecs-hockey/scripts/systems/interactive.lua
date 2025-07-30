@@ -60,6 +60,8 @@ local function release(root, velocity, speed)
     root.attached = nil
     puck.attached = nil
     EventBus:emit("possession", nil)
+
+    root.release_stun = 50 -- this makes sure that the player cannot collide with the puck after release
 end
 
 function InteractiveSystem:handle_pass(root)
