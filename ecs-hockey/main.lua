@@ -28,9 +28,13 @@ local away_goal_position = Vector:new(screen_width - 50 - goal_width, (screen_he
 
 -- Tasks:
 -- - [ ] Enable checking / tackling other players
--- - [ ] Implement Goalie + Goal
--- - [ ] Implement game mechanics - scoring etc. (big one)
--- - [ ] Fix passing - it's currently fairly broken. You are allowed to pass behind yorself. But it will just get blocked, which is silly
+-- - [ ] Implement Goalie
+-- - [ ] Implement 'home' positions for each player
+  -- - [ ] Implement Resetting the game after a goal is scored
+  -- - [ ] Implement face off ?? :O 
+-- - [ ] Draw the ice rink
+-- - [ ] Make the ice rink with rounded edges.
+-- - [ ] Implement Game Mechanics (Icing, etc.)
 
 function love.load()
     red_team = { id = Teams.HOME, color = Color.RED }
