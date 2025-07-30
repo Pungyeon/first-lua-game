@@ -6,7 +6,7 @@ local color = {
     },
     DARK_GREEN = {
         red = 0,
-        green = 127,
+        green = .3,
         blue = 0
     },
     GREEN = {

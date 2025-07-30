@@ -51,7 +51,7 @@ local AISystem = {
     away_team = {}
 }
 
-function AISystem:initialise(entities)
+function AISystem:init(entities)
     for _, entity in ipairs(entities) do
         if entity.tag == "puck" then
             self.puck = entity
@@ -178,14 +178,6 @@ function AISystem:travel_to(player, travel_to)
         distance.x / distance.direct,
         distance.y / distance.direct
     )
-    print(string.format("player: (id:%d, pos: %s, vel: %s), travel: %s, distance(%d): %s",
-        player.id,
-        player.position:string(),
-        player.velocity:string(),
-        travel_to:string(),
-        distance.direct,
-        Vector:new(distance.x, distance.y):string()
-    ))
 end
 
 function AISystem:handle_team(dt, team, opponents, team_id)

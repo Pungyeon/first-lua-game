@@ -12,6 +12,7 @@ local Teams = require("scripts/types/teams")
 local InteractiveSystem = require("scripts/systems/interactive")
 local SelectSystem = require("scripts/systems/select")
 local AISystem = require("scripts/systems/ai")
+local ScoringSystem = require("scripts/systems/scoring")
 
 local screen_width, screen_height = love.window.getMode()
 local wall_thickness = 10
@@ -20,6 +21,9 @@ local interactive_system = nil
 local select_system = nil
 
 local goal_height = 150
+local goal_width = 80
+local goal_position = Vector:new(50, (screen_height/2) - (goal_height/2))
+local post_thickness = 10
 
 -- Tasks:
 -- - [ ] Enable checking / tackling other players
@@ -31,7 +35,6 @@ function love.load()
     red_team = { id = Teams.HOME, color = Color.RED }
     blue_team = { id = Teams.AWAY, color = Color.BLUE }
     entities = {
-        Puck:new(250, 250),
         Player:new(screen_width * 0.8, 100, red_team),
         Player:new(screen_width * 0.8, 300, red_team),
         -- Player:new(screen_width * 0.8, 500, red_team),
@@ -42,14 +45,25 @@ function love.load()
         Wall:new(0, 0, wall_thickness, screen_height),
         Wall:new(screen_width - wall_thickness, 0, wall_thickness, screen_height),
         Wall:new(0, screen_height - wall_thickness, screen_width, screen_height),
-        Goal:new(50, screen_height/2 + goal_height/2, goal_height, goal_width, red_team)
+        Goal:new(goal_position, goal_width, goal_height, red_team),
+        -- Goal Posts
+        Wall:new(goal_position.x, goal_position.y, goal_width, post_thickness),
+        Wall:new(goal_position.x, goal_position.y, post_thickness, goal_height),
+        Wall:new(
+          goal_position.x,
+          goal_position.y+goal_height-post_thickness,
+          goal_width,
+          post_thickness
+        ),
+        Puck:new(250, 250)
     }
     for i = 1, #entities do
         entities[i].id = i
     end
     interactive_system = InteractiveSystem:new(entities)
     select_system = SelectSystem:new(red_team, entities)
-    AISystem:initialise(entities)
+    AISystem:init(entities)
+    ScoringSystem:init()
 end
 
 function love.conf(t)

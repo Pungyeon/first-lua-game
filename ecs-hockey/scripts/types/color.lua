@@ -1,12 +1,12 @@
 local color = {
     WHITE = {
-        red = 255,
-        green = 255,
-        blue = 255
+        red = 1,
+        green = 1,
+        blue = 1 
     },
     DARK_GREEN = {
         red = 0,
-        green = 1,
+        green = .3,
         blue = 0
     },
     GREEN = {

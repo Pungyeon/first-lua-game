@@ -9,6 +9,11 @@ function RenderSystem:handle(entities)
             if entity.team ~= nil then
                 color = entity.team.color
             end
+
+            if entity.color ~= nil then
+              color = entity.color
+            end 
+            
             if entity.render.type == "rectangle" then
                 love.graphics.setColor(Color.BLUE.red, Color.BLUE.green, Color.BLUE.blue)
                 if entity.selected then
