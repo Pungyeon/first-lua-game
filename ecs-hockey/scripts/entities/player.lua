@@ -7,6 +7,7 @@ function Player:new(x, y, team)
     return {
         team       = team,
         speed      = 200,
+        reset_position = Vector:new(x, y),
         position   = Vector:new(x, y),
         velocity   = Vector:new(0, 0),
         render     = { type = "rectangle" },

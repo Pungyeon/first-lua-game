@@ -3,14 +3,14 @@ local Color = require("scripts/types/color")
 
 Puck = {}
 
-function Puck:new(x, y)
+function Puck:new(x, y, width, height)
     return {
         speed = 1000,
         position = Vector:new(x, y),
-        velocity = Vector:new(0.2, 0.4),
-        collision = { type = "particle", width = 10, height = 10 },
+        velocity = Vector:new(0, 0),
+        collision = { type = "particle", width = width, height = height},
         physics = { type = "particle" },
-        dimensions = { width = 10, height = 10 },
+        dimensions = { width = width, height = height },
         color = Color.WHITE,
         render = { type = "rectangle" },
         tag = "puck"

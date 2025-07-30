@@ -2,6 +2,7 @@ local Player = require("scripts/entities/player")
 local Puck = require("scripts/entities/puck")
 local Wall = require("scripts/entities/wall")
 local Goal = require("scripts/entities/goal")
+local Area = require("scripts/entities/area")
 local RenderSystem = require("scripts/systems/render")
 local InputSystem = require("scripts/systems/input")
 local PhysicsSystem = require("scripts/systems/physics")
@@ -21,10 +22,17 @@ local interactive_system = nil
 local select_system = nil
 
 local goal_height = 150
-local goal_width = 80
-local home_goal_position = Vector:new(50, (screen_height/2) - (goal_height/2))
+local goal_width = 60
+local home_goal_position = Vector:new(60, (screen_height/2) - (goal_height/2))
 local post_thickness = 10
-local away_goal_position = Vector:new(screen_width - 50 - goal_width, (screen_height/2) - (goal_height/2))
+local away_goal_position = Vector:new(screen_width - 60 - goal_width, (screen_height/2) - (goal_height/2))
+local line_width = 5
+local center_y = screen_height/2
+local center_x = screen_width/2
+local player_width = 30
+local player_height = 30
+local puck_width = 10
+local puck_height = 10
 
 -- Tasks:
 -- - [ ] Enable checking / tackling other players
@@ -41,10 +49,24 @@ function love.load()
     blue_team = { id = Teams.AWAY, color = Color.BLUE }
     score_board = { home_team = 0, away_team = 0, render = { type = "score_board"} }
     entities = {
-        Player:new(screen_width * 0.8, 100, red_team),
-        Player:new(screen_width * 0.8, 300, red_team),
+        Area:new(center_x-line_width, 0, line_width, screen_height, Color.DARK_RED),
+        Player:new(
+          center_x+player_width*2,
+          center_y-player_width/2,
+          red_team),
+        Player:new(
+          center_x+player_width*6,
+          center_y-player_width/2,
+          red_team),
         -- Player:new(screen_width * 0.8, 500, red_team),
-        Player:new(screen_width * 0.1, 400, blue_team),
+        Player:new(
+          center_x-player_width*3,
+          center_y-player_width/2,
+          blue_team),
+        Player:new(
+          center_x-player_width*7,
+          center_y-player_width/2,
+          blue_team),
         -- Player:new(screen_width * 0.1, 200, blue_team),
         -- Player:new(screen_width * 0.1, 100, blue_team),
         Wall:new(0, 0, screen_width, wall_thickness),
@@ -72,7 +94,7 @@ function love.load()
           goal_width,
           post_thickness
         ),
-        Puck:new(250, 250),
+        Puck:new(center_x-(puck_width/2), center_y-(puck_height/2), puck_width, puck_height),
         score_board
     }
     for i = 1, #entities do
