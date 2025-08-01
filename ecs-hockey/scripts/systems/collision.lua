@@ -6,7 +6,7 @@ local function contains(outer, inner)
       inner.position.y >= outer.position.y and
       inner.position.x + inner.dimensions.width <= outer.position.x + outer.dimensions.width and
       inner.position.y + inner.dimensions.height <= outer.position.y + outer.dimensions.height
-end 
+end
 
 local function aabb(a, b)
     return a.position.x < b.position.x + b.collision.width and
@@ -92,8 +92,6 @@ local function handle_goal_collision(dt, entity, goal)
       -- EventBus:emit("reset", nil)
     end
   end
-
-  return  
 end
 
 function CollisionSystem:handle(dt, entities)
@@ -151,17 +149,13 @@ function CollisionSystem:handle(dt, entities)
     end
 
     for _, player in ipairs(players) do
+        if player.release_stun and player.release_stun > 0 then
+          goto continue_player
+        end
         for _, particle in ipairs(particles) do
             if particle.attached then
                 goto continue
             end
-            if player.release_stun then 
-              player.release_stun = player.release_stun - 1
-              if player.release_stun == 0 then
-                player.release_stun = nil
-              end
-              goto continue
-            end 
             if aabb(player, particle) then
                 if player.attached == nil then
                     player.attached = particle
@@ -172,6 +166,7 @@ function CollisionSystem:handle(dt, entities)
             end
             ::continue::
         end
+        ::continue_player::
     end
 
     for i = 1, #players do

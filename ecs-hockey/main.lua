@@ -11,6 +11,7 @@ local EventBus = require("scripts/types/event_bus")
 local Color = require("scripts/types/color")
 local Teams = require("scripts/types/teams")
 local InteractiveSystem = require("scripts/systems/interactive")
+local EffectsSystem = require("scripts/systems/effects")
 local SelectSystem = require("scripts/systems/select")
 local AISystem = require("scripts/systems/ai")
 local ScoringSystem = require("scripts/systems/scoring")
@@ -103,6 +104,7 @@ function love.load()
 
     interactive_system = InteractiveSystem:new(entities)
     select_system = SelectSystem:new(red_team, entities)
+    EffectsSystem:init(entities)
     AISystem:init(entities)
     ScoringSystem:init(score_board)
 end
@@ -115,6 +117,7 @@ function love.keypressed(key)
 end
 
 function love.update(dt)
+    EffectsSystem:handle(dt)
     InputSystem:handle("UNUSED", entities)
     AISystem:handle(dt)
     CollisionSystem:handle(dt, entities)

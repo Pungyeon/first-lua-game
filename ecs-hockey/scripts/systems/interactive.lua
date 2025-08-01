@@ -78,6 +78,7 @@ function InteractiveSystem:handle_tackle(entity)
     local distance = player.position:distance_to(entity.position)
     if math.abs(distance.direct) < 50 then -- This seems ok ? 
       -- TODO : push the guy and implement a bounce timer, i guess ? 
+      -- This actually seems to be very difficult.
       print(string.format("BAM! %d (%d, %d)", distance.direct, player.id, entity.id))
     end
     ::continue::
