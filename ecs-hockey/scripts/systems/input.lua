@@ -1,3 +1,4 @@
+local love = require("love")
 local EventBus = require("scripts/types/event_bus")
 
 InputSystem = {

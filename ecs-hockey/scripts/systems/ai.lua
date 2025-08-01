@@ -1,3 +1,4 @@
+local love = require("love")
 local EventBus = require("scripts/types/event_bus")
 local Color = require("scripts/types/color")
 local Teams = require("scripts/types/teams")

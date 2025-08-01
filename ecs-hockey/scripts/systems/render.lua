@@ -1,3 +1,4 @@
+local love = require("love")
 local Color = require("scripts/types/color")
 RenderSystem = {}
 

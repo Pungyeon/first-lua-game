@@ -1,3 +1,4 @@
+local love = require("love")
 local Player = require("scripts/entities/player")
 local Puck = require("scripts/entities/puck")
 local Wall = require("scripts/entities/wall")
