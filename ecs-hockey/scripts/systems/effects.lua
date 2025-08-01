@@ -15,6 +15,9 @@ function EffectsSystem:handle(dt)
   for _, player in ipairs(self.players) do
     if player.collision and player.collision.bounce > 0 then
       player.collision.bounce = player.collision.bounce - 1
+      if player.collision.bounce == 0 then
+        player.velocity = Vector:new(0,0)
+      end
     end
     if player.release_stun and player.release_stun > 0 then
       player.release_stun = player.release_stun - 1

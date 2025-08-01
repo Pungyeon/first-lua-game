@@ -14,15 +14,19 @@ local function handle_entity(key, entity)
     entity.velocity = Vector:new(0, 0)
     if love.keyboard.isDown("w") then
         entity.velocity.y = -1
+        entity.direction.y = -1
     end
     if love.keyboard.isDown("s") then
         entity.velocity.y = 1
+        entity.direction.y = 1
     end
     if love.keyboard.isDown("a") then
         entity.velocity.x = -1
+        entity.direction.x = -1
     end
     if love.keyboard.isDown("d") then
         entity.velocity.x = 1
+        entity.direction.x = 1
     end
     if love.keyboard.isDown("j") then
         EventBus:emit("pass", entity)

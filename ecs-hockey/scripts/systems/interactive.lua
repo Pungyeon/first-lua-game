@@ -1,5 +1,6 @@
 local EventBus = require("scripts/types/event_bus")
 local Vector = require("scripts/types/vector")
+local Rectangle = require("scripts/types/rectangle")
 
 InteractiveSystem = {} -- TODO : this name sucks
 
@@ -37,7 +38,7 @@ function InteractiveSystem:new(entities)
       if entity.tag == "player" then
         table.insert(obj.players, entity)
       end
-    end 
+    end
 
     setmetatable(obj, self)
     self.__index = self
@@ -69,17 +70,23 @@ local function release(root, velocity, speed)
 end
 
 function InteractiveSystem:handle_tackle(entity)
-  -- check if tackle is possible
-  -- push back other bloke
   for _, player in ipairs(self.players) do
-    if player.id == entity.id then 
+    if player.id == entity.id then
       goto continue
     end
-    local distance = player.position:distance_to(entity.position)
+    local distance = player.position:distance_to(
+      Rectangle:new(
+        entity.position.x,
+        entity.position.y,
+        entity.dimensions.width,
+        entity.dimensions.height
+      ):center()
+    )
     if math.abs(distance.direct) < 50 then -- This seems ok ? 
-      -- TODO : push the guy and implement a bounce timer, i guess ? 
-      -- This actually seems to be very difficult.
-      print(string.format("BAM! %d (%d, %d)", distance.direct, player.id, entity.id))
+      player.velocity.x = entity.direction.x
+      player.velocity.y = entity.direction.y
+      player.collision.bounce = 30
+      print(string.format("BAM! %d (%d, %d) %s", distance.direct, player.id, entity.id, entity.direction:string()))
     end
     ::continue::
   end 

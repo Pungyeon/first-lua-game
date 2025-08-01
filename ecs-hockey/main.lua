@@ -1,4 +1,5 @@
 local Game = require("scenes/game")
+local Bounce = require("scenes/bounce")
 -- Tasks:
 -- - [ ] Enable checking / tackling other players
 -- - [ ] Implement Goalie
@@ -9,7 +10,8 @@ local Game = require("scenes/game")
 -- - [ ] Make the ice rink with rounded edges.
 -- - [ ] Implement Game Mechanics (Icing, etc.)
 
-local scene = Game
+-- local scene = Game
+local scene = Bounce
 
 function love.load()
   scene:init()
