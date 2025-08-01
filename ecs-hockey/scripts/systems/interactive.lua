@@ -27,7 +27,7 @@ function InteractiveSystem:new(entities)
       players = {}
     }
     for _, entity in ipairs(entities) do
-      if entity.tag == "goal" then    
+      if entity.tag == "goal" then
         if entity.team.id == Teams.AWAY then
           obj.away_goal = entity
         end
@@ -86,6 +86,10 @@ function InteractiveSystem:handle_tackle(entity)
       player.velocity.x = entity.direction.x
       player.velocity.y = entity.direction.y
       player.collision.bounce = 30
+      if player.attached then
+        entity.release_stun = 50
+        release(player, Vector:new(entity.direction.x, entity.direction.y), 100)
+      end
       print(string.format("BAM! %d (%d, %d) %s", distance.direct, player.id, entity.id, entity.direction:string()))
     end
     ::continue::
@@ -128,14 +132,15 @@ function InteractiveSystem:handle_shoot(entity)
 
     local goal = nil
     if entity.team.id == Teams.AWAY then
-      goal = self.away_goal 
+      goal = self.away_goal
     end
     if entity.team.id == Teams.HOME then
-      goal = self.home_goal 
+      goal = self.home_goal
     end
 
     if not goal then
       release(entity, Vector:new(entity.velocity.x, entity.velocity.y), 1000)
+      return
     end
     local distance = goal.position:distance_to(entity.position)
     local vec = Vector:new(

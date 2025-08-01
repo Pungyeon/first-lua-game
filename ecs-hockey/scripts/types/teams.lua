@@ -1,6 +1,6 @@
 Teams = {
-    HOME = 1,
-    AWAY = 2,
+    HOME = -1,
+    AWAY = 1,
 }
 
 return Teams

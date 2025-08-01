@@ -14,7 +14,7 @@ function Player:new(x, y, team)
         physics    = { type = "simple" },
         dimensions = { width = 30, height = 30 },
         collision  = { type = "rigid", width = 30, height = 30, bounce = 0 },
-        direction = Vector:new(0, 0),
+        direction = Vector:new(team.id, 0),
         tag        = "player"
     }
 end

@@ -26,10 +26,14 @@ local center_x = screen_width/2
 local player_width = 30
 local wall_thickness = 10
 local entities = nil
+local puck_width = 10
+local puck_height = 10
 
 function Bounce:init()
     local red_team = { id = Teams.HOME, color = Color.RED }
     local blue_team = { id = Teams.AWAY, color = Color.BLUE }
+    local puck = Puck:new(center_x-(puck_width/2), center_y-(puck_height/2), puck_width, puck_height)
+    puck.velocity.x = -0.2
     entities = {
         Area:new(center_x-line_width, 0, line_width, screen_height, Color.DARK_RED),
         Player:new(
@@ -44,6 +48,7 @@ function Bounce:init()
         Wall:new(0, 0, wall_thickness, screen_height),
         Wall:new(screen_width - wall_thickness, 0, wall_thickness, screen_height),
         Wall:new(0, screen_height - wall_thickness, screen_width, screen_height),
+        puck
     }
     for i = 1, #entities do
         entities[i].id = i
