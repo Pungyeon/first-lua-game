@@ -182,57 +182,84 @@ function AISystem:travel_to(player, travel_to)
     player.direction = player.velocity:direction()
 end
 
-function AISystem:handle_team(dt, team, opponents, team_id)
+-- Possession result constants
+local UNKNOWN = 0
+local NONE = 1
+local IN_POSSESSION = 2
+local OUT_OF_POSSESSION = 3
+
+function AISystem:get_possession(team_id)
     if not self.possession then
-        for i = 1, #team do
-            local player = team[i]
-            if player.selected or player.travelling_to then
-                goto continue
-            end
-
-            local distance = self.puck.position:distance_to(player.position)
-            player.velocity = Vector:new(
-                distance.x / distance.direct,
-                distance.y / distance.direct
-            )
-            ::continue::
-        end
-        return
+        return NONE
     end
-
     if self.possession.team.id == team_id then
-        for _, player in ipairs(team) do
-            if self:is_travelling(player) or player.selected then
-                goto continue
-            end
+        return IN_POSSESSION
+    end
+    return OUT_OF_POSSESSION
+end
 
-            self:reroute(player)
-            ::continue::
+function AISystem:handle_none_possession(team) 
+    for i = 1, #team do
+        local player = team[i]
+        if player.selected or player.travelling_to then
+            goto continue
         end
-        return
+
+        local distance = self.puck.position:distance_to(player.position)
+        player.velocity = Vector:new(
+            distance.x / distance.direct,
+            distance.y / distance.direct
+        )
+        ::continue::
+    end
+end
+
+function AISystem:handle_in_possession(team)
+for _, player in ipairs(team) do
+    if self:is_travelling(player) or player.selected then
+            goto continue
+        end
+
+        self:reroute(player)
+        ::continue::
+    end
+end
+
+function AISystem:handle_out_of_possession(team, opponents)
+    local j = 1
+    for i = 1, #team do
+        local player = team[i]
+        if self:is_travelling(player) or player.selected then
+            goto continue
+        end
+
+        local distance = self.puck.position:distance_to(player.position)
+        if distance.direct < 200 or j > #opponents then -- TODO : Fix this hacky bullshit
+        -- TODO yo, wtf is going on here? 
+        else
+            local opponent = opponents[j]
+            distance = opponent.position:distance_to(player.position)
+            j = j + 1
+        end
+        player.velocity = Vector:new(
+            distance.x / distance.direct,
+            distance.y / distance.direct
+        )
+        ::continue::
+    end
+end
+
+function AISystem:handle_team(dt, team, opponents, team_id)
+    local possession = self:get_possession(team_id)
+    if possession == NONE then
+        self:handle_none_possession(team)
+    end
+    if possession == IN_POSSESSION then
+       self:handle_in_possession(team)
     end
 
-    if self.possession.team.id ~= team_id then
-        local j = 1
-        for i = 1, #team do
-            local player = team[i]
-            if self:is_travelling(player) or player.selected then
-                goto continue
-            end
-
-            local distance = self.puck.position:distance_to(player.position)
-            if distance.direct < 200 or j > #opponents then -- TODO : Fix this hacky bullshit
-            else
-                local opponent = opponents[j]
-                distance = opponent.position:distance_to(player.position)
-                j = j + 1
-            end
-            player.velocity = Vector:new(
-                distance.x / distance.direct,
-                distance.y / distance.direct
-            )
-            ::continue::
-        end
+    if possession == OUT_OF_POSSESSION then
+        self:handle_out_of_possession(team, opponents)
     end
 end
 
