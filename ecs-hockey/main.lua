@@ -13,8 +13,8 @@ local Bounce = require("scenes/bounce")
 -- - [ ] Make the ice rink with rounded edges.
 -- - [ ] Implement Game Mechanics (Icing, etc.)
 
-local scene = Game
--- local scene = Bounce
+-- local scene = Game
+local scene = Bounce
 
 function love.load()
   scene:init()
