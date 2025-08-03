@@ -37,8 +37,18 @@ function Vector:distance_to(vector)
     }
 end
 
-function Vector:round()
-    if self.x < 0 
+function direction(n)
+    if n == 0 then
+        return 0
+    end
+    if n < 0 then
+        return -1
+    end
+    return 1
+end
+
+function Vector:direction()
+    return Vector:new(direction(self.x), direction(self.y))
 end
 
 return Vector
