@@ -179,6 +179,7 @@ function AISystem:travel_to(player, travel_to)
         distance.x / distance.direct,
         distance.y / distance.direct
     )
+    player.direction = 
 end
 
 function AISystem:handle_team(dt, team, opponents, team_id)

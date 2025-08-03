@@ -37,4 +37,8 @@ function Vector:distance_to(vector)
     }
 end
 
+function Vector:round()
+    if self.x < 0 
+end
+
 return Vector
