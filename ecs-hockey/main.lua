@@ -1,6 +1,7 @@
 local love = require("love")
 local Game = require("scenes/game")
 local Bounce = require("scenes/bounce")
+local Tackle = require("scenes/tackle")
 -- Bugs:
 -- - [ ] Now that we are using directions for input, we need to set this with the ai systems as well.
 -- Tasks:
@@ -14,7 +15,8 @@ local Bounce = require("scenes/bounce")
 -- - [ ] Implement Game Mechanics (Icing, etc.)
 
 -- local scene = Game
-local scene = Bounce
+-- local scene = Bounce
+local scene = Tackle
 
 function love.load()
   scene:init()

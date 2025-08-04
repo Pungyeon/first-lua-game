@@ -11,6 +11,7 @@ local CollisionSystem = require("scripts/systems/collision")
 local InteractiveSystem = require("scripts/systems/interactive")
 local EffectsSystem = require("scripts/systems/effects")
 local SelectSystem = require("scripts/systems/select")
+local AISystem = require("scripts/systems/ai")
 
 -- Types
 local Color = require("scripts/types/color")
@@ -56,6 +57,7 @@ function Tackle:init()
   
     local interactive_system = InteractiveSystem:new(entities)
     local select_system = SelectSystem:new(red_team, entities)
+    AISystem:init(entities)
     EffectsSystem:init(entities)
 end
 
@@ -64,8 +66,9 @@ function Tackle:update(dt)
     InputSystem:handle("UNUSED", entities)
     CollisionSystem:handle(dt, entities)
     PhysicsSystem:handle(dt, entities)
+		AISystem:handle(dt)
 end
-f
+
 function Tackle:draw()
     RenderSystem:handle(entities)
 end
