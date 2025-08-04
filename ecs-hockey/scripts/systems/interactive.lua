@@ -100,7 +100,7 @@ function InteractiveSystem:tackle_player(entity, player)
     entity.release_stun = 50
     release(player, Vector:new(entity.direction.x, entity.direction.y), 100)
   end
-  print(string.format("BAM!(%d, %d) %s", distance.direct, player.id, entity.id, entity.direction:string()))
+  print(string.format("BAM! (%d, %d) %s", player.id, entity.id, entity.direction:string()))
 end
 
 function InteractiveSystem:handle_pass(root)
