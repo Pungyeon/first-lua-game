@@ -69,9 +69,9 @@ local function release(root, velocity, speed)
     root.release_stun = 50 -- this makes sure that the player cannot collide with the puck after release
 end
 
-function InteractiveSystem:handle_tackle(entity, victim)
+function InteractiveSystem:handle_tackle(actor, victim)
   if victim then
-    self:tackle_player(entity, victim)
+    self:tackle_player(actor, victim)
   end
   for _, player in ipairs(self.players) do
     if player.id == entity.id then
@@ -79,10 +79,10 @@ function InteractiveSystem:handle_tackle(entity, victim)
     end
     local distance = player.position:distance_to(
       Rectangle:new(
-        entity.position.x,
-        entity.position.y,
-        entity.dimensions.width,
-        entity.dimensions.height
+        actor.position.x,
+        actor.position.y,
+        actor.dimensions.width,
+        actor.dimensions.height
       ):center()
     )
     if math.abs(distance.direct) < 50 then -- This seems ok ? 
@@ -99,6 +99,7 @@ function InteractiveSystem:tackle_player(entity, player)
   if player.attached then
     entity.release_stun = 50
     release(player, Vector:new(entity.direction.x, entity.direction.y), 100)
+		
   end
   print(string.format("BAM! (%d, %d) %s", player.id, entity.id, entity.direction:string()))
 end
