@@ -19,11 +19,13 @@ end
 
 function DebugSystem:draw()
     local possession = "NONE"
-    if self.puck.attached.team.id == 1 then
+		if self.puck.attached then
+        if self.puck.attached.team.id == 1 then
         possession = "HOME"
-    end
-    if self.puck.attached.team.id == -1 then
+       end
+       if self.puck.attached.team.id == -1 then
         possession = "AWAY"
+       end
     end
     love.graphics.print(
         string.format("Possession: %s", possession), 20, 20
