@@ -32,21 +32,24 @@ function DebugSystem:draw()
     )
 		local y = 35
 		for _, player in ipairs(self.players) do
-			local travel = Vector:new(-1, -1)
-			if player.travelling_to then
-				travel = player.travelling_to
-			end
+			local nvec = Vector:new(-1, -1)
+			
+			
+
 			love.graphics.print(
-				string.format("Player: %d, Travelling: %s", player.id, travel:string()), 20, y)
+				string.format(
+					"Player: %d, Travelling: %s, ",
+					player.id, v_or(player.travelling_to, nvec):string())
+, 20, y)
 			y = y + 15
 		end
+end
 
-
-
-
-
-
-
+function v_or(v, default) 
+	if not v then
+		return default
+	end
+	return v
 end
 
 return DebugSystem
