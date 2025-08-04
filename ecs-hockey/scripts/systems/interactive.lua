@@ -72,6 +72,9 @@ local function release(root, velocity, speed)
 end
 
 function InteractiveSystem:handle_tackle(actor, victim)
+  if not Assert.IsZero(actor.release_stun) then
+    return
+  end
   if victim then
     self:tackle_player(actor, victim)
     return
@@ -104,24 +107,23 @@ function InteractiveSystem:tackle_player(actor, player)
   local puck = player.attached
   if puck then
     actor.release_stun = 10
-    release(player, Vector:new(actor.direction.x, actor.direction.y), 300)
+    release(player, Vector:new(actor.direction.x, actor.direction.y), 100)
 		if not actor.selected then
 
       local distance = puck.position:distance_to(actor.position)
 			actor.travelling_to = puck.position
-      player.velocity = Vector:new(
+      actor.velocity = Vector:new(
           distance.x / distance.direct,
           distance.y / distance.direct
       )
       actor.direction = actor.velocity:direction()
 
-      assert(false)
       end
   end
-  print(string.format(
-    "BAM! (%d, %d) %s (selected: %s, %s)",
-    player.id, actor.id, actor.direction:string(), player.selected, actor.selected)
-  )
+  -- print(string.format(
+    -- "BAM! (%d, %d) %s (selected: %s, %s)",
+    -- player.id, actor.id, actor.direction:string(), player.selected, actor.selected)
+  -- )
 end
 
 function InteractiveSystem:handle_pass(root)

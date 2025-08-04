@@ -96,7 +96,6 @@ function AISystem:init(entities)
     end)
 
     EventBus:on("possession", function(entity)
-        print("possession changed !")
         for _, player in ipairs(self.home_team) do
             player.travelling_to = nil
         end
@@ -161,7 +160,6 @@ function AISystem:is_travelling(player)
             end
             return true
         end
-        print(string.format("setting travelling_to to nil: %s", player.id))
         player.travelling_to = nil
         player.velocity = Vector:new(0, 0)
     end

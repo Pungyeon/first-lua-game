@@ -14,9 +14,9 @@ local Tackle = require("scenes/tackle")
 -- - [ ] Make the ice rink with rounded edges.
 -- - [ ] Implement Game Mechanics (Icing, etc.)
 
--- local scene = Game
+local scene = Game
 -- local scene = Bounce
-local scene = Tackle
+-- local scene = Tackle
 
 function love.load()
   scene:init()

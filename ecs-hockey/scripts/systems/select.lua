@@ -41,6 +41,9 @@ end
 
 function SelectSystem:handle_switch(player)
     if player ~= nil then
+        if player.team.id ~= self.players[self.selected].team.id then
+          return
+        end
         for i = 1, #self.players do
             if self.players[i].id == player.id then
                 self:switch_to(i)
