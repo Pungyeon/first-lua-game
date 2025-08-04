@@ -74,6 +74,7 @@ end
 function Tackle:draw()
     RenderSystem:handle(entities)
     DebugSystem:draw()
+		AISystem:debug()
 end
 
 return Tackle

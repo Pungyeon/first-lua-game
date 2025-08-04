@@ -30,6 +30,23 @@ function DebugSystem:draw()
     love.graphics.print(
         string.format("Possession: %s", possession), 20, 20
     )
+		local y = 35
+		for _, player in ipairs(self.players) do
+			local travel = Vector:new(-1, -1)
+			if player.travelling_to then
+				travel = player.travelling_to
+			end
+			love.graphics.print(
+				string.format("Player: %d, Travelling: %s", player.id, travel:string()), 20, y)
+			y = y + 15
+		end
+
+
+
+
+
+
+
 end
 
 return DebugSystem
