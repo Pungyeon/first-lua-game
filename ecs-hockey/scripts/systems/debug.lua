@@ -33,6 +33,10 @@ function DebugSystem:draw()
 		local y = 35
 		for _, player in ipairs(self.players) do
 			local travel = v_or(player.travelling_to, Vector:new(-1, -1)):string()
+			local distance = -1
+			if travel.x != -1 then
+				player.position:distance_to(travel)
+			end
 			
 			-- TODO : I need to figure out why the ai is not working. After tackling, they aren't chasing the puck AND it seems that they don't know when they've reached their target position. It's quite annoying and difficult to debug right now.
 			love.graphics.print(
