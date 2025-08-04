@@ -15,8 +15,8 @@ local Tackle = require("scenes/tackle")
 -- - [ ] Implement Game Mechanics (Icing, etc.)
 
 -- local scene = Game
--- local scene = Bounce
-local scene = Tackle
+local scene = Bounce
+-- local scene = Tackle
 
 function love.load()
   scene:init()

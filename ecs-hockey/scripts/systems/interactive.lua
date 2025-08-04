@@ -74,7 +74,7 @@ function InteractiveSystem:handle_tackle(actor, victim)
     self:tackle_player(actor, victim)
   end
   for _, player in ipairs(self.players) do
-    if player.id == entity.id then
+    if player.id == actor then
       goto continue
     end
     local distance = player.position:distance_to(
@@ -86,22 +86,24 @@ function InteractiveSystem:handle_tackle(actor, victim)
       ):center()
     )
     if math.abs(distance.direct) < 50 then -- This seems ok ? 
-     self:tackle_player(entity, player)
+     self:tackle_player(actor, player)
     end
     ::continue::
   end
 end
 
-function InteractiveSystem:tackle_player(entity, player)
-  player.velocity.x = entity.direction.x
-  player.velocity.y = entity.direction.y
+function InteractiveSystem:tackle_player(actor, player)
+  player.velocity.x = actor.direction.x
+  player.velocity.y = actor.direction.y
   player.collision.bounce = 50
   if player.attached then
-    entity.release_stun = 50
-    release(player, Vector:new(entity.direction.x, entity.direction.y), 100)
+    actor.release_stun = 10
+		actor.travelling_to = player.attached.position
+    release(player, Vector:new(actor.direction.x, actor.direction.y), 100)
+
 		
   end
-  print(string.format("BAM! (%d, %d) %s", player.id, entity.id, entity.direction:string()))
+  print(string.format("BAM! (%d, %d) %s", player.id, actor.id, actor.direction:string()))
 end
 
 function InteractiveSystem:handle_pass(root)
