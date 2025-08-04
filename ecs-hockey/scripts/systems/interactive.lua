@@ -98,7 +98,9 @@ function InteractiveSystem:tackle_player(actor, player)
   player.collision.bounce = 50
   if player.attached then
     actor.release_stun = 10
-		actor.travelling_to = player.attached.position
+		if not actor.selected then
+			actor.travelling_to = player.attached.position
+    end
     release(player, Vector:new(actor.direction.x, actor.direction.y), 100)
 
 		
