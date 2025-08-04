@@ -141,6 +141,7 @@ function AISystem:calculate_spatial_map()
     self.squares = squares
 end
 
+-- TODO : Maybe we should rename this to 'handle_travelling?'
 function AISystem:is_travelling(player)
     if player.travelling_to then
         local distance = player.position:distance_to(player.travelling_to)
@@ -235,7 +236,10 @@ function AISystem:handle_out_of_possession(team, opponents)
 
         local distance = self.puck.position:distance_to(player.position)
         if distance.direct < 200 or j > #opponents then -- TODO : Fix this hacky bullshit
-        -- TODO yo, wtf is going on here? 
+        -- TODO yo, wtf is going on here?
+            if distance.direct < 50 then
+                EventBus:emit("tackle", { actor = player, victim = self.puck.attached })
+            end
         else
             local opponent = opponents[j]
             distance = opponent.position:distance_to(player.position)

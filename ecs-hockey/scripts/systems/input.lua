@@ -49,7 +49,7 @@ local function handle_entity(key, entity)
 
     if love.keyboard.isDown("n") and InputSystem.n_down == false then
         InputSystem.n_down = true
-        EventBus:emit("tackle", entity)
+        EventBus:emit("tackle", { actor = entity })
     elseif love.keyboard.isDown("n") == false and InputSystem.n_down then
         InputSystem.n_down = false
     end

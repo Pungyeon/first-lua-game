@@ -51,8 +51,8 @@ function InteractiveSystem:new(entities)
         obj:handle_pass(data)
     end)
 
-    EventBus:on("tackle", function(entity)
-        obj:handle_tackle(entity)
+    EventBus:on("tackle", function(data)
+        obj:handle_tackle(data.actor, data.victim)
     end)
 
     return self
@@ -69,7 +69,10 @@ local function release(root, velocity, speed)
     root.release_stun = 50 -- this makes sure that the player cannot collide with the puck after release
 end
 
-function InteractiveSystem:handle_tackle(entity)
+function InteractiveSystem:handle_tackle(entity, victim)
+  if victim then
+    self:tackle_player(entity, victim)
+  end
   for _, player in ipairs(self.players) do
     if player.id == entity.id then
       goto continue
@@ -83,17 +86,21 @@ function InteractiveSystem:handle_tackle(entity)
       ):center()
     )
     if math.abs(distance.direct) < 50 then -- This seems ok ? 
-      player.velocity.x = entity.direction.x
-      player.velocity.y = entity.direction.y
-      player.collision.bounce = 30
-      if player.attached then
-        entity.release_stun = 50
-        release(player, Vector:new(entity.direction.x, entity.direction.y), 100)
-      end
-      print(string.format("BAM! %d (%d, %d) %s", distance.direct, player.id, entity.id, entity.direction:string()))
+     self:tackle_player(entity, player)
     end
     ::continue::
-  end 
+  end
+end
+
+function InteractiveSystem:tackle_player(entity, player)
+  player.velocity.x = entity.direction.x
+  player.velocity.y = entity.direction.y
+  player.collision.bounce = 30
+  if player.attached then
+    entity.release_stun = 50
+    release(player, Vector:new(entity.direction.x, entity.direction.y), 100)
+  end
+  print(string.format("BAM! %d (%d, %d) %s", distance.direct, player.id, entity.id, entity.direction:string()))
 end
 
 function InteractiveSystem:handle_pass(root)
