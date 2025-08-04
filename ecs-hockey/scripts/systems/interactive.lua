@@ -93,8 +93,8 @@ function InteractiveSystem:handle_tackle(entity, victim)
 end
 
 function InteractiveSystem:tackle_player(entity, player)
-  player.velocity.x = entity.direction.x*10
-  player.velocity.y = entity.direction.y*10
+  player.velocity.x = entity.direction.x
+  player.velocity.y = entity.direction.y
   player.collision.bounce = 50
   if player.attached then
     entity.release_stun = 50

@@ -58,8 +58,8 @@ function DebugSystem:draw()
 			-- TODO : I need to figure out why the ai is not working. After tackling, they aren't chasing the puck AND it seems that they don't know when they've reached their target position. It's quite annoying and difficult to debug right now.
 			love.graphics.print(
 				string.format(
-					"Player: %d, Travelling: %s, Position: %s, Distance: %d",
-					player.id, travel:string(), player.position:string(), distance.direct)
+					"Player: %d, Travelling: %s, Position: %s, Velocity: %s",
+					player.id, travel:string(), player.position:string(), player.velocity:string())
 , 20, y)
 			y = y + 15
 		end
