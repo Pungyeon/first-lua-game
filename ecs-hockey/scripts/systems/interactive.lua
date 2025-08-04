@@ -1,6 +1,8 @@
 local EventBus = require("scripts/types/event_bus")
 local Vector = require("scripts/types/vector")
 local Rectangle = require("scripts/types/rectangle")
+local Assert = require("scripts/assert/assert")
+
 
 InteractiveSystem = {} -- TODO : this name sucks
 
@@ -72,7 +74,9 @@ end
 function InteractiveSystem:handle_tackle(actor, victim)
   if victim then
     self:tackle_player(actor, victim)
+    return
   end
+
   for _, player in ipairs(self.players) do
     if player.id == actor then
       goto continue
@@ -96,16 +100,28 @@ function InteractiveSystem:tackle_player(actor, player)
   player.velocity.x = actor.direction.x
   player.velocity.y = actor.direction.y
   player.collision.bounce = 50
-  if player.attached then
-    actor.release_stun = 10
-		if not actor.selected then
-			actor.travelling_to = player.attached.position
-    end
-    release(player, Vector:new(actor.direction.x, actor.direction.y), 100)
 
-		
+  local puck = player.attached
+  if puck then
+    actor.release_stun = 10
+    release(player, Vector:new(actor.direction.x, actor.direction.y), 300)
+		if not actor.selected then
+
+      local distance = puck.position:distance_to(actor.position)
+			actor.travelling_to = puck.position
+      player.velocity = Vector:new(
+          distance.x / distance.direct,
+          distance.y / distance.direct
+      )
+      actor.direction = actor.velocity:direction()
+
+      assert(false)
+      end
   end
-  print(string.format("BAM! (%d, %d) %s", player.id, actor.id, actor.direction:string()))
+  print(string.format(
+    "BAM! (%d, %d) %s (selected: %s, %s)",
+    player.id, actor.id, actor.direction:string(), player.selected, actor.selected)
+  )
 end
 
 function InteractiveSystem:handle_pass(root)

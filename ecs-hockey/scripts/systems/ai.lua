@@ -84,7 +84,8 @@ function AISystem:init(entities)
         local static = collision_data.static
         if static.team and static.team.id ~= player.team.id then
             -- Tackle opponent
-                EventBus:emit("tackle", { actor = player, victim = static })
+            EventBus:emit("tackle", { actor = player, victim = static })
+            return
         end
 
         self:travel_to(
@@ -95,6 +96,7 @@ function AISystem:init(entities)
     end)
 
     EventBus:on("possession", function(entity)
+        print("possession changed !")
         for _, player in ipairs(self.home_team) do
             player.travelling_to = nil
         end
@@ -146,7 +148,7 @@ end
 function AISystem:is_travelling(player)
     if player.travelling_to then
         local distance = player.position:distance_to(player.travelling_to)
-        if distance.direct > 50 then
+        if distance.direct > 1 then
             if player.attached and not player.selected then
                 local should_shoot = love.math.random(1, 100) == 1
                 if should_shoot then
@@ -159,6 +161,7 @@ function AISystem:is_travelling(player)
             end
             return true
         end
+        print(string.format("setting travelling_to to nil: %s", player.id))
         player.travelling_to = nil
         player.velocity = Vector:new(0, 0)
     end
@@ -241,7 +244,7 @@ function AISystem:handle_out_of_possession(team, opponents)
 
         local distance = self.puck.position:distance_to(player.position)
         if distance.direct < 200 or j > #opponents then -- TODO : Fix this hacky bullshit
-
+          -- TODO : Possible to check for tackle here.
         else
             local opponent = opponents[j]
             distance = opponent.position:distance_to(player.position)

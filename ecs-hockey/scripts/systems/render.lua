@@ -42,6 +42,8 @@ function RenderSystem:handle(entities)
                     entity.dimensions.width,
                     entity.dimensions.height
                 )
+                love.graphics.setColor(1, 1, 1)
+                love.graphics.print(entity.id, entity.position.x, entity.position.y)
             end
         end
     end
