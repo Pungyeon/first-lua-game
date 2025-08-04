@@ -17,9 +17,11 @@ function DebugSystem:init(entities, on_update)
 end
 
 function DebugSystem:handle(dt)
-    if love.keyboard.isDown("n") and self.next == false then
-        self.next = true
-        self.on_update(1)
+    if love.keyboard.isDown("n") then
+				if not self.next then
+	        self.next = true
+ 	       self.on_update(0.01)
+				end
     else
         self.next = false
     end
