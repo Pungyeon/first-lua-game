@@ -200,10 +200,14 @@ function AISystem:get_possession(team_id)
     return OUT_OF_POSSESSION
 end
 
+function AISystem:should_ignore(player)
+	return player.selected or self:is_travelling(player)
+end
+
 function AISystem:handle_none_possession(team) 
     for i = 1, #team do
         local player = team[i]
-        if player.select or self:is_travelling(player) then
+        if self:should_ignore(player) then
             goto continue
         end
 
@@ -218,7 +222,7 @@ end
 
 function AISystem:handle_in_possession(team)
 for _, player in ipairs(team) do
-    if self:is_travelling(player) or player.selected then
+    if self:should_ignore(player) then
             goto continue
         end
 
@@ -231,7 +235,7 @@ function AISystem:handle_out_of_possession(team, opponents)
     local j = 1
     for i = 1, #team do
         local player = team[i]
-        if self:is_travelling(player) or player.selected then
+        if self:should_ignore(player) then
             goto continue
         end
 
