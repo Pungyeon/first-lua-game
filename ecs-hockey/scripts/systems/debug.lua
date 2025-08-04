@@ -1,9 +1,10 @@
 local DebugSystem = {
     players = {},
-    puck = nil
+    puck = nil,
+    on_update = function(dt) end
 }
 
-function DebugSystem:init(entities)
+function DebugSystem:init(entities, on_update)
     for _, entity in ipairs(entities) do
         if entity.tag == "puck" then
             self.puck = entity
@@ -12,9 +13,16 @@ function DebugSystem:init(entities)
             table.insert(self.players, entity)
         end
     end
+    self.on_update = on_update
 end
 
 function DebugSystem:handle(dt)
+    if love.keyboard.isDown("n") and self.next == false then
+        self.next = true
+        self.on_update(1)
+    else
+        self.next = false
+    end
 end
 
 function DebugSystem:draw()

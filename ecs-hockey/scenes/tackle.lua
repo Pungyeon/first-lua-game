@@ -60,21 +60,23 @@ function Tackle:init()
     local select_system = SelectSystem:new(red_team, entities)
     AISystem:init(entities)
     EffectsSystem:init(entities)
-    DebugSystem:init(entities)
+    DebugSystem:init(entities, function(dt) 
+        EffectsSystem:handle(dt)
+        InputSystem:handle("UNUSED", entities)
+        CollisionSystem:handle(dt, entities)
+        PhysicsSystem:handle(dt, entities)
+    	AISystem:handle(dt)
+    end)
 end
 
 function Tackle:update(dt)
-    EffectsSystem:handle(dt)
-    InputSystem:handle("UNUSED", entities)
-    CollisionSystem:handle(dt, entities)
-    PhysicsSystem:handle(dt, entities)
-	AISystem:handle(dt)
+    DebugSystem:handle(dt)
 end
 
 function Tackle:draw()
     RenderSystem:handle(entities)
     DebugSystem:draw()
-		AISystem:debug()
+	AISystem:debug()
 end
 
 return Tackle
