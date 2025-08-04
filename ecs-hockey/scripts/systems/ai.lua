@@ -202,7 +202,7 @@ end
 function AISystem:handle_none_possession(team) 
     for i = 1, #team do
         local player = team[i]
-        if player.selected or player.travelling_to then
+        if player.select or self:is_travelling(player) then
             goto continue
         end
 
