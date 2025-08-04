@@ -83,7 +83,8 @@ function AISystem:init(entities)
 
         local static = collision_data.static
         if static.team and static.team.id ~= player.team.id then
-            -- Tackle opponent ?
+            -- Tackle opponent
+                EventBus:emit("tackle", { actor = player, victim = static })
         end
 
         self:travel_to(
@@ -236,10 +237,7 @@ function AISystem:handle_out_of_possession(team, opponents)
 
         local distance = self.puck.position:distance_to(player.position)
         if distance.direct < 200 or j > #opponents then -- TODO : Fix this hacky bullshit
-        -- TODO yo, wtf is going on here?
-            if distance.direct < 50 then
-                EventBus:emit("tackle", { actor = player, victim = self.puck.attached })
-            end
+
         else
             local opponent = opponents[j]
             distance = opponent.position:distance_to(player.position)
