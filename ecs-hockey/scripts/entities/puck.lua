@@ -13,7 +13,7 @@ function Puck:new(x, y, width, height)
         dimensions = { width = width, height = height },
         color = Color.WHITE,
         render = { type = "rectangle" },
-        tag = "puck"
+        tag = "puck",
     }
 end
 
