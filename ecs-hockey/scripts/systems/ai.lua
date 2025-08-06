@@ -45,6 +45,7 @@ function is_within_square(pos, square)
 end
 
 local AISystem = {
+    pause = false,
     possession = nil,
     puck = nil,
     squares = {},
@@ -69,6 +70,11 @@ function AISystem:init(entities)
     end
 
     Assert.NotNil(self.puck, "no puck found for AISystem")
+
+    EventBus:on("reset", function(data)
+    print(string.format("ai system pausing: %s", not data.complete))
+    self.pause = not data.complete
+    end)
 
     EventBus:on("collision", function(collision_data)
         Assert.NotNil(collision_data)
@@ -271,6 +277,9 @@ function AISystem:handle_team(dt, team, opponents, team_id)
 end
 
 function AISystem:handle(dt)
+    if self.pause then
+      return
+    end
     self:calculate_spatial_map()
 
     self:handle_team(dt, self.home_team, self.away_team, Teams.HOME)

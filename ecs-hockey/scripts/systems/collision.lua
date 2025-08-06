@@ -1,5 +1,11 @@
 local EventBus = require("scripts/types/event_bus")
-local CollisionSystem = {}
+local CollisionSystem = {
+  pause = false
+}
+
+EventBus:on("reset", function(data)
+  CollisionSystem.pause = not data.complete
+end)
 
 local function contains(outer, inner)
   return inner.position.x >= outer.position.x and
@@ -95,6 +101,9 @@ local function handle_goal_collision(dt, entity, goal)
 end
 
 function CollisionSystem:handle(dt, entities)
+    if self.pause then
+      return
+    end
     local walls = {}   -- TODO : rename this to static
     local players = {} -- TODO : rename this to rigid
     local particles = {}

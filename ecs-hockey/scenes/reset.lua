@@ -17,6 +17,7 @@ local EffectsSystem = require("scripts/systems/effects")
 local SelectSystem = require("scripts/systems/select")
 local AISystem = require("scripts/systems/ai")
 local ScoringSystem = require("scripts/systems/scoring")
+local ResetSystem = require("scripts/systems/reset")
 
 local screen_width, screen_height = love.window.getMode()
 local wall_thickness = 10
@@ -102,6 +103,7 @@ function Reset:init()
     EffectsSystem:init(entities)
     AISystem:init(entities)
     ScoringSystem:init(score_board)
+    ResetSystem:init(entities)
 end
 
 function Reset:update(dt)
@@ -110,6 +112,7 @@ function Reset:update(dt)
     AISystem:handle(dt)
     CollisionSystem:handle(dt, entities)
     PhysicsSystem:handle(dt, entities)
+    ResetSystem:handle(dt)
 end
 
 function Reset:draw()
