@@ -19,8 +19,9 @@ function ScoringSystem:init(score_board)
     if data.team.id == Teams.HOME then
       self.score_board.away_team = self.score_board.away_team + 1
     end
-    data.state = {} 
+    -- data.state = {} 
     print(string.format("Goal ! %d", data.team.id))
+    EventBus:emit("reset", { complete = false })
   end)
 end
 
