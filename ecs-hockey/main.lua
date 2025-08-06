@@ -5,12 +5,13 @@ local Tackle = require("scenes/tackle")
 local Reset = require("scenes/reset")
 local EventBus = require("scripts/types/event_bus")
 -- Bugs:
--- - [ ] Now that we are using directions for input, we need to set this with the ai systems as well.
+-- - [x] Now that we are using directions for input, we need to set this with the ai systems as well.
 -- Tasks:
--- - [ ] Enable checking / tackling other players
+-- - [x] Enable checking / tackling other players
 -- - [ ] Implement Goalie
--- - [ ] Implement 'home' positions for each player
-  -- - [ ] Implement Resetting the game after a goal is scored
+-- - [x] Implement 'home' positions for each player
+  -- - [x] Implement Resetting the game after a goal is scored
+--   - [ ] Implement a goal celebration event ? 
   -- - [ ] Implement face off ?? :O 
 -- - [ ] Draw the ice rink
 -- - [ ] Make the ice rink with rounded edges.
