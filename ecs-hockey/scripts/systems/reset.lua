@@ -1,5 +1,5 @@
 local EventBus = require("scripts/types/event_bus")
-local Teams = require("scripts/types/teams")
+local love = require("love")
 
 local screen_width, screen_height = love.window.getMode()
 

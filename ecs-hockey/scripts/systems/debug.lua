@@ -1,8 +1,9 @@
+local love = require("love")
 local Assert = require("scripts/assert/assert")
 local DebugSystem = {
     players = {},
     puck = nil,
-    on_update = function(dt) end
+    on_update = function(_) end
 }
 
 function DebugSystem:init(entities, on_update)
@@ -17,7 +18,7 @@ function DebugSystem:init(entities, on_update)
     self.on_update = on_update
 end
 
-function DebugSystem:handle(dt)
+function DebugSystem:handle(_)
     if love.keyboard.isDown("1") then
 			if not self.step then
 	        self.step = true
