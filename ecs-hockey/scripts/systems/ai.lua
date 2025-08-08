@@ -2,6 +2,7 @@ local love = require("love")
 local EventBus = require("scripts/types/event_bus")
 local Color = require("scripts/types/color")
 local Teams = require("scripts/types/teams")
+local Rectangle = require("scripts/types/rectangle")
 local Vector = require("scripts/types/vector")
 local Assert = require("scripts/assert/assert")
 
@@ -27,13 +28,12 @@ end
 
 local function get_best_square(player, squares, state)
     local relevant_squares = {}
-    if state == State.InPossession then 
+    if state == State.InPossession then
       if player.team.id == Teams.HOME then
         relevant_squares = { 5,  6,  7,  8, 9, 10, 11, 12 }
       else
         relevant_squares = { 9, 10, 11, 12, 13, 14, 15, 16 }
       end
-      -- We should only worry about the 'offensive squares'
     end
     local best = nil
     for _, square_idx in ipairs(relevant_squares) do
@@ -66,13 +66,17 @@ local AISystem = {
     puck = nil,
     squares = {},
     home_team = {},
-    away_team = {}
+    away_team = {},
+    goals = {}
 }
 
 function AISystem:init(entities)
     for _, entity in ipairs(entities) do
         if entity.tag == "puck" then
             self.puck = entity
+        end
+        if entity.tag == "goal" then
+          self.goals[entity.team.id] = entity
         end
         if entity.tag == "player" then
             if entity.team.id == Teams.HOME then
@@ -131,13 +135,22 @@ function AISystem:init(entities)
     end)
 end
 
+local columns = 5
+local rows = 4
+local screen_width, screen_height = love.window.getMode()
+local square_width = screen_width / columns
+local square_height = screen_height / rows
+
+function AISystem:get_square(position)
+  local sw = math.ceil(position.x / square_width);
+  local sh = math.ceil(position.y / square_height);
+
+  local index = sh + (columns * sw)
+  return self.squares[index]
+end
+
 function AISystem:calculate_spatial_map()
     -- TODO : initialise this in initialise instead.
-    local columns = 5
-    local rows = 4
-    local screen_width, screen_height = love.window.getMode()
-    local square_width = screen_width / columns
-    local square_height = screen_height / rows
 
     local squares = {}
     for i = 1, columns do
@@ -168,20 +181,67 @@ function AISystem:calculate_spatial_map()
     self.squares = squares
 end
 
+local function lineLineIntersect(x1, y1, x2, y2, x3, y3, x4, y4)
+  local denominator = (y4-y3)*(x2 -x1) - (x4-x3)*(y2-y1)
+  if denominator == 0 then
+    return false
+  end
+  local uA = ((x4-x3)*(y1-y3) - (y4-y3)*(x1-x3))
+  local uB = ((x2-x1)*(y1-y3) - (y2-y1)*(x1-x3))
+
+  if uA >= 0 and uA <= 1 and uB >= 0 and uB <= 1 then
+    return true
+  end
+  return false
+end
+
+local function lineRectIntersect(x1, y1, x2, y2, rx, ry, rw, rh)
+  local left = lineLineIntersect(x1, y1, x2, y2, rx, ry, rx, ry + rh)
+  local right = lineLineIntersect(x2, y1, x2, y2, rx + rw, ry, rx + rw, ry + rh)
+  local top = lineLineIntersect(x1, y1, x2, y2, rx, ry, rx + rw, ry)
+  local bottom = lineLineIntersect(x1, y1, x2, y2, rx, ry + rh, rx + rw, ry + rh)
+
+  return left or right or top or bottom
+end
+
+function AISystem:trigger_behaviour(player, opponents)
+  local should_shoot = love.math.random(1, 100) == 1
+  if not should_shoot then
+    return
+  end
+  local goal = self.goals[player.team.id*-1] -- Retrieve the target goal
+  local target = Rectangle:from_entity(goal):center()
+  local obstruction = false
+  for _, op in ipairs(opponents) do
+    local intersect = lineRectIntersect(
+      player.position.x,
+      player.position.y,
+      target.x,
+      target.y,
+      op.position.x,
+      op.position.y,
+      op.dimensions.width,
+      op.dimensions.height
+    )
+    if intersect then
+      obstruction = true
+    end
+  end
+
+  if obstruction then
+    EventBus:emit("pass", player)
+  else
+    EventBus:emit("shoot", player)
+  end
+end
+
 -- TODO : Maybe we should rename this to 'handle_travelling?'
-function AISystem:is_travelling(player)
+function AISystem:is_travelling(player, opponents)
     if player.travelling_to then
         local distance = player.position:distance_to(player.travelling_to)
         if distance.direct > 1 then
             if player.attached and not player.selected then
-                local should_shoot = love.math.random(1, 100) == 1
-                if should_shoot then
-                    EventBus:emit("shoot", player)
-                end
-                -- local should_pass = love.math.random(1, 100) == 1
-                -- if should_pass then
-                --     EventBus:emit("pass", player)
-                -- end
+              AISystem:trigger_behaviour(player, opponents)
             end
             return true
         end
@@ -225,14 +285,14 @@ function AISystem:get_possession(team_id)
     return OUT_OF_POSSESSION
 end
 
-function AISystem:should_ignore(player)
-	return player.selected or self:is_travelling(player)
+function AISystem:should_ignore(player, opponents)
+	return player.selected or self:is_travelling(player, opponents)
 end
 
-function AISystem:handle_none_possession(team)
+function AISystem:handle_none_possession(team, opponents)
     for i = 1, #team do
         local player = team[i]
-        if self:should_ignore(player) then
+        if self:should_ignore(player, opponents) then
             goto continue
         end
 
@@ -245,9 +305,9 @@ function AISystem:handle_none_possession(team)
     end
 end
 
-function AISystem:handle_in_possession(team)
+function AISystem:handle_in_possession(team, opponents)
 for _, player in ipairs(team) do
-    if self:should_ignore(player) then
+    if self:should_ignore(player, opponents) then
             goto continue
         end
 
@@ -260,7 +320,7 @@ function AISystem:handle_out_of_possession(team, opponents)
     local j = 1
     for i = 1, #team do
         local player = team[i]
-        if self:should_ignore(player) then
+        if self:should_ignore(player, opponents) then
             goto continue
         end
 
@@ -283,10 +343,10 @@ end
 function AISystem:handle_team(_, team, opponents, team_id)
     local possession = self:get_possession(team_id)
     if possession == NONE then
-        self:handle_none_possession(team)
+        self:handle_none_possession(team, opponents)
     end
     if possession == IN_POSSESSION then
-       self:handle_in_possession(team)
+       self:handle_in_possession(team, opponents)
     end
 
     if possession == OUT_OF_POSSESSION then

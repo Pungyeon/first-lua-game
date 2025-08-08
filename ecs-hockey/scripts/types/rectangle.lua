@@ -14,6 +14,19 @@ function Rectangle:new(x, y, width, height)
     return obj
 end
 
+function Rectangle:from_entity(entity)
+  local obj = {
+    x = entity.position.x,
+    y = entity.position.y,
+    width = entity.dimensions.width,
+    height = entity.dimensions.height,
+  }
+
+  setmetatable(obj, self)
+  self.__index = self
+  return obj
+end
+
 function Rectangle:center()
   return Vector:new(
     self.x + self.width / 2,
