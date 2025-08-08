@@ -72,9 +72,9 @@ function Reset:init()
         Wall:new(0, screen_height - wall_thickness, screen_width, screen_height),
         Goal:new(home_goal_position, goal_width, goal_height, red_team),
         -- Goal Posts
-        Wall:new(home_goal_position.x, home_goal_position.y, goal_width, post_thickness),
-        Wall:new(home_goal_position.x, home_goal_position.y, post_thickness, goal_height),
-        Wall:new(
+        Wall:new(home_goal_position.x, home_goal_position.y, goal_width, post_thickness), -- top post
+        Wall:new(home_goal_position.x, home_goal_position.y, post_thickness, goal_height, 0.1), -- back post
+        Wall:new( -- bottom post
           home_goal_position.x,
           home_goal_position.y+goal_height-post_thickness,
           goal_width,
@@ -84,7 +84,7 @@ function Reset:init()
         Goal:new(away_goal_position, goal_width, goal_height, blue_team),
         -- Goal Posts
         Wall:new(away_goal_position.x, away_goal_position.y, goal_width, post_thickness),
-        Wall:new(away_goal_position.x+goal_width, away_goal_position.y, post_thickness, goal_height),
+        Wall:new(away_goal_position.x+goal_width, away_goal_position.y, post_thickness, goal_height, 0.1),
         Wall:new(
           away_goal_position.x,
           away_goal_position.y+goal_height-post_thickness,
@@ -107,6 +107,7 @@ function Reset:init()
 end
 
 function Reset:update(dt)
+    ScoringSystem:handle(dt)
     EffectsSystem:handle(dt)
     InputSystem:handle("UNUSED", entities)
     AISystem:handle(dt)

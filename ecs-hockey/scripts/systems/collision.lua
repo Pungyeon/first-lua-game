@@ -70,7 +70,7 @@ local function handle_static_collision(dt, entity, static)
             entity.velocity.x = 0
         elseif entity.collision.type == "particle" then
             entity.velocity.x = entity.velocity.x * -1
-            entity.speed = entity.speed * 0.75
+            entity.speed = entity.speed * static.slowdown
         else
             error("unsupported collision type: " .. entity.collision.type)
         end
@@ -95,7 +95,6 @@ local function handle_goal_collision(dt, entity, goal)
   if entity.tag == "puck" then
     if contains(goal, entity) then
       EventBus:emit("goal", goal)
-      -- EventBus:emit("reset", nil)
     end
   end
 end

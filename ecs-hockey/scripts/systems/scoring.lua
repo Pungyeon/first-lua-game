@@ -2,14 +2,15 @@ local EventBus = require("scripts/types/event_bus")
 local Teams = require("scripts/types/teams")
 
 local ScoringSystem = {
-  score_board = nil
+  score_board = nil,
+  countdown = 0
 }
 
 function ScoringSystem:init(score_board)
   self.score_board = score_board
 
   EventBus:on("goal", function(data)
-    if data.state then
+    if self.countdown > 0 then
       return
     end
 
@@ -19,10 +20,20 @@ function ScoringSystem:init(score_board)
     if data.team.id == Teams.HOME then
       self.score_board.away_team = self.score_board.away_team + 1
     end
-    -- data.state = {} 
     print(string.format("Goal ! %d", data.team.id))
-    EventBus:emit("reset", { complete = false })
+    self.countdown = 100
   end)
+end
+
+function ScoringSystem:handle(_)
+  if self.countdown > 0 then
+    self.countdown = self.countdown - 1
+    print(string.format("Celebration Countdown: %s", self.countdown))
+    if self.countdown == 0 then
+      print("sending reset")
+      EventBus:emit("reset", { complete = false })
+    end
+  end
 end
 
 return ScoringSystem

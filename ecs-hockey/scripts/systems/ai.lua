@@ -71,9 +71,13 @@ function AISystem:init(entities)
 
     Assert.NotNil(self.puck, "no puck found for AISystem")
 
+    EventBus:on("goal", function(_)
+      print(string.format("ai system pausing: goal"))
+      self.pause = true
+    end)
     EventBus:on("reset", function(data)
-    print(string.format("ai system pausing: %s", not data.complete))
-    self.pause = not data.complete
+      print(string.format("ai system pausing: %s", not data.complete))
+      self.pause = not data.complete
     end)
 
     EventBus:on("collision", function(collision_data)
