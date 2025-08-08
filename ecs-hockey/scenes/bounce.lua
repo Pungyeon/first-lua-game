@@ -3,6 +3,7 @@ local love = require("love")
 local Player = require("scripts/entities/player")
 local Wall = require("scripts/entities/wall")
 local Area = require("scripts/entities/area")
+local Puck = require("scripts/entities/puck")
 
 -- Systems
 local RenderSystem = require("scripts/systems/render")
@@ -16,7 +17,6 @@ local SelectSystem = require("scripts/systems/select")
 -- Types
 local Color = require("scripts/types/color")
 local Teams = require("scripts/types/teams")
-local Puck = require("scripts/types/puck")
 
 -- Main
 local Bounce = {}
