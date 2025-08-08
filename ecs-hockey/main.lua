@@ -12,6 +12,7 @@ local EventBus = require("scripts/types/event_bus")
 -- - [x] Implement 'home' positions for each player
   -- - [x] Implement Resetting the game after a goal is scored
 --   - [x] Implement a goal celebration event ? 
+--   -   [ ] Expand on this so that they actually do some celebrating?
   -- - [ ] Implement face off ?? :O 
 -- - [ ] Draw the ice rink
 -- - [ ] Make the ice rink with rounded edges.
