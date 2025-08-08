@@ -92,7 +92,6 @@ function AISystem:init(entities)
     Assert.NotNil(self.puck, "no puck found for AISystem")
 
     EventBus:on("goal", function(_)
-      print(string.format("ai system pausing: goal"))
       self.pause = true
     end)
     EventBus:on("reset", function(data)
@@ -195,17 +194,17 @@ local function lineLineIntersect(x1, y1, x2, y2, x3, y3, x4, y4)
   return false
 end
 
-local function lineRectIntersect(x1, y1, x2, y2, rx, ry, rw, rh)
-  local left = lineLineIntersect(x1, y1, x2, y2, rx, ry, rx, ry + rh)
-  local right = lineLineIntersect(x2, y1, x2, y2, rx + rw, ry, rx + rw, ry + rh)
-  local top = lineLineIntersect(x1, y1, x2, y2, rx, ry, rx + rw, ry)
-  local bottom = lineLineIntersect(x1, y1, x2, y2, rx, ry + rh, rx + rw, ry + rh)
+local function lineRectIntersect(x1, y1, x2, y2, r)
+  local left = lineLineIntersect(x1, y1, x2, y2, r.x, r.y, r.x, r.y + r.height)
+  local right = lineLineIntersect(x2, y1, x2, y2, r.x + r.width, r.y, r.x + r.width, r.y + r.height)
+  local top = lineLineIntersect(x1, y1, x2, y2, r.x, r.y, r.x + r.width, r.y)
+  local bottom = lineLineIntersect(x1, y1, x2, y2, r.x, r.y + r.height, r.x + r.width, r.y + r.height)
 
   return left or right or top or bottom
 end
 
 function AISystem:trigger_behaviour(player, opponents)
-  local should_shoot = love.math.random(1, 100) == 1
+  local should_shoot = love.math.random(1, 20) == 1
   if not should_shoot then
     return
   end
@@ -213,22 +212,22 @@ function AISystem:trigger_behaviour(player, opponents)
   local target = Rectangle:from_entity(goal):center()
   local obstruction = false
   for _, op in ipairs(opponents) do
+    assert(false) -- TODO : This isn't working ! Create a new scene to test this.
     local intersect = lineRectIntersect(
       player.position.x,
       player.position.y,
       target.x,
       target.y,
-      op.position.x,
-      op.position.y,
-      op.dimensions.width,
-      op.dimensions.height
+      Rectangle:from_entity(op)
     )
     if intersect then
       obstruction = true
     end
+    print(string.format("intersect: %s, a.id: %d, b.id: %d", intersect, player.id, op.id))
   end
 
   if obstruction then
+    print("Deciding to pass the puck!")
     EventBus:emit("pass", player)
   else
     EventBus:emit("shoot", player)

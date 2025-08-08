@@ -62,8 +62,8 @@ function ResetSystem:handle(_)
 
   if self.countdown > 0 then
     self.countdown = self.countdown - 1
-    print(string.format("[%s] %d", self.in_progress, self.countdown))
     if self.countdown == 0 then
+      print("FACE OFF!")
       EventBus:emit("reset", { complete = true })
     end
     return

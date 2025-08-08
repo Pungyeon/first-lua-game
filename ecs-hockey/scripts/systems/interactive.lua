@@ -121,6 +121,7 @@ function InteractiveSystem:handle_pass(root)
 	if root.attached == nil then
 		return
 	end
+  print("oi, dickhead what's up?")
 
 	-- TODO : at some point, we will need to also take into account the movement
 	-- of the player. i.e if the player is moving down, we should filter out players who are above

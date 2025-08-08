@@ -28,9 +28,8 @@ end
 function ScoringSystem:handle(_)
 	if self.countdown > 0 then
 		self.countdown = self.countdown - 1
-		print(string.format("Celebration Countdown: %s", self.countdown))
 		if self.countdown == 0 then
-			print("sending reset")
+			print("Celebration time is over")
 			EventBus:emit("reset", { complete = false })
 		end
 	end
