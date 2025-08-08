@@ -5,6 +5,12 @@ local Teams = require("scripts/types/teams")
 local Vector = require("scripts/types/vector")
 local Assert = require("scripts/assert/assert")
 
+local State = {
+  InPossession = "in_possession",
+  OutOfPosession = "out_of_possession",
+  NonePossession = "none_posession"
+}
+
 local Square = {}
 
 function Square:new(i, j, square_width, square_height)
@@ -19,9 +25,19 @@ function Square:new(i, j, square_width, square_height)
   }
 end
 
-local function get_best_square(_, squares)
+local function get_best_square(player, squares, state)
+    local relevant_squares = {}
+    if state == State.InPossession then 
+      if player.team.id == Teams.HOME then
+        relevant_squares = { 5,  6,  7,  8, 9, 10, 11, 12 }
+      else
+        relevant_squares = { 9, 10, 11, 12, 13, 14, 15, 16 }
+      end
+      -- We should only worry about the 'offensive squares'
+    end
     local best = nil
-    for _, square in ipairs(squares) do
+    for _, square_idx in ipairs(relevant_squares) do
+        local square = squares[square_idx]
         if not best then
             best = square
         end
@@ -102,7 +118,6 @@ function AISystem:init(entities)
             player,
             player.position:add(collision_data.velocity:multiply(100))
         )
-        -- self:reroute(player)
     end)
 
     EventBus:on("possession", function(entity)
@@ -118,8 +133,8 @@ end
 
 function AISystem:calculate_spatial_map()
     -- TODO : initialise this in initialise instead.
-    local columns = 3
-    local rows = 2
+    local columns = 5
+    local rows = 4
     local screen_width, screen_height = love.window.getMode()
     local square_width = screen_width / columns
     local square_height = screen_height / rows
@@ -176,8 +191,8 @@ function AISystem:is_travelling(player)
     return false
 end
 
-function AISystem:reroute(player)
-    local s = get_best_square(player, self.squares)
+function AISystem:reroute(player, state)
+    local s = get_best_square(player, self.squares, state)
     local travel_to = Vector:new(
         love.math.random(s.x, s.x + s.width),
         love.math.random(s.y, s.y + s.height)
@@ -236,7 +251,7 @@ for _, player in ipairs(team) do
             goto continue
         end
 
-        self:reroute(player)
+        self:reroute(player, State.InPossession)
         ::continue::
     end
 end

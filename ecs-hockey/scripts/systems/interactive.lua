@@ -1,3 +1,4 @@
+local love = require("love")
 local EventBus = require("scripts/types/event_bus")
 local Vector = require("scripts/types/vector")
 local Rectangle = require("scripts/types/rectangle")
@@ -159,7 +160,13 @@ function InteractiveSystem:handle_shoot(entity)
 		release(entity, Vector:new(entity.velocity.x, entity.velocity.y), 1000)
 		return
 	end
-	local distance = goal.position:distance_to(entity.position)
+
+	local target = Vector:new(
+		goal.position.x + (goal.dimensions.width * entity.team.id),
+		love.math.random(goal.position.y, goal.position.y + goal.dimensions.height)
+	)
+
+	local distance = target:distance_to(entity.position)
 	local vec = Vector:new(distance.x / distance.direct, distance.y / distance.direct)
 	release(entity, vec, 1000)
 end
