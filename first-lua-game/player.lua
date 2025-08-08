@@ -1,6 +1,6 @@
 local color = require('color')
 
-Player = {}
+local Player = {}
 Player.__index = Player
 Player = setmetatable(Player, { __index = Node })
 

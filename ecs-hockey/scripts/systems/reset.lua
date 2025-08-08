@@ -1,4 +1,5 @@
 local EventBus = require("scripts/types/event_bus")
+local Vector = require("scripts/types/vector")
 local love = require("love")
 
 local screen_width, screen_height = love.window.getMode()
@@ -54,7 +55,7 @@ function ResetSystem:is_travelling(player)
     return false
 end
 
-function ResetSystem:handle(dt)
+function ResetSystem:handle(_)
   if not self.in_progress then
     return
   end

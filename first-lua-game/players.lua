@@ -1,77 +1,77 @@
-local area = require('area')
+local area = require("area")
 
-Players = {}
+local Players = {}
 Players.__index = Players
 
 function Players:new(players)
-    local obj = {
-        players = players,
-        selected = 1
-    }
-    setmetatable(obj, self)
-    return obj
+	local obj = {
+		players = players,
+		selected = 1,
+	}
+	setmetatable(obj, self)
+	return obj
 end
 
 function Players:switch_next()
-    self:switch_to(self.selected + 1)
+	self:switch_to(self.selected + 1)
 end
 
 function Players:switch_to(to)
-    self.players[self.selected]:deselect()
-    self.selected = to
-    if self.selected > #self.players then
-        self.selected = 1
-    end
+	self.players[self.selected]:deselect()
+	self.selected = to
+	if self.selected > #self.players then
+		self.selected = 1
+	end
 end
 
 function Players:handle_input(puck, goal)
-    self.players[self.selected]:select()
+	self.players[self.selected]:select()
 
-    for i = 1, #self.players do
-        self.players[i]:handle_input(puck, goal)
-    end
+	for i = 1, #self.players do
+		self.players[i]:handle_input(puck, goal)
+	end
 end
 
 function Players:foreach(fn)
-    for i = 1, #self.players do
-        fn(i, self.players[i])
-    end
+	for i = 1, #self.players do
+		fn(i, self.players[i])
+	end
 end
 
 function Players:internal_collision(i)
-    for j = 1, #self.players do
-        if i ~= j then
-            if area.Collision(self.players[i], self.players[j]) then
-                self.players[i]:on_collision(area.CollisionResult(self.players[i], self.players[j]))
-            end
-        end
-    end
+	for j = 1, #self.players do
+		if i ~= j then
+			if area.Collision(self.players[i], self.players[j]) then
+				self.players[i]:on_collision(area.CollisionResult(self.players[i], self.players[j]))
+			end
+		end
+	end
 end
 
 function Players:external_collision(player, players)
-    for j = 1, #players do
-        if area.Collision(player, players[j]) then
-            player:on_collision(area.CollisionResult(player, self.players[j]))
-        end
-    end
-    return false
+	for j = 1, #players do
+		if area.Collision(player, players[j]) then
+			player:on_collision(area.CollisionResult(player, self.players[j]))
+		end
+	end
+	return false
 end
 
 function Players:pickup_collision(puck)
-    for i = 1, #self.players do
-        local player = self.players[i]
-        if area.Collision(player, puck) then
-            if player:pickup(puck) then
-                self:switch_to(i)
-            end
-        end
-    end
+	for i = 1, #self.players do
+		local player = self.players[i]
+		if area.Collision(player, puck) then
+			if player:pickup(puck) then
+				self:switch_to(i)
+			end
+		end
+	end
 end
 
 function Players:draw()
-    for i = 1, #self.players do
-        self.players[i]:draw()
-    end
+	for i = 1, #self.players do
+		self.players[i]:draw()
+	end
 end
 
 return Players

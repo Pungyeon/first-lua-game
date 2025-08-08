@@ -1,3 +1,4 @@
+local Vector = require("scripts/types/vector")
 local Rectangle = {}
 
 function Rectangle:new(x, y, width, height)

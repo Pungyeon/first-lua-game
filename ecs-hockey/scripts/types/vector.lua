@@ -1,54 +1,54 @@
-Vector = {}
+local Vector = {}
 
 function Vector:new(x, y)
-    local obj = {
-        x = x,
-        y = y,
-    }
-    setmetatable(obj, self)
-    self.__index = self
+	local obj = {
+		x = x,
+		y = y,
+	}
+	setmetatable(obj, self)
+	self.__index = self
 
-    return obj
+	return obj
 end
 
 function Vector:add(vec)
-    return Vector:new(self.x + vec.x, self.y + vec.y)
+	return Vector:new(self.x + vec.x, self.y + vec.y)
 end
 
 function Vector:multiply(n)
-    return Vector:new(self.x * n, self.y * n)
+	return Vector:new(self.x * n, self.y * n)
 end
 
 function Vector:copy()
-    return Vector:new(self.x, self.y)
+	return Vector:new(self.x, self.y)
 end
 
 function Vector:string()
-    return string.format("{ x: %f, y: %f }", self.x, self.y)
+	return string.format("{ x: %f, y: %f }", self.x, self.y)
 end
 
 function Vector:distance_to(vector)
-    local x = self.x - vector.x
-    local y = self.y - vector.y
-    return {
-        x = x,
-        y = y,
-        direct = math.sqrt((x * x) + (y * y))
-    }
+	local x = self.x - vector.x
+	local y = self.y - vector.y
+	return {
+		x = x,
+		y = y,
+		direct = math.sqrt((x * x) + (y * y)),
+	}
 end
 
-function direction(n)
-    if n == 0 then
-        return 0
-    end
-    if n < 0 then
-        return -1
-    end
-    return 1
+local function direction(n)
+	if n == 0 then
+		return 0
+	end
+	if n < 0 then
+		return -1
+	end
+	return 1
 end
 
 function Vector:direction()
-    return Vector:new(direction(self.x), direction(self.y))
+	return Vector:new(direction(self.x), direction(self.y))
 end
 
 return Vector

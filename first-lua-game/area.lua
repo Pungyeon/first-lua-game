@@ -29,7 +29,7 @@ local function is_left_collision(a, b)
         and ((a.y < b.y + b.height) or (a.y + a.height > b.y))
 end
 
-area = {
+local area = {
     CollisionResult = function(a, b)
         return {
             top = is_top_collision(a, b),

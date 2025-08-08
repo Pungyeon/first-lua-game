@@ -19,7 +19,7 @@ function Square:new(i, j, square_width, square_height)
   }
 end
 
-local function get_best_square(pos, squares)
+local function get_best_square(_, squares)
     local best = nil
     for _, square in ipairs(squares) do
         if not best then
@@ -37,7 +37,7 @@ local function get_best_square(pos, squares)
     return best
 end
 
-function is_within_square(pos, square)
+local function is_within_square(pos, square)
     return pos.x > square.x
         and pos.x < square.x + square.width
         and pos.y > square.y
@@ -196,7 +196,6 @@ function AISystem:travel_to(player, travel_to)
 end
 
 -- Possession result constants
-local UNKNOWN = 0
 local NONE = 1
 local IN_POSSESSION = 2
 local OUT_OF_POSSESSION = 3
@@ -215,7 +214,7 @@ function AISystem:should_ignore(player)
 	return player.selected or self:is_travelling(player)
 end
 
-function AISystem:handle_none_possession(team) 
+function AISystem:handle_none_possession(team)
     for i = 1, #team do
         local player = team[i]
         if self:should_ignore(player) then
@@ -266,7 +265,7 @@ function AISystem:handle_out_of_possession(team, opponents)
     end
 end
 
-function AISystem:handle_team(dt, team, opponents, team_id)
+function AISystem:handle_team(_, team, opponents, team_id)
     local possession = self:get_possession(team_id)
     if possession == NONE then
         self:handle_none_possession(team)
