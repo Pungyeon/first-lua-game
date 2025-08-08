@@ -22,14 +22,21 @@ function SelectSystem:new(team, entities)
         obj:handle_switch(data)
     end)
 
+		EventBus:on("reset", function(data)
+      if data.complete then
+        obj:switch_to(1)
+      end
+	  end)
+
     EventBus:emit("switch", nil)
 
     return self
 end
 
 function SelectSystem:switch_to(i)
-    self.players[self.selected].selected = nil
-    self.players[self.selected].velocity = Vector:new(0, 0)
+    if self.players[self.selected] then
+        self.players[self.selected].selected = nil
+    end
 
     self.selected = i
     if self.selected > #self.players then
