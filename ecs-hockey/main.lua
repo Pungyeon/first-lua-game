@@ -4,6 +4,7 @@ local Bounce = require("scenes/bounce")
 local Tackle = require("scenes/tackle")
 local Reset = require("scenes/reset")
 local EventBus = require("scripts/types/event_bus")
+local SystemTests = require("scripts/systems/test")
 -- Bugs:
 -- - [x] Now that we are using directions for input, we need to set this with the ai systems as well.
 -- Tasks:
@@ -39,6 +40,7 @@ function love.keypressed(key)
 end
 
 function love.load()
+	SystemTests:run()
 	scene:init()
 end
 

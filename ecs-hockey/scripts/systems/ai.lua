@@ -180,7 +180,7 @@ function AISystem:calculate_spatial_map()
     self.squares = squares
 end
 
-local function lineLineIntersect(x1, y1, x2, y2, x3, y3, x4, y4)
+function lineLineIntersect(x1, y1, x2, y2, x3, y3, x4, y4)
   local denominator = (y4-y3)*(x2 -x1) - (x4-x3)*(y2-y1)
   if denominator == 0 then
     return false
@@ -194,7 +194,7 @@ local function lineLineIntersect(x1, y1, x2, y2, x3, y3, x4, y4)
   return false
 end
 
-local function lineRectIntersect(x1, y1, x2, y2, r)
+function lineRectIntersect(x1, y1, x2, y2, r)
   local left = lineLineIntersect(x1, y1, x2, y2, r.x, r.y, r.x, r.y + r.height)
   local right = lineLineIntersect(x2, y1, x2, y2, r.x + r.width, r.y, r.x + r.width, r.y + r.height)
   local top = lineLineIntersect(x1, y1, x2, y2, r.x, r.y, r.x + r.width, r.y)
