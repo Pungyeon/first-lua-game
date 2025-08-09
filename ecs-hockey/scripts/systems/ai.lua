@@ -185,8 +185,8 @@ function lineLineIntersect(x1, y1, x2, y2, x3, y3, x4, y4)
   if denominator == 0 then
     return false
   end
-  local uA = ((x4-x3)*(y1-y3) - (y4-y3)*(x1-x3))
-  local uB = ((x2-x1)*(y1-y3) - (y2-y1)*(x1-x3))
+  local uA = ((x4-x3)*(y1-y3) - (y4-y3)*(x1-x3)) / denominator
+  local uB = ((x2-x1)*(y1-y3) - (y2-y1)*(x1-x3)) / denominator
 
   if uA >= 0 and uA <= 1 and uB >= 0 and uB <= 1 then
     return true
@@ -195,9 +195,9 @@ function lineLineIntersect(x1, y1, x2, y2, x3, y3, x4, y4)
 end
 
 function lineRectIntersect(x1, y1, x2, y2, r)
-  local left = lineLineIntersect(x1, y1, x2, y2, r.x, r.y, r.x, r.y + r.height)
-  local right = lineLineIntersect(x2, y1, x2, y2, r.x + r.width, r.y, r.x + r.width, r.y + r.height)
-  local top = lineLineIntersect(x1, y1, x2, y2, r.x, r.y, r.x + r.width, r.y)
+  local left   = lineLineIntersect(x1, y1, x2, y2, r.x, r.y, r.x, r.y + r.height)
+  local right  = lineLineIntersect(x1, y1, x2, y2, r.x + r.width, r.y, r.x + r.width, r.y + r.height)
+  local top    = lineLineIntersect(x1, y1, x2, y2, r.x, r.y, r.x + r.width, r.y)
   local bottom = lineLineIntersect(x1, y1, x2, y2, r.x, r.y + r.height, r.x + r.width, r.y + r.height)
 
   return left or right or top or bottom
@@ -212,7 +212,6 @@ function AISystem:trigger_behaviour(player, opponents)
   local target = Rectangle:from_entity(goal):center()
   local obstruction = false
   for _, op in ipairs(opponents) do
-    assert(false) -- TODO : This isn't working ! Create a new scene to test this.
     local intersect = lineRectIntersect(
       player.position.x,
       player.position.y,

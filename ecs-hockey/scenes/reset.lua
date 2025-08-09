@@ -22,7 +22,7 @@ local screen_width, screen_height = love.window.getMode()
 local wall_thickness = 10
 
 local goal_height = 150
-local goal_width = 60
+local goal_width = 30
 local home_goal_position = Vector:new(60, (screen_height / 2) - (goal_height / 2))
 local post_thickness = 10
 local away_goal_position = Vector:new(screen_width - 60 - goal_width, (screen_height / 2) - (goal_height / 2))
