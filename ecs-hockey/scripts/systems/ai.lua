@@ -208,7 +208,7 @@ function AISystem:trigger_behaviour(player, opponents)
   if not should_shoot then
     return
   end
-  local goal = self.goals[player.team.id*-1] -- Retrieve the target goal
+  local goal = self.goals[player.team.id] -- Retrieve the target goal
   local target = Rectangle:from_entity(goal):center()
   local obstruction = false
   for _, op in ipairs(opponents) do
