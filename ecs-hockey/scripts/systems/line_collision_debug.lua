@@ -59,7 +59,7 @@ function LineCollisionDebugSystem:trigger_behaviour(player, opponents)
   for _, op in ipairs(opponents) do
     local intersect = lineRectIntersect(
       from.x,
-      player.position.y,
+      from.y,
       target.x,
       target.y,
       Rectangle:from_entity(op)
@@ -74,7 +74,7 @@ function LineCollisionDebugSystem:trigger_behaviour(player, opponents)
     love.graphics.setColor(c.red, c.green, c.blue)
   end
   love.graphics.setLineWidth(5)
-  love.graphics.line(player.position.x, player.position.y, target.x, target.y)
+  love.graphics.line(from.x, from.y, target.x, target.y)
 end
 
 function LineCollisionDebugSystem:handle(dt)
