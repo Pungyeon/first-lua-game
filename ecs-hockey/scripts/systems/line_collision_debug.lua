@@ -1,6 +1,7 @@
 local love = require("love")
 local Rectangle = require("scripts/types/rectangle")
 local Teams = require("scripts/types/teams")
+local Color = require("scripts/types/color")
 
 local LineCollisionDebugSystem = {
     goals = {},
@@ -14,14 +15,14 @@ function LineCollisionDebugSystem:init(entities)
             self.goals[entity.team.id] = entity
             goto continue
         end
-        if not entity.tag == "player" then
-            goto continue
-        end
-        if entity.team.id == Teams.AWAY then
+        if entity.tag == "player" then
+          if entity.team.id == Teams.AWAY then
             table.insert(self.away_team, entity)
-        else
+          else
             table.insert(self.home_team, entity)
+          end
         end
+
         ::continue::
     end
 end
@@ -52,11 +53,12 @@ end
 
 function LineCollisionDebugSystem:trigger_behaviour(player, opponents)
   local goal = self.goals[player.team.id] -- Retrieve the target goal
+	local from = Rectangle:from_entity(player):center()
   local target = Rectangle:from_entity(goal):center()
   local obstruction = false
   for _, op in ipairs(opponents) do
     local intersect = lineRectIntersect(
-      player.position.x,
+      from.x,
       player.position.y,
       target.x,
       target.y,
@@ -66,6 +68,10 @@ function LineCollisionDebugSystem:trigger_behaviour(player, opponents)
       obstruction = true
     end
     print(string.format("intersect: %s, a.id: %d, b.id: %d", intersect, player.id, op.id))
+  end
+  if obstruction then
+    local c = Color.RED
+    love.graphics.setColor(c.red, c.green, c.blue)
   end
   love.graphics.setLineWidth(5)
   love.graphics.line(player.position.x, player.position.y, target.x, target.y)
