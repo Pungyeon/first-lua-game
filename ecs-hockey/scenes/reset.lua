@@ -16,6 +16,7 @@ local SelectSystem = require("scripts/systems/select")
 local AISystem = require("scripts/systems/ai")
 local ScoringSystem = require("scripts/systems/scoring")
 local ResetSystem = require("scripts/systems/reset")
+local LineCollisionSystem = require("scripts/systems/line_collision_debug")
 local Vector = require("scripts/types/vector")
 
 local screen_width, screen_height = love.window.getMode()
@@ -80,6 +81,7 @@ function Reset:init()
 	AISystem:init(entities)
 	ScoringSystem:init(score_board)
 	ResetSystem:init(entities)
+	LineCollisionSystem:init(entities)
 end
 
 function Reset:update(dt)
@@ -95,6 +97,7 @@ end
 function Reset:draw()
 	RenderSystem:handle(entities)
 	AISystem:debug()
+	LineCollisionSystem:draw()
 end
 
 return Reset
