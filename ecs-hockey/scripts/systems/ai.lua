@@ -180,59 +180,6 @@ function AISystem:calculate_spatial_map()
     self.squares = squares
 end
 
-function lineLineIntersect(x1, y1, x2, y2, x3, y3, x4, y4)
-  local denominator = (y4-y3)*(x2 -x1) - (x4-x3)*(y2-y1)
-  if denominator == 0 then
-    return false
-  end
-  local uA = ((x4-x3)*(y1-y3) - (y4-y3)*(x1-x3)) / denominator
-  local uB = ((x2-x1)*(y1-y3) - (y2-y1)*(x1-x3)) / denominator
-
-  if uA >= 0 and uA <= 1 and uB >= 0 and uB <= 1 then
-    return true
-  end
-  return false
-end
-
-function lineRectIntersect(x1, y1, x2, y2, r)
-  local left   = lineLineIntersect(x1, y1, x2, y2, r.x, r.y, r.x, r.y + r.height)
-  local right  = lineLineIntersect(x1, y1, x2, y2, r.x + r.width, r.y, r.x + r.width, r.y + r.height)
-  local top    = lineLineIntersect(x1, y1, x2, y2, r.x, r.y, r.x + r.width, r.y)
-  local bottom = lineLineIntersect(x1, y1, x2, y2, r.x, r.y + r.height, r.x + r.width, r.y + r.height)
-
-  return left or right or top or bottom
-end
-
-function AISystem:trigger_behaviour(player, opponents)
-  local should_shoot = love.math.random(1, 20) == 1
-  if not should_shoot then
-    return
-  end
-  local goal = self.goals[player.team.id] -- Retrieve the target goal
-  local target = Rectangle:from_entity(goal):center()
-  local obstruction = false
-  for _, op in ipairs(opponents) do
-    local intersect = lineRectIntersect(
-      player.position.x,
-      player.position.y,
-      target.x,
-      target.y,
-      Rectangle:from_entity(op)
-    )
-    if intersect then
-      obstruction = true
-    end
-    print(string.format("intersect: %s, a.id: %d, b.id: %d", intersect, player.id, op.id))
-  end
-
-  if obstruction then
-    print("Deciding to pass the puck!")
-    EventBus:emit("pass", player)
-  else
-    EventBus:emit("shoot", player)
-  end
-end
-
 -- TODO : Maybe we should rename this to 'handle_travelling?'
 function AISystem:is_travelling(player, opponents)
     if player.travelling_to then
