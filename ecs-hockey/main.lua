@@ -3,6 +3,7 @@ local Game = require("scenes/game")
 local Bounce = require("scenes/bounce")
 local Tackle = require("scenes/tackle")
 local Reset = require("scenes/reset")
+local Rink = require("scenes/rink")
 local EventBus = require("scripts/types/event_bus")
 local SystemTests = require("scripts/systems/test")
 -- Bugs:
@@ -19,7 +20,7 @@ local SystemTests = require("scripts/systems/test")
 -- - [ ] Make the ice rink with rounded edges.
 -- - [ ] Implement Game Mechanics (Icing, etc.)
 
-local scene = Reset
+local scene = Rink
 
 function love.keypressed(key)
 	if key == "1" then
@@ -30,6 +31,8 @@ function love.keypressed(key)
 		scene = Tackle
 	elseif key == "4" then
 		scene = Reset
+	elseif key == "5" then
+		scene = Rink
 	elseif key == "0" then
 		EventBus:emit("reset", { complete = false })
 		return

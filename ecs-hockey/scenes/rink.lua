@@ -44,7 +44,8 @@ function Rink:init()
 	local score_board = { home_team = 0, away_team = 0, render = { type = "score_board" } }
 	entities = {
 		Area:new(center_x - line_width, 0, line_width, screen_height, Color.DARK_RED),
-		Area:new(screen)
+		Area:new(screen_width * 0.3, 0, line_width, screen_height, Color.DARK_BLUE),
+		Area:new(screen_width * 0.6, 0, line_width, screen_height, Color.DARK_BLUE),
 		Player:new(center_x + player_width * 2, center_y - player_width / 2, red_team),
 		Wall:new(0, 0, screen_width, wall_thickness),
 		Wall:new(0, 0, wall_thickness, screen_height),

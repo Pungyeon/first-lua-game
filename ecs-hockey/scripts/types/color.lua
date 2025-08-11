@@ -29,6 +29,11 @@ local color = {
 		green = 0,
 		blue = 0,
 	},
+	DARK_BLUE = {
+		red = 0,
+		green = 0,
+		blue = 0.3,
+	},
 	BLUE = {
 		red = 0,
 		green = 0,
