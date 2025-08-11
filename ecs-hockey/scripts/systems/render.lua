@@ -4,10 +4,6 @@ local RenderSystem = {}
 
 local screen_width, screen_height = love.window.getMode()
 
-function RenderSystem:render_rink()
-
-end
-
 function RenderSystem:handle(entities)
 	for i = 1, #entities do
 		local entity = entities[i]
