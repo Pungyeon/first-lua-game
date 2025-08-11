@@ -126,9 +126,11 @@ function AISystem:init(entities)
     EventBus:on("possession", function(entity)
         for _, player in ipairs(self.home_team) do
             player.travelling_to = nil
+            player.velocity = Vector:new(0, 0)
         end
         for _, player in ipairs(self.away_team) do
             player.travelling_to = nil
+            player.velocity = Vector:new(0, 0)
         end
         self.possession = entity
     end)
