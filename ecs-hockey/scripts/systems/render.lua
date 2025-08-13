@@ -31,7 +31,7 @@ local render_tag_map = {
 					)
 				end
 
-				assert(color.red, string.format("render type: %s, tag: %s"))
+				print(color)
 				love.graphics.setColor(color.red, color.green, color.blue)
 				love.graphics.rectangle(
 					"fill",
