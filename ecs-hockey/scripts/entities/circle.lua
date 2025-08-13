@@ -2,13 +2,13 @@ local Vector = require("scripts/types/vector")
 
 local Circle = {}
 
-function Circle:new(x, y, width, height, color)
+function Circle:new(x, y, radius, color)
 	return {
 		position = Vector:new(x, y),
 		render = { type = "circle" },
-		dimensions = { width = width, height = height },
+    radius = radius,
 		color = color,
-		tag = "area",
+		tag = "circle",
 	}
 end
 

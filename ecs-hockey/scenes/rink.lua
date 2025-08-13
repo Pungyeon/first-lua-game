@@ -4,6 +4,7 @@ local Puck = require("scripts/entities/puck")
 local Wall = require("scripts/entities/wall")
 local Goal = require("scripts/entities/goal")
 local Area = require("scripts/entities/area")
+local Area = require("scripts/entities/area")
 local RenderSystem = require("scripts/systems/render")
 local InputSystem = require("scripts/systems/input")
 local PhysicsSystem = require("scripts/systems/physics")
@@ -49,7 +50,12 @@ function Rink:init()
 		Area:new(center_x - line_width, 0, line_width, screen_height, Color.DARK_RED),
 		Area:new(screen_width * 0.3, 0, line_width, screen_height, Color.DARK_BLUE),
 		Area:new(screen_width * 0.7, 0, line_width, screen_height, Color.DARK_BLUE),
-		Circle:new(center_x - center_circle_radius, center_y - center_circle_radius, ),
+		Circle:new(
+      center_x - center_circle_radius,
+      center_y - center_circle_radius,
+      center_circle_radius,
+      Color.DARK_RED
+    ),
 		Wall:new(0, 0, screen_width, wall_thickness),
 		Wall:new(0, 0, wall_thickness, screen_height),
 		Wall:new(screen_width - wall_thickness, 0, wall_thickness, screen_height),
