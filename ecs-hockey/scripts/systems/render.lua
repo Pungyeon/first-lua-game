@@ -25,6 +25,11 @@ function RenderSystem:handle(entities)
 				)
 			end
 
+      if entity.render.type == "circle" then
+				love.graphics.setColor(color.red, color.green, color.blue)
+				love.graphics.circle("line", entity.position.x, entity.position.y, entity.radius)
+      end 
+
 			if entity.render.type == "rectangle" then
 				love.graphics.setColor(Color.BLUE.red, Color.BLUE.green, Color.BLUE.blue)
 				if entity.selected then
