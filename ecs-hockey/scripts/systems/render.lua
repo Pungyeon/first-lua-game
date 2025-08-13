@@ -31,7 +31,6 @@ local render_tag_map = {
 					)
 				end
 
-				print(color)
 				love.graphics.setColor(color.red, color.green, color.blue)
 				love.graphics.rectangle(
 					"fill",

@@ -11,7 +11,7 @@ function Puck:new(x, y, width, height)
 		collision = { type = "particle", width = width, height = height },
 		physics = { type = "particle" },
 		dimensions = { width = width, height = height },
-		color = Color.WHITE,
+		color = Color.BLACK,
 		render = { type = "rectangle" },
 		tag = "puck",
 		attached = nil,
