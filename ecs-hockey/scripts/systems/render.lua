@@ -14,6 +14,7 @@ local render_tag_map = {
 	end,
   circle = function(color, entity)
 		love.graphics.setColor(color.red, color.green, color.blue)
+		love.graphics.setLineWidth(5)
 		love.graphics.circle("line", entity.position.x, entity.position.y, entity.radius)
 	end,
 	rectangle = function(color, entity)
