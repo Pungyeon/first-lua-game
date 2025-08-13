@@ -6,6 +6,7 @@ local screen_width, screen_height = love.window.getMode()
 
 local render_tag_map = {
 	score_board = function(color, entity)
+		love.graphics.setColor(color.red, color.green, color.blue)
 		love.graphics.print(
 			string.format("%d - %d", entity.home_team, entity.away_team),
 			screen_width / 2,
@@ -30,6 +31,7 @@ local render_tag_map = {
 					)
 				end
 
+				assert(color.red, string.format("render type: %s, tag: %s"))
 				love.graphics.setColor(color.red, color.green, color.blue)
 				love.graphics.rectangle(
 					"fill",
