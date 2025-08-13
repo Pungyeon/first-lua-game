@@ -18,8 +18,8 @@ local render_tag_map = {
 		love.graphics.circle("line", entity.position.x, entity.position.y, entity.radius)
 	end,
 	rectangle = function(color, entity)
-				love.graphics.setColor(Color.BLUE.red, Color.BLUE.green, Color.BLUE.blue)
 				if entity.selected then
+					love.graphics.setColor(Color.BLUE.red, Color.BLUE.green, Color.BLUE.blue)
 					local border = 3
 					love.graphics.rectangle(
 						"fill",
@@ -45,7 +45,7 @@ local render_tag_map = {
 
 function RenderSystem:handle_entity(entity)
 		if entity.render then
-			local color = Color.BLUE
+			local color = nil
 			if entity.team ~= nil then
 				color = entity.team.color
 			end
@@ -54,7 +54,8 @@ function RenderSystem:handle_entity(entity)
 				color = entity.color
 			end
 			
-			
+			assert(color, string.format("Color nil (%s): (render type: %s, tag: %s)",
+				color, entity.render.type, entity.tag))
 
 			local fn = render_tag_map[entity.render.type]
 			if fn then

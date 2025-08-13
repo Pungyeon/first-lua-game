@@ -44,7 +44,7 @@ local entities = nil
 function Rink:init()
 	local red_team = { id = Teams.HOME, color = Color.RED }
 	local blue_team = { id = Teams.AWAY, color = Color.BLUE }
-	local score_board = { home_team = 0, away_team = 0, render = { type = "score_board" } }
+	local score_board = { home_team = 0, away_team = 0, render = { type = "score_board" }, color = Color.GRAY }
 	entities = {
 		-- Rink
 		Area:new(0, 0, screen_width, screen_height, Color.WHITE),
