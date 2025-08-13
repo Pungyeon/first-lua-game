@@ -4,31 +4,19 @@ local RenderSystem = {}
 
 local screen_width, screen_height = love.window.getMode()
 
-function RenderSystem:handle_entity(entity)
-		if entity.render then
-			local color = Color.GREEN
-			if entity.team ~= nil then
-				color = entity.team.color
-			end
-
-			if entity.color ~= nil then
-				color = entity.color
-			end
-
-			if entity.render.type == "score_board" then
-				love.graphics.print(
-					string.format("%d - %d", entity.home_team, entity.away_team),
-					screen_width / 2,
-					screen_height * 0.8
-				)
-			end
-
-      if entity.render.type == "circle" then
-				love.graphics.setColor(color.red, color.green, color.blue)
-				love.graphics.circle("line", entity.position.x, entity.position.y, entity.radius)
-      end 
-
-			if entity.render.type == "rectangle" then
+local render_tag_map = {
+	score_board = function(entity)
+		love.graphics.print(
+			string.format("%d - %d", entity.home_team, entity.away_team),
+			screen_width / 2,
+			screen_height * 0.8
+		)
+	end,
+  circle = function(entity)
+		love.graphics.setColor(color.red, color.green, color.blue)
+		love.graphics.circle("line", entity.position.x, entity.position.y, entity.radius)
+	end,
+	rectangle = function(entity)
 				love.graphics.setColor(Color.BLUE.red, Color.BLUE.green, Color.BLUE.blue)
 				if entity.selected then
 					local border = 3
@@ -51,6 +39,25 @@ function RenderSystem:handle_entity(entity)
 				)
 				love.graphics.setColor(0, 0, 0)
 				love.graphics.print(entity.id, entity.position.x, entity.position.y)
+	end,
+}
+
+function RenderSystem:handle_entity(entity)
+		if entity.render then
+			local color = Color.GREEN
+			if entity.team ~= nil then
+				color = entity.team.color
+			end
+
+			if entity.color ~= nil then
+				color = entity.color
+			end
+
+			local fn = render_tag_map[entity.tag]
+			if fn then
+				fn(entity)
+			else
+				assert(false)
 			end
 		end
 end
