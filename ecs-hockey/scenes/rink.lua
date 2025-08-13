@@ -65,7 +65,7 @@ function Rink:init()
 			home_goal_position.x+goal_width,
 			center_y,
 			(goal_width/2),
-			Color.BLUE
+			Color.LIGHT_BLUE
 		),
 		Circle:new(
 			"fill",

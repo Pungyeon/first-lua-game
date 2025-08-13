@@ -44,6 +44,11 @@ local color = {
 		green = 0,
 		blue = 255,
 	},
+	LIGHT_BLUE = {
+		red = 0,
+		green = 0,
+		blue = 0.8,
+	},
 }
 
 return color
