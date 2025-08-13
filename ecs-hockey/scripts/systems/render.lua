@@ -45,7 +45,7 @@ local render_tag_map = {
 
 function RenderSystem:handle_entity(entity)
 		if entity.render then
-			local color = Color.GREEN
+			local color = Color.BLUE
 			if entity.team ~= nil then
 				color = entity.team.color
 			end
@@ -53,6 +53,8 @@ function RenderSystem:handle_entity(entity)
 			if entity.color ~= nil then
 				color = entity.color
 			end
+			
+			
 
 			local fn = render_tag_map[entity.render.type]
 			if fn then
