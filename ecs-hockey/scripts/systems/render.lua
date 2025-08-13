@@ -4,11 +4,9 @@ local RenderSystem = {}
 
 local screen_width, screen_height = love.window.getMode()
 
-function RenderSystem:handle(entities)
-	for i = 1, #entities do
-		local entity = entities[i]
+function RenderSystem:handle_entity(entity)
 		if entity.render then
-			local color = Color.WHITE
+			local color = Color.GREEN
 			if entity.team ~= nil then
 				color = entity.team.color
 			end
@@ -51,10 +49,15 @@ function RenderSystem:handle(entities)
 					entity.dimensions.width,
 					entity.dimensions.height
 				)
-				love.graphics.setColor(1, 1, 1)
+				love.graphics.setColor(0, 0, 0)
 				love.graphics.print(entity.id, entity.position.x, entity.position.y)
 			end
 		end
+end
+
+function RenderSystem:handle(entities)
+	for i = 1, #entities do
+		self:handle_entity(entities[i])
 	end
 end
 
