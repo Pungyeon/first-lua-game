@@ -53,12 +53,19 @@ function Rink:init()
 		Area:new(away_goal_position.x, 0, line_width, screen_height, Color.DARK_RED),
 		Area:new(screen_width * 0.3, 0, line_width, screen_height, Color.DARK_BLUE),
 		Area:new(screen_width * 0.7, 0, line_width, screen_height, Color.DARK_BLUE),
-		Circle:new(
+		Circle:new( -- center circle
+      "line",
       center_x,
       center_y,
       center_circle_radius,
       Color.DARK_RED
     ),
+		Circle:new(
+			"fill",
+			home_goal_position.x,
+			center_y,
+			
+		),
 		Wall:new(0, 0, screen_width, wall_thickness),
 		Wall:new(0, 0, wall_thickness, screen_height),
 		Wall:new(screen_width - wall_thickness, 0, wall_thickness, screen_height),

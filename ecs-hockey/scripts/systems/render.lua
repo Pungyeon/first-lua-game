@@ -16,7 +16,7 @@ local render_tag_map = {
   circle = function(color, entity)
 		love.graphics.setColor(color.red, color.green, color.blue)
 		love.graphics.setLineWidth(5)
-		love.graphics.circle("line", entity.position.x, entity.position.y, entity.radius)
+		love.graphics.circle(entity.render.fill, entity.position.x, entity.position.y, entity.radius)
 	end,
 	rectangle = function(color, entity)
 				if entity.selected then
