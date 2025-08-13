@@ -109,8 +109,8 @@ end
 
 function Rink:draw()
 	RenderSystem:handle(entities)
-	AISystem:debug()
-	LineCollisionSystem:draw()
+	-- AISystem:debug()
+	-- LineCollisionSystem:draw()
 end
 
 return Rink

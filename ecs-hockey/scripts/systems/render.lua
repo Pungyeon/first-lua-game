@@ -5,18 +5,18 @@ local RenderSystem = {}
 local screen_width, screen_height = love.window.getMode()
 
 local render_tag_map = {
-	score_board = function(entity)
+	score_board = function(color, entity)
 		love.graphics.print(
 			string.format("%d - %d", entity.home_team, entity.away_team),
 			screen_width / 2,
 			screen_height * 0.8
 		)
 	end,
-  circle = function(entity)
+  circle = function(color, entity)
 		love.graphics.setColor(color.red, color.green, color.blue)
 		love.graphics.circle("line", entity.position.x, entity.position.y, entity.radius)
 	end,
-	rectangle = function(entity)
+	rectangle = function(color, entity)
 				love.graphics.setColor(Color.BLUE.red, Color.BLUE.green, Color.BLUE.blue)
 				if entity.selected then
 					local border = 3
@@ -53,11 +53,11 @@ function RenderSystem:handle_entity(entity)
 				color = entity.color
 			end
 
-			local fn = render_tag_map[entity.tag]
+			local fn = render_tag_map[entity.render.type]
 			if fn then
-				fn(entity)
+				fn(color, entity)
 			else
-				assert(false)
+				assert(false, "could not find tag in render map: " .. entity.render.type)
 			end
 		end
 end
