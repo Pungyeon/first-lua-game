@@ -367,7 +367,7 @@ end
 function AISystem:debug()
     -- TODO : draw the square map
     for _, square in ipairs(self.squares) do
-        love.graphics.setColor(Color.WHITE.red, Color.WHITE.green, Color.WHITE.blue)
+        love.graphics.setColor(Color.GRAY.red, Color.GRAY.green, Color.GRAY.blue)
         love.graphics.setLineWidth(5)
         love.graphics.line(
             square.x, square.y,

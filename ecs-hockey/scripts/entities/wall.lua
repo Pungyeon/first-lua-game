@@ -18,7 +18,7 @@ function Wall:new(x, y, width, height, slowdown)
 		position = Vector:new(x, y),
 		collision = { type = "static", width = width, height = height },
 		dimensions = { width = width, height = height },
-		color = Color.WHITE,
+		color = Color.GRAY,
 		render = { type = "rectangle" },
 		tag = "wall",
 		slowdown = or_default(slowdown, 0.75),
