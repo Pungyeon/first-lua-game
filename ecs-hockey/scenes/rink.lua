@@ -34,6 +34,8 @@ local player_width = 30
 local puck_width = 10
 local puck_height = 10
 
+local center_circle_radius = 100
+
 local Rink = {}
 
 local entities = nil
@@ -43,14 +45,17 @@ function Rink:init()
 	local blue_team = { id = Teams.AWAY, color = Color.BLUE }
 	local score_board = { home_team = 0, away_team = 0, render = { type = "score_board" } }
 	entities = {
+		-- Rink
 		Area:new(center_x - line_width, 0, line_width, screen_height, Color.DARK_RED),
 		Area:new(screen_width * 0.3, 0, line_width, screen_height, Color.DARK_BLUE),
 		Area:new(screen_width * 0.7, 0, line_width, screen_height, Color.DARK_BLUE),
-		Player:new(center_x + player_width * 2, center_y - player_width / 2, red_team),
+		Circle:new(center_x - center_circle_radius, center_y - center_circle_radius, ),
 		Wall:new(0, 0, screen_width, wall_thickness),
 		Wall:new(0, 0, wall_thickness, screen_height),
 		Wall:new(screen_width - wall_thickness, 0, wall_thickness, screen_height),
 		Wall:new(0, screen_height - wall_thickness, screen_width, screen_height),
+		-- Game Objects
+		Player:new(center_x + player_width * 2, center_y - player_width / 2, red_team),
 		Goal:new(home_goal_position, goal_width, goal_height, red_team),
 		-- Goal Posts
 		Wall:new(home_goal_position.x, home_goal_position.y, goal_width, post_thickness), -- top post
