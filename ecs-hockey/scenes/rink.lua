@@ -72,7 +72,7 @@ function Rink:init()
 			away_goal_position.x,
 			center_y,
 			(goal_width/2),
-			Color.BLUE
+			Color.LIGHT_BLUE
 		),
 		Wall:new(0, 0, screen_width, wall_thickness),
 		Wall:new(0, 0, wall_thickness, screen_height),
