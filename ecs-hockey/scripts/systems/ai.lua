@@ -67,7 +67,8 @@ local AISystem = {
     squares = {},
     home_team = {},
     away_team = {},
-    goals = {}
+    goals = {},
+    goalies = {}
 }
 
 function AISystem:init(entities)
@@ -77,6 +78,9 @@ function AISystem:init(entities)
         end
         if entity.tag == "goal" then
           self.goals[entity.team.id] = entity
+        end
+        if entity.tag == "goalies" then
+          self.goalies[entity.team.id] = entity
         end
         if entity.tag == "player" then
             if entity.team.id == Teams.HOME then
@@ -104,6 +108,8 @@ function AISystem:init(entities)
         Assert.NotNil(collision_data.entity)
         Assert.NotNil(collision_data.velocity)
         Assert.NotNil(collision_data.static)
+
+        -- TODO : we need to handle the goalies here.
 
         local player = collision_data.entity
         if player.selected then
@@ -362,6 +368,10 @@ function AISystem:handle(dt)
 
     self:handle_team(dt, self.home_team, self.away_team, Teams.HOME)
     self:handle_team(dt, self.away_team, self.home_team, Teams.AWAY)
+  
+    for _, goalie in ipairs(self.goalies) do
+      assert(false)  -- TODO : do something here
+    end
 end
 
 function AISystem:debug()

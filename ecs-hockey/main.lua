@@ -8,6 +8,7 @@ local Reset = require("scenes/reset")
 local Rink = require("scenes/rink")
 local EventBus = require("scripts/types/event_bus")
 local SystemTests = require("scripts/systems/test")
+local Goalie = require("scenes/goalie")
 -- Bugs:
 -- - [x] Now that we are using directions for input, we need to set this with the ai systems as well.
 -- Tasks:
@@ -18,15 +19,15 @@ local SystemTests = require("scripts/systems/test")
 --   - [x] Implement a goal celebration event ?
 --   -   [ ] Expand on this so that they actually do some celebrating?
 -- - [ ] Implement face off ?? :O
--- - [ ] Draw the ice rink
+-- - [x] Draw the ice rink
 -- - [ ] Make the ice rink with rounded edges.
 -- - [ ] Implement Game Mechanics (Icing, etc.)
 
-local scene = Rink
+local scene = Goalie
 
 function love.keypressed(key)
 	if key == "1" then
-		scene = Game
+		scene = Goalie
 	elseif key == "2" then
 		scene = Bounce
 	elseif key == "3" then
