@@ -3,8 +3,6 @@ local Player = require("scripts/entities/player")
 local Puck = require("scripts/entities/puck")
 local Wall = require("scripts/entities/wall")
 local Goal = require("scripts/entities/goal")
-local Area = require("scripts/entities/area")
-local Circle = require("scripts/entities/circle")
 local RenderSystem = require("scripts/systems/render")
 local InputSystem = require("scripts/systems/input")
 local PhysicsSystem = require("scripts/systems/physics")
@@ -23,11 +21,11 @@ local RinkEntity = require("scripts/entities/rink")
 
 local screen_width, screen_height = love.window.getMode()
 
-local goal_line_home = screen_width*0.1
-local goal_line_away = screen_width*0.9
+local goal_line_home = screen_width * 0.1
+local goal_line_away = screen_width * 0.9
 local goal_height = screen_width / 12
 local goal_width = screen_width / 25
-local home_goal_position = Vector:new(goal_line_home-goal_width, (screen_height / 2) - (goal_height / 2))
+local home_goal_position = Vector:new(goal_line_home - goal_width, (screen_height / 2) - (goal_height / 2))
 local post_thickness = 10
 local away_goal_position = Vector:new(goal_line_away, (screen_height / 2) - (goal_height / 2))
 local center_y = screen_height / 2
@@ -62,7 +60,13 @@ function Rink:init()
 		Goal:new(away_goal_position, goal_width, goal_height, blue_team),
 		-- Goal Posts
 		Wall:new(away_goal_position.x, away_goal_position.y, goal_width, post_thickness),
-		Wall:new(away_goal_position.x + goal_width - post_thickness, away_goal_position.y, post_thickness, goal_height, 0.1),
+		Wall:new(
+			away_goal_position.x + goal_width - post_thickness,
+			away_goal_position.y,
+			post_thickness,
+			goal_height,
+			0.1
+		),
 		Wall:new(away_goal_position.x, away_goal_position.y + goal_height - post_thickness, goal_width, post_thickness),
 		Puck:new(center_x - (puck_width / 2), center_y - (puck_height / 2), puck_width, puck_height),
 		score_board,
