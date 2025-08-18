@@ -23,11 +23,13 @@ local Vector = require("scripts/types/vector")
 local screen_width, screen_height = love.window.getMode()
 local wall_thickness = 10
 
-local goal_height = 75
-local goal_width = 60
-local home_goal_position = Vector:new(60, (screen_height / 2) - (goal_height / 2))
+local goal_line_home = screen_width*0.1
+local goal_line_away = screen_width*0.9
+local goal_height = screen_width / 12
+local goal_width = screen_width / 25
+local home_goal_position = Vector:new(goal_line_home-goal_width, (screen_height / 2) - (goal_height / 2))
 local post_thickness = 10
-local away_goal_position = Vector:new(screen_width - 60 - goal_width, (screen_height / 2) - (goal_height / 2))
+local away_goal_position = Vector:new(goal_line_away, (screen_height / 2) - (goal_height / 2))
 local line_width = 5
 local center_y = screen_height / 2
 local center_x = screen_width / 2
@@ -35,7 +37,7 @@ local player_width = 30
 local puck_width = 10
 local puck_height = 10
 
-local center_circle_radius = 100
+local center_circle_radius = screen_height/8
 
 local Rink = {}
 
@@ -64,16 +66,72 @@ function Rink:init()
 			"fill",
 			home_goal_position.x+goal_width,
 			center_y,
-			(goal_width/2),
+			goal_height/2,
 			Color.LIGHT_BLUE
 		),
 		Circle:new(
 			"fill",
 			away_goal_position.x,
 			center_y,
-			(goal_width/2),
+			goal_height/2,
 			Color.LIGHT_BLUE
 		),
+    Circle:new(
+      "line",
+      screen_width * 0.2,
+      screen_height * 0.2,
+      center_circle_radius / 2,
+      Color.DARK_RED
+    ),
+    Circle:new(
+      "fill",
+      screen_width * 0.2,
+      screen_height * 0.2,
+      5,
+      Color.DARK_RED
+    ),
+    Circle:new(
+      "line",
+      screen_width * 0.8,
+      screen_height * 0.8,
+      center_circle_radius / 2,
+      Color.DARK_RED
+    ),
+    Circle:new(
+      "fill",
+      screen_width * 0.8,
+      screen_height * 0.8,
+      5,
+      Color.DARK_RED
+    ),
+    Circle:new(
+      "line",
+      screen_width * 0.2,
+      screen_height * 0.8,
+      center_circle_radius / 2,
+      Color.DARK_RED
+    ),
+    Circle:new(
+      "fill",
+      screen_width * 0.2,
+      screen_height * 0.8,
+      5,
+      Color.DARK_RED
+    ),
+    Circle:new(
+      "line",
+      screen_width * 0.8,
+      screen_height * 0.2,
+      center_circle_radius / 2,
+      Color.DARK_RED
+    ),
+    Circle:new(
+      "fill",
+      screen_width * 0.8,
+      screen_height * 0.2,
+      5,
+      Color.DARK_RED
+    ),
 		Wall:new(0, 0, screen_width, wall_thickness),
 		Wall:new(0, 0, wall_thickness, screen_height),
 		Wall:new(screen_width - wall_thickness, 0, wall_thickness, screen_height),
@@ -94,7 +152,7 @@ function Rink:init()
 		Goal:new(away_goal_position, goal_width, goal_height, blue_team),
 		-- Goal Posts
 		Wall:new(away_goal_position.x, away_goal_position.y, goal_width, post_thickness),
-		Wall:new(away_goal_position.x + goal_width, away_goal_position.y, post_thickness, goal_height, 0.1),
+		Wall:new(away_goal_position.x + goal_width - post_thickness, away_goal_position.y, post_thickness, goal_height, 0.1),
 		Wall:new(away_goal_position.x, away_goal_position.y + goal_height - post_thickness, goal_width, post_thickness),
 		Puck:new(center_x - (puck_width / 2), center_y - (puck_height / 2), puck_width, puck_height),
 		score_board,

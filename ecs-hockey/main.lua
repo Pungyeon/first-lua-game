@@ -1,4 +1,6 @@
 local love = require("love")
+love.window.setMode(1280, 960)
+
 local Game = require("scenes/game")
 local Bounce = require("scenes/bounce")
 local Tackle = require("scenes/tackle")
