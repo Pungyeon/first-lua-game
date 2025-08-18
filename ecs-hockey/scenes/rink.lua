@@ -19,9 +19,9 @@ local ScoringSystem = require("scripts/systems/scoring")
 local ResetSystem = require("scripts/systems/reset")
 local LineCollisionSystem = require("scripts/systems/line_collision_debug")
 local Vector = require("scripts/types/vector")
+local RinkEntity = require("scripts/entities/rink")
 
 local screen_width, screen_height = love.window.getMode()
-local wall_thickness = 10
 
 local goal_line_home = screen_width*0.1
 local goal_line_away = screen_width*0.9
@@ -30,14 +30,11 @@ local goal_width = screen_width / 25
 local home_goal_position = Vector:new(goal_line_home-goal_width, (screen_height / 2) - (goal_height / 2))
 local post_thickness = 10
 local away_goal_position = Vector:new(goal_line_away, (screen_height / 2) - (goal_height / 2))
-local line_width = 5
 local center_y = screen_height / 2
 local center_x = screen_width / 2
 local player_width = 30
 local puck_width = 10
 local puck_height = 10
-
-local center_circle_radius = screen_height/8
 
 local Rink = {}
 
@@ -47,95 +44,8 @@ function Rink:init()
 	local red_team = { id = Teams.HOME, color = Color.RED }
 	local blue_team = { id = Teams.AWAY, color = Color.BLUE }
 	local score_board = { home_team = 0, away_team = 0, render = { type = "score_board" }, color = Color.GRAY }
-	entities = {
+	entities = RinkEntity:new({
 		-- Rink
-		Area:new(0, 0, screen_width, screen_height, Color.WHITE),
-		Area:new(center_x - line_width, 0, line_width, screen_height, Color.DARK_RED),
-		Area:new(home_goal_position.x + goal_width - line_width, 0, line_width, screen_height, Color.DARK_RED),
-		Area:new(away_goal_position.x, 0, line_width, screen_height, Color.DARK_RED),
-		Area:new(screen_width * 0.3, 0, line_width, screen_height, Color.DARK_BLUE),
-		Area:new(screen_width * 0.7, 0, line_width, screen_height, Color.DARK_BLUE),
-		Circle:new( -- center circle
-      "line",
-      center_x,
-      center_y,
-      center_circle_radius,
-      Color.DARK_RED
-    ),
-		Circle:new(
-			"fill",
-			home_goal_position.x+goal_width,
-			center_y,
-			goal_height/2,
-			Color.LIGHT_BLUE
-		),
-		Circle:new(
-			"fill",
-			away_goal_position.x,
-			center_y,
-			goal_height/2,
-			Color.LIGHT_BLUE
-		),
-    Circle:new(
-      "line",
-      screen_width * 0.2,
-      screen_height * 0.2,
-      center_circle_radius / 2,
-      Color.DARK_RED
-    ),
-    Circle:new(
-      "fill",
-      screen_width * 0.2,
-      screen_height * 0.2,
-      5,
-      Color.DARK_RED
-    ),
-    Circle:new(
-      "line",
-      screen_width * 0.8,
-      screen_height * 0.8,
-      center_circle_radius / 2,
-      Color.DARK_RED
-    ),
-    Circle:new(
-      "fill",
-      screen_width * 0.8,
-      screen_height * 0.8,
-      5,
-      Color.DARK_RED
-    ),
-    Circle:new(
-      "line",
-      screen_width * 0.2,
-      screen_height * 0.8,
-      center_circle_radius / 2,
-      Color.DARK_RED
-    ),
-    Circle:new(
-      "fill",
-      screen_width * 0.2,
-      screen_height * 0.8,
-      5,
-      Color.DARK_RED
-    ),
-    Circle:new(
-      "line",
-      screen_width * 0.8,
-      screen_height * 0.2,
-      center_circle_radius / 2,
-      Color.DARK_RED
-    ),
-    Circle:new(
-      "fill",
-      screen_width * 0.8,
-      screen_height * 0.2,
-      5,
-      Color.DARK_RED
-    ),
-		Wall:new(0, 0, screen_width, wall_thickness),
-		Wall:new(0, 0, wall_thickness, screen_height),
-		Wall:new(screen_width - wall_thickness, 0, wall_thickness, screen_height),
-		Wall:new(0, screen_height - wall_thickness, screen_width, screen_height),
 		-- Game Objects
 		Player:new(center_x + player_width * 2, center_y - player_width / 2, red_team),
 		Goal:new(home_goal_position, goal_width, goal_height, red_team),
@@ -156,7 +66,7 @@ function Rink:init()
 		Wall:new(away_goal_position.x, away_goal_position.y + goal_height - post_thickness, goal_width, post_thickness),
 		Puck:new(center_x - (puck_width / 2), center_y - (puck_height / 2), puck_width, puck_height),
 		score_board,
-	}
+	})
 	for i = 1, #entities do
 		entities[i].id = i
 	end
