@@ -376,9 +376,21 @@ function AISystem:handle(dt)
       local within_upper_bounds = goalie.position.y > goal.position.y
       local within_lower_bounds = goalie.position.y + goalie.dimensions.height < goal.position.y + goal.dimensions.height
 
-      if goalie_center.y < puck_center and within_lower_bounds then
+      if goalie.attached then
+        local square = self:get_square(goalie.position)
+        if 
+          (goalie.team.id == Teams.AWAY and square.home == 0) or
+          (goalie.team.id == Teams.HOME and square.away == 0)
+        then
+          print("goalie is passing the puck!")
+          EventBus:emit("pass", goalie)
+          -- release the thing  
+        end
+      end
+
+      if goalie_center.y < puck_center.y and within_lower_bounds then
         goalie.velocity.y = 1
-      elseif goalie_center.y  > puck_center and within_upper_bounds then
+      elseif goalie_center.y  > puck_center.y and within_upper_bounds then
         goalie.velocity.y = -1
       else
         goalie.velocity.y = 0

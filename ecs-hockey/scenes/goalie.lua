@@ -47,6 +47,7 @@ function Goalie:init()
 		-- Goalie
 		-- Game Objects
 		Player:new(center_x + player_width * 2, center_y - player_width / 2, red_team),
+		Player:new(center_x - player_width * 10, center_y - player_width / 2, blue_team),
     GoalieEntity:new(home_goal_position.x + goal_width, center_y - player_width / 2, blue_team),
 		Goal:new(home_goal_position, goal_width, goal_height, red_team),
 		-- Goal Posts
