@@ -369,20 +369,20 @@ function AISystem:handle(dt)
     self:handle_team(dt, self.home_team, self.away_team, Teams.HOME)
     self:handle_team(dt, self.away_team, self.home_team, Teams.AWAY)
 
+    local puck_center = Rectangle:from_entity(self.puck):center()
     for _, goalie in ipairs(self.goalies) do
       local goalie_center = Rectangle:from_entity(goalie):center()
       local goal = self.goals[goalie.team.id]
       local within_upper_bounds = goalie.position.y > goal.position.y
       local within_lower_bounds = goalie.position.y + goalie.dimensions.height < goal.position.y + goal.dimensions.height
 
-      if goalie_center.y < self.puck.position.y and within_lower_bounds then
+      if goalie_center.y < puck_center and within_lower_bounds then
         goalie.velocity.y = 1
-      elseif goalie_center.y  > self.puck.position.y and within_upper_bounds then
+      elseif goalie_center.y  > puck_center and within_upper_bounds then
         goalie.velocity.y = -1
       else
         goalie.velocity.y = 0
       end
-      ::continue::
     end
 end
 
