@@ -79,7 +79,7 @@ function AISystem:init(entities)
         if entity.tag == "goal" then
           self.goals[entity.team.id] = entity
         end
-        if entity.tag == "goalies" then
+        if entity.tag == "goalie" then
           self.goalies[entity.team.id] = entity
         end
         if entity.tag == "player" then
@@ -368,9 +368,29 @@ function AISystem:handle(dt)
 
     self:handle_team(dt, self.home_team, self.away_team, Teams.HOME)
     self:handle_team(dt, self.away_team, self.home_team, Teams.AWAY)
-  
+
     for _, goalie in ipairs(self.goalies) do
-      assert(false)  -- TODO : do something here
+      if goalie.attached then
+        -- Release the puck at some point
+        goto continue
+      end
+      -- TODO : All of these measurements are really stupid. Do it properly instead and compare top of goalie and top of goal and bottom of goal with bottom of goalie.
+      local puck_height = self.puck.position.y
+      local goalie_height = goalie.position.y
+      local goal = self.goals[goalie.team.id]
+      if puck_height > goalie_height then
+        if goalie_height >= goal.position.y+goal.dimensions.height then
+          goto continue
+        end
+        goalie.velocity.y = 1
+      else
+        if goalie_height <= goal.position.y then
+          goto continue
+        end
+        goalie.velocity.y = -1
+      end
+      -- assert(false)  -- TODO : do something here
+      ::continue::
     end
 end
 
